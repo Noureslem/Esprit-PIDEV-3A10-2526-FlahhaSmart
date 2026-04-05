@@ -2,11 +2,10 @@
 
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Java-17+-orange?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java"/>
-  <img src="https://img.shields.io/badge/JavaFX-21-blue?style=for-the-badge&logo=java&logoColor=white" alt="JavaFX"/>
   <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL"/>
   <img src="https://img.shields.io/badge/Maven-3.6+-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white" alt="Maven"/>
   <img src="https://img.shields.io/badge/License-Academic-green?style=for-the-badge" alt="License"/>
+  <img src="https://img.shields.io/badge/Symfony-6.x-black?style=for-the-badge&logo=symfony&logoColor=white" alt="Symfony"/>
 </p>
 
 <h1 align="center">🌾 FlahaSmart</h1>
