@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques des poids - FlahaSmart{% endblock %}
+{% block page_title %}⚖️ Statistiques des poids{% endblock %}
+
+{% block body %}
+<div class="card">
+    <div class="card-header bg-white">
+        <h1 class="h3 mb-0">⚖️ Statistiques des poids</h1>
+    </div>
+    <div class="card-body">
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-value">{{ max|number_format(2, ',', ' ') }} kg</div>
+                    <div class="stats-label">Poids maximum</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-value">{{ min|number_format(2, ',', ' ') }} kg</div>
+                    <div class="stats-label">Poids minimum</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-value">{{ avg|number_format(2, ',', ' ') }} kg</div>
+                    <div class="stats-label">Poids moyen</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-value">{{ total|number_format(2, ',', ' ') }} kg</div>
+                    <div class="stats-label">Poids total</div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="h5">Répartition par tranche de poids</h3>
+        <div class="mt-3">
+            <div class="row">
+                {% for range, count in ranges %}
+                <div class="col-md-3 mb-2">
+                    <strong>{{ range }}</strong> : {{ count }} article(s)
+                    <div class="progress mt-1" style="height: 20px;">
+                        <div class="progress-bar" style="width: {{ (count / articles|length * 100)|round }}%"></div>
+                    </div>
+                    <small>{{ (count / articles|length * 100)|round(1) }}%</small>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a href="{{ path('app_article_index') }}" class="btn btn-secondary">Retour</a>
+    </div>
+</div>
+{% endblock %}
