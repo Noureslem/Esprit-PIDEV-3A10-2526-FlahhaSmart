@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+{% block title %}Consommations - Admin{% endblock %}
+{% block body %}
+    <h3 class="text-dark fw-bold mb-4" style="font-size: 1.5rem;">Liste des consommations</h3>
+
+        <div class="row mb-3 align-items-center">
+        <div class="col-md-5">
+            <div class="input-group input-group-sm shadow-sm">
+                <span class="input-group-text bg-white border-end-0 text-success"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" class="form-control border-start-0 ps-0 js-search-input" placeholder="Rechercher..." style="font-size: 0.85rem;">
+            </div>
+        </div>
+        <div class="col-md-4 mt-2 mt-md-0">
+            <div class="input-group input-group-sm shadow-sm">
+                <span class="input-group-text bg-white border-end-0 text-success"><i class="fa-solid fa-filter"></i></span>
+                <select class="form-select border-start-0 js-sort-select" style="font-size: 0.85rem;">
+                    <option value="default">Trier par défaut (ID)</option>
+                    <option value="name_asc">Nom (A-Z)</option>
+                    <option value="name_desc">Nom (Z-A)</option>
+                </select>
+                <button class="btn btn-success" style="font-size: 0.85rem;">Appliquer</button>
+            </div>
+        </div>
+        <div class="col-md-3 mt-2 mt-md-0 text-md-end">
+            <a href="{{ path('admin_consommation_new') }}" class="btn btn-success btn-sm shadow-sm fw-bold"><i class="fa-solid fa-plus me-1"></i> Nouvelle conso</a>
+        </div>
+    </div>
+
+    <div class="table-responsive bg-white rounded shadow-sm border">
+        <table class="table table-hover table-custom mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Produit Lié</th>
+                    <th scope="col">Surface</th>
+                    <th scope="col">Qté Utilisée</th>
+                    <th scope="col">Unité</th>
+                    <th scope="col">Date Récolte</th>
+                    <th scope="col">Date Utilisation</th>
+                    <th scope="col" class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for conso in consommations %}
+                <tr class="js-filterable-row">
+                    <td class="fw-bold">{{ conso.idProduit }}</td>
+                    <td><span class="text-success fw-bold">{{ conso.stockProduit ? conso.stockProduit.typeProduit : '--' }}</span></td>
+                    <td>{{ conso.surface }}</td>
+                    <td>{{ conso.quantiteUtilisee }}</td>
+                    <td>{{ conso.unite }}</td>
+                    <td>{{ conso.dateRecolte ? conso.dateRecolte|date('d/m/Y') : '--' }}</td>
+                    <td>{{ conso.dateUtilisation ? conso.dateUtilisation|date('d/m/Y') : '--' }}</td>
+                    <td class="text-end">
+                        <div class="d-flex justify-content-end gap-1">
+                            <a href="{{ path('admin_consommation_edit', {'idProduit': conso.idProduit}) }}" class="btn btn-outline-primary btn-action">Modifier</a>
+                            <form method="post" action="{{ path('admin_consommation_delete', {'idProduit': conso.idProduit}) }}" onsubmit="return confirm('Confirmer la suppression ?');" style="display:inline-block; margin:0;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conso.idProduit) }}">
+                                <button class="btn btn-outline-danger btn-action">Supprimer</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8" class="text-center py-4 text-muted">Aucune consommation enregistrée.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <style>
+        .table-custom th {
+            background-color: #eaf3ed !important;
+            color: #198754;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #198754;
+        }
+        .table-custom td {
+            font-size: 0.85rem;
+            color: #444;
+            vertical-align: middle;
+        }
+        .btn-action {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('.js-search-input');
+            const rows = document.querySelectorAll('.js-filterable-row');
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const term = e.target.value.toLowerCase();
+                    rows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        row.style.display = text.includes(term) ? '' : 'none';
+                    });
+                });
+            }
+        });
+    </script>
+{% endblock %}

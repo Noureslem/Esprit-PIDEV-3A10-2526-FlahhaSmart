@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% block title %}Edit Consommation - Admin{% endblock %}
+{% block body %}
+    <h2>Modifier Consommation</h2>
+    <div class="custom-form">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            {{ form_widget(form) }}
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;">Mettre à jour</button>
+        {{ form_end(form) }}
+        <a href="{{ path('agriculteur_consommation_index') }}" style="display:block; margin-top:15px; text-align:center; color:#666;">Retour à la liste</a>
+    </div>
+{% endblock %}

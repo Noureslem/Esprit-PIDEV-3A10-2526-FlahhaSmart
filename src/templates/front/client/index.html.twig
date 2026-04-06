@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+{% block title %}Boutique des Produits{% endblock %}
+{% block body %}
+    <div class="text-center mb-5 mt-3">
+        <h1 class="text-success fw-bold display-5"><i class="fa-solid fa-store me-3"></i>Nos Produits Récoltés</h1>
+        <p class="text-muted fs-5">Parcourez notre catalogue et découvrez nos variétés exclusives directement des producteurs.</p>
+    </div>
+
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-8 col-lg-6">
+            <div class="input-group input-group-lg shadow-sm" style="border-radius: 50px; overflow:hidden;">
+                <span class="input-group-text bg-white border-0 text-success px-4"><i class="fa-solid fa-search"></i></span>
+                <input type="text" class="form-control border-0 js-search-input" placeholder="Rechercher une variété, un produit...">
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 row-cols-xl-4 g-4 mb-5">
+        {% for stock in stocks %}
+            <div class="col js-filterable-card">
+                <div class="card h-100 border-0 shadow-sm custom-hover-card" style="border-radius: 16px; transition: transform 0.3s, box-shadow 0.3s;">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 border border-success border-opacity-25">
+                                {{ stock.statut|default('standard')|capitalize }}
+                            </span>
+                        </div>
+                        <div class="display-1 text-success mb-3 opacity-25">
+                            <i class="fa-brands fa-pagelines"></i>
+                        </div>
+                        <h3 class="card-title fw-bold text-dark mb-1">{{ stock.typeProduit|default('?') }}</h3>
+                        <h6 class="text-muted mb-3">{{ stock.variete|default('Variété inconnue') }}</h6>
+                        <hr class="w-50 mx-auto text-success opacity-25">
+                        <p class="small text-secondary mb-0">
+                            <strong><i class="fa-solid fa-hat-cowboy me-1"></i> Producteur :</strong><br>
+                            {{ stock.user ? stock.user.nom ~ ' ' ~ stock.user.prenom : 'Coopérative' }}
+                        </p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pb-4 text-center">
+                        <a href="{{ path('client_produit_show', {'idProduit': stock.idProduit}) }}" class="btn btn-success rounded-pill px-4 shadow-sm w-75">
+                            Voir Détails <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12 text-center py-5">
+                <i class="fa-solid fa-basket-shopping text-muted fa-4x mb-3 opacity-25"></i>
+                <h4 class="text-muted">La vitrine est actuellement vide.</h4>
+            </div>
+        {% endfor %}
+    </div>
+
+    <style>
+        .custom-hover-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(25, 135, 84, 0.15) !important;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('.js-search-input');
+            const cards = document.querySelectorAll('.js-filterable-card');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const term = e.target.value.toLowerCase();
+                    cards.forEach(card => {
+                        const text = card.textContent.toLowerCase();
+                        card.style.display = text.includes(term) ? '' : 'none';
+                    });
+                });
+            }
+        });
+    </script>
+{% endblock %}

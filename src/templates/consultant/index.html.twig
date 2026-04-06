@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Consultant IA - FlahaSmart{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white text-center border-0">
+                <h1 class="h3 mb-0">🤖 Consultation IA</h1>
+                <p class="text-muted small mb-0">deepseek-r1:1.5b</p>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="question" class="form-label fw-bold">Votre question :</label>
+                        <textarea name="question" id="question" class="form-control" rows="4" required>{{ question }}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Consulter</button>
+                </form>
+
+                {% if answer is not null %}
+                <hr>
+                <div class="mt-4">
+                    <h5 class="fw-bold">Réponse :</h5>
+                    <div class="alert alert-light border rounded-3 p-3" style="background-color: #f8f9fa;">
+                        {{ answer|nl2br }}
+                    </div>
+                </div>
+                {% elseif error is not null %}
+                <div class="alert alert-danger mt-4">
+                    {{ error }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
