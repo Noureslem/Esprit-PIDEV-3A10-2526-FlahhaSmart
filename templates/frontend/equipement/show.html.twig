@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'equipement.show.page_title'|trans({'%name%': equipement.nom}) }}{% endblock %}
+{% block navbar_title %}{{ 'equipement.show.navbar_title'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="page-header d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">
+                <i class="bi bi-box-seam me-2"></i>{{ equipement.nom }}
+            </h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">{{ 'common.home'|trans }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_equipement_index') }}">{{ 'nav.equipements'|trans }}</a></li>
+                    <li class="breadcrumb-item active">{{ equipement.nom }}</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ path('app_equipement_edit', {'id': equipement.id}) }}" class="btn btn-warning">
+                <i class="bi bi-pencil me-1"></i>
+                {{ 'common.update'|trans }}
+            </a>
+            {{ include('frontend/equipement/_delete_form.html.twig') }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card detail-card">
+                <div class="detail-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-white bg-opacity-25 rounded-circle p-3">
+                            <i class="bi bi-box-seam fs-3"></i>
+                        </div>
+                        <div>
+                            <h4 class="mb-1">{{ equipement.nom }}</h4>
+                            <span class="badge bg-light text-dark">ID: {{ equipement.id }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="detail-body">
+                    <div class="row">
+                        <div class="col-md-4 detail-label">
+                            <i class="bi bi-hash me-2"></i>{{ 'common.id'|trans }}
+                        </div>
+                        <div class="col-md-8 detail-value">{{ equipement.id }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 detail-label">
+                            <i class="bi bi-card-text me-2"></i>{{ 'equipement.show.name'|trans }}
+                        </div>
+                        <div class="col-md-8 detail-value">{{ equipement.nom }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 detail-label">
+                            <i class="bi bi-tag me-2"></i>{{ 'equipement.show.type'|trans }}
+                        </div>
+                        <div class="col-md-8 detail-value">{{ equipement.type }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 detail-label">
+                            <i class="bi bi-activity me-2"></i>{{ 'equipement.show.state'|trans }}
+                        </div>
+                        <div class="col-md-8 detail-value">
+                            <span class="badge badge-status-{{ equipement.etat|lower|replace({' ': '_', 'é': 'e'}) }}">
+                                {{ equipement.etat }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-lightning me-2"></i>{{ 'common.quick_actions'|trans }}
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ path('app_equipement_edit', {'id': equipement.id}) }}" class="btn btn-outline-warning">
+                            <i class="bi bi-pencil me-2"></i>{{ 'common.update'|trans }}
+                        </a>
+                        <a href="{{ path('app_equipement_index') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>{{ 'common.back_to_list'|trans }}
+                        </a>
+                        <a href="{{ path('app_operation_new') }}" class="btn btn-outline-primary">
+                            <i class="bi bi-plus-lg me-2"></i>{{ 'app.actions.new_operation'|trans }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale|default('fr') }}" dir="{{ app.request.locale == 'ar' ? 'rtl' : 'ltr' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Panel{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚙️</text></svg>">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Flatpickr CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+       
+        <div class="sidebar-nav">
+            <div class="nav-section-title">{{ 'nav.section.navigation'|trans }}</div>
+            <ul class="nav flex-column">
+                {% if app.request.pathInfo starts with '/dashboard' %}
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.pathInfo starts with '/dashboard' %}active{% endif %}" href="{{ path('app_dashboard_index') }}">
+                        <i class="bi bi-bar-chart"></i>
+                        <span>{{ 'nav.dashboard'|trans }}</span>
+                    </a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.pathInfo starts with '/equipement' %}active{% endif %}" href="{{ path('app_equipement_index') }}">
+                        <i class="bi bi-box-seam"></i>
+                        <span>{{ 'nav.equipements'|trans }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.pathInfo starts with '/operation' %}active{% endif %}" href="{{ path('app_operation_index') }}">
+                        <i class="bi bi-clipboard-check"></i>
+                        <span>{{ 'nav.operations'|trans }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.pathInfo starts with '/workspace' %}active{% endif %}" href="{{ path('app_workspace_index') }}">
+                        <i class="bi bi-briefcase"></i>
+                        <span>{{ 'workspace.title'|trans }}</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="nav-section-title mt-4">{{ 'nav.section.quick_actions'|trans }}</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_equipement_new') }}">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>{{ 'nav.new_equipement'|trans }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_operation_new') }}">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>{{ 'nav.new_operation'|trans }}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Navbar -->
+        <nav class="top-navbar">
+            <div class="d-flex align-items-center gap-3">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="bi bi-list"></i>
+                </button>
+                <span class="navbar-title">{% block navbar_title %}Dashboard{% endblock %}</span>
+            </div>
+            <div class="navbar-actions">
+                <div class="dropdown d-inline-block me-2">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                            title="{{ 'nav.language'|trans }}">
+                        <i class="bi bi-translate me-1"></i>
+                        {{ app.request.locale|upper|default('FR') }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{{ path('app_locale_switch', {'_locale': 'fr'}) }}">Français</a></li>
+                        <li><a class="dropdown-item" href="{{ path('app_locale_switch', {'_locale': 'en'}) }}">English</a></li>
+                        <li><a class="dropdown-item" href="{{ path('app_locale_switch', {'_locale': 'ar'}) }}">العربية</a></li>
+                    </ul>
+                </div>
+                <span class="text-muted small">
+                    <i class="bi bi-calendar3 me-1"></i>
+                    {{ "now"|date("d/m/Y") }}
+                </span>
+            </div>
+        </nav>
+        
+        <!-- Page Content -->
+        <div class="page-content fade-in">
+            <!-- Flash Messages -->
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                        <i class="bi bi-{{ label == 'success' ? 'check-circle' : 'exclamation-circle' }} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+    
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle text-danger me-2"></i>
+                        {{ 'common.confirm_delete.title'|trans }}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ 'common.confirm_delete.message'|trans }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'common.cancel'|trans }}</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">
+                        <i class="bi bi-trash me-1"></i>
+                        {{ 'common.delete'|trans }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Widget -->
+    {% include 'components/chatbot.html.twig' %}
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Bulk selection (no build step) -->
+    <script src="{{ asset('js/bulk-selection.js') }}" defer></script>
+    <!-- Chatbot Widget -->
+    <script src="{{ asset('js/chatbot-widget.js') }}" defer></script>
+    
+    <script>
+        // Sidebar Toggle
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        const i18nOk = {{ 'common.ok'|trans|json_encode|raw }};
+        const i18nCancel = {{ 'common.cancel'|trans|json_encode|raw }};
+        const i18nSingleDeleteMessage = {{ 'common.confirm_delete.message'|trans|json_encode|raw }};
+
+        // Reusable Bootstrap confirmation modal (single delete + bulk delete)
+        (function () {
+            const modalEl = document.getElementById('deleteModal');
+            if (!modalEl || typeof bootstrap === 'undefined') {
+                return;
+            }
+
+            const modal = new bootstrap.Modal(modalEl);
+            const bodyEl = modalEl.querySelector('.modal-body');
+            const cancelBtn = modalEl.querySelector('.modal-footer .btn.btn-secondary');
+            const confirmBtn = document.getElementById('confirmDelete');
+
+            let onConfirm = null;
+
+            function setMessage(message) {
+                if (!bodyEl) return;
+                const p = bodyEl.querySelector('p');
+                if (p) {
+                    p.textContent = message;
+                } else {
+                    bodyEl.textContent = message;
+                }
+            }
+
+            function openInfo(message) {
+                setMessage(message);
+                if (confirmBtn) confirmBtn.classList.add('d-none');
+                if (cancelBtn) cancelBtn.textContent = i18nOk;
+                onConfirm = null;
+                modal.show();
+            }
+
+            function openConfirm(message, callback) {
+                setMessage(message);
+                if (confirmBtn) confirmBtn.classList.remove('d-none');
+                if (cancelBtn) cancelBtn.textContent = i18nCancel;
+                onConfirm = callback;
+                modal.show();
+            }
+
+            confirmBtn?.addEventListener('click', function () {
+                if (typeof onConfirm === 'function') {
+                    modal.hide();
+                    onConfirm();
+                }
+            });
+
+            // Single delete buttons
+            document.addEventListener('click', function (e) {
+                const btn = e.target.closest('.delete-btn');
+                if (!btn) return;
+
+                e.preventDefault();
+                const form = btn.closest('form');
+                if (!form) return;
+
+                openConfirm(i18nSingleDeleteMessage, function () {
+                    form.submit();
+                });
+            });
+
+            // Expose helpers for other scripts (bulk selection)
+            window.AppConfirmModal = {
+                info: openInfo,
+                confirm: openConfirm,
+            };
+        })();
+
+        // Simple i18n strings for standalone JS files
+        window.AppI18n = Object.assign(window.AppI18n || {}, {
+            emptySelectionMessage: {{ 'common.bulk_select_at_least_one'|trans|json_encode|raw }},
+            bulkConfirmCountMessage: {{ 'common.confirm_bulk_delete_count'|trans|json_encode|raw }},
+        });
+        
+        // Auto-hide alerts after 5 seconds
+        setTimeout(() => {
+            document.querySelectorAll('.alert').forEach(alert => {
+                new bootstrap.Alert(alert).close();
+            });
+        }, 5000);
+
+        // Initialize Flatpickr for all inputs with .js-flatpickr
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof flatpickr !== 'undefined') {
+                document.querySelectorAll('.js-flatpickr').forEach(function(el) {
+                    flatpickr(el, {
+                        dateFormat: 'Y-m-d',
+                        altInput: true,
+                        altFormat: 'd/m/Y',
+                        allowInput: true
+                    });
+                });
+            }
+        });
+
+    </script>
+    
+    {% block javascripts %}{% endblock %}
+</body>
+</html>
