@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'operation.new.title'|trans }}{% endblock %}
+{% block navbar_title %}{{ 'operation.new.navbar_title'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="bi bi-plus-circle me-2"></i>{{ 'operation.new.title'|trans }}
+        </h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">{{ 'common.home'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_operation_index') }}">{{ 'nav.operations'|trans }}</a></li>
+                <li class="breadcrumb-item active">{{ 'common.new'|trans }}</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card mx-auto">
+                <div class="card-header">
+                    <i class="bi bi-clipboard-check me-2"></i>{{ 'operation.new.card_header'|trans }}
+                </div>
+                <div class="card-body">
+                    {{ include('frontend/operation/_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

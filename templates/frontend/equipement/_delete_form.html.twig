@@ -1,0 +1,14 @@
+{% if equipement.etat|lower == 'réservé' %}
+    <button type="button" class="btn btn-secondary" disabled title="{{ 'equipement.delete.reserved_tooltip'|trans }}">
+        <i class="bi bi-trash me-1"></i>
+        {{ 'common.delete'|trans }}
+    </button>
+{% else %}
+    <form method="post" action="{{ path('app_equipement_delete', {'id': equipement.id}) }}" class="d-inline delete-form">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ equipement.id) }}">
+        <button type="button" class="btn btn-danger delete-btn">
+            <i class="bi bi-trash me-1"></i>
+            {{ 'common.delete'|trans }}
+        </button>
+    </form>
+{% endif %}

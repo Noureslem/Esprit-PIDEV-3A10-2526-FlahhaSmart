@@ -1,0 +1,185 @@
+{% extends 'frontend/base.html.twig' %}
+
+{% block title %}{{ 'operation.index.title'|trans }}{% endblock %}
+{% block navbar_title %}{{ 'operation.index.navbar_title'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="page-header d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">
+                <i class="bi bi-clipboard-check me-2"></i>{{ 'operation.index.title'|trans }}
+            </h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">{{ 'common.home'|trans }}</a></li>
+                    <li class="breadcrumb-item active">{{ 'nav.operations'|trans }}</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="submit"
+                    class="btn btn-danger"
+                    form="operation-bulk-delete-form"
+                    data-bulk-delete-trigger
+                    data-confirm-message="{{ 'operation.bulk.confirm'|trans }}">
+                <i class="bi bi-trash me-1"></i>
+                {{ 'app.actions.delete_selection'|trans }}
+            </button>
+            <a href="{{ path('app_operation_new') }}" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-1"></i>
+                {{ 'app.actions.new_operation'|trans }}
+            </a>
+        </div>
+    </div>
+
+    {# Search and Filter Form #}
+    <div class="search-filter-section mb-4 p-3 bg-light rounded border">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <label for="filterType" class="form-label">{{ 'operation.index.filter.type_label'|trans }}</label>
+                <input type="text" 
+                       id="filterType" 
+                       name="type" 
+                       class="form-control" 
+                       placeholder="{{ 'operation.index.filter.type_placeholder'|trans }}"
+                       value="{{ filters.type ?? '' }}">
+            </div>
+            <div class="col-md-4">
+                <label for="filterStatut" class="form-label">{{ 'operation.index.filter.status_label'|trans }}</label>
+                <select id="filterStatut" name="statut" class="form-select">
+                    <option value="">{{ 'operation.index.filter.status_all'|trans }}</option>
+                    {% for statut in statuts %}
+                        <option value="{{ statut }}" 
+                                {% if filters.statut == statut %}selected{% endif %}>
+                            {{ statut }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 d-flex align-items-end gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-1">
+                    <i class="bi bi-search me-1"></i>{{ 'common.search'|trans }}
+                </button>
+                <a href="{{ path('app_operation_index') }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i>{{ 'common.reset'|trans }}
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-container">
+        {# Keep bulk form separate to avoid invalid nested forms inside table rows #}
+        <form id="operation-bulk-delete-form"
+              method="post"
+              action="{{ path('app_operation_bulk_delete') }}"
+              data-bulk-form>
+            <input type="hidden" name="_token" value="{{ csrf_token('bulk_delete_operation') }}">
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 40px;">
+                            <input type="checkbox"
+                                   class="form-check-input js-bulk-select-all"
+                                   data-bulk-form-id="operation-bulk-delete-form"
+                                   aria-label="{{ 'common.select_all'|trans }}">
+                        </th>
+                        <th scope="col">
+                            {{ 'operation.index.table.type'|trans }}
+                            <span class="sort-links">
+                                <a href="{{ path('app_operation_index', filters|merge({'sort': 'type_operation', 'direction': 'ASC'})) }}" 
+                                   title="{{ 'common.sort.asc'|trans }}" class="sort-link">▲</a>
+                                <a href="{{ path('app_operation_index', filters|merge({'sort': 'type_operation', 'direction': 'DESC'})) }}" 
+                                   title="{{ 'common.sort.desc'|trans }}" class="sort-link">▼</a>
+                            </span>
+                        </th>
+                        <th scope="col">{{ 'operation.index.table.equipment'|trans }}</th>
+                        <th scope="col">
+                            {{ 'operation.index.table.start_date'|trans }}
+                            <span class="sort-links">
+                                <a href="{{ path('app_operation_index', filters|merge({'sort': 'date_debut', 'direction': 'ASC'})) }}" 
+                                   title="{{ 'common.sort.asc'|trans }}" class="sort-link">▲</a>
+                                <a href="{{ path('app_operation_index', filters|merge({'sort': 'date_debut', 'direction': 'DESC'})) }}" 
+                                   title="{{ 'common.sort.desc'|trans }}" class="sort-link">▼</a>
+                            </span>
+                        </th>
+                        <th scope="col">
+                            {{ 'operation.index.table.end_date'|trans }}
+                            <span class="sort-links">
+                                <a href="{{ path('app_operation_index', filters|merge({'sort': 'date_fin', 'direction': 'ASC'})) }}" 
+                                   title="{{ 'common.sort.asc'|trans }}" class="sort-link">▲</a>
+                                <a href="{{ path('app_operation_index', filters|merge({'sort': 'date_fin', 'direction': 'DESC'})) }}" 
+                                   title="{{ 'common.sort.desc'|trans }}" class="sort-link">▼</a>
+                            </span>
+                        </th>
+                        <th scope="col">{{ 'operation.index.table.status'|trans }}</th>
+                        <th scope="col" class="text-end">{{ 'common.actions'|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for operation in operations %}
+                    <tr>
+                        <td>
+                            <input type="checkbox"
+                                   class="form-check-input js-bulk-item"
+                                   form="operation-bulk-delete-form"
+                                   name="ids[]"
+                                   value="{{ operation.id }}"
+                                aria-label="{{ 'operation.bulk.item_aria'|trans({'%id%': operation.id}) }}">
+                        </td>
+                        <td>
+                            <strong>{{ operation.typeOperation }}</strong>
+                        </td>
+                         <td>
+                            <i class="bi bi-tools me-1 text-muted"></i>
+                            {{ operation.equipement ? operation.equipement.nom : '-' }}
+                        </td>
+                        <td>
+                            <i class="bi bi-calendar-event me-1 text-muted"></i>
+                            {{ operation.dateDebut ? operation.dateDebut|date('d/m/Y') : '-' }}
+                        </td>
+                        <td>
+                            <i class="bi bi-calendar-check me-1 text-muted"></i>
+                            {{ operation.dateFin ? operation.dateFin|date('d/m/Y') : '-' }}
+                        </td>
+                        <td>
+                            <span class="badge badge-status-{{ operation.statut|lower|replace({' ': '_', 'é': 'e'}) }}">
+                                {{ operation.statut }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group-actions justify-content-end">
+                                <a href="{{ path('app_operation_edit', {'id': operation.id}) }}" 
+                                   class="btn btn-outline-warning btn-action" title="{{ 'common.update'|trans }}">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form method="post" action="{{ path('app_operation_delete', {'id': operation.id}) }}" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ operation.id) }}">
+                                    <button type="button" class="btn btn-outline-danger btn-action delete-btn" title="{{ 'common.delete'|trans }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <i class="bi bi-inbox d-block"></i>
+                                <p class="mb-3">{{ 'operation.index.empty'|trans }}</p>
+                                <a href="{{ path('app_operation_new') }}" class="btn btn-primary btn-sm">
+                                    <i class="bi bi-plus-lg me-1"></i>
+                                    {{ 'operation.index.empty_cta'|trans }}
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+        </div>
+    </div>
+{% endblock %}

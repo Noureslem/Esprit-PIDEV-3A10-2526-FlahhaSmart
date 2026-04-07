@@ -1,0 +1,47 @@
+<div class="weather-card card border-0 shadow-sm mb-4" id="weatherWidget" data-weather-endpoint="{{ path('app_weather_current') }}">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+                <h5 class="card-title mb-1">Meteo en direct</h5>
+                <small class="text-muted" id="weatherLocation">Chargement...</small>
+            </div>
+            <span class="badge rounded-pill bg-light text-dark" id="weatherBadge">--</span>
+        </div>
+
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <img id="weatherIcon" src="" alt="Meteo" width="48" height="48" class="d-none" />
+            <div>
+                <div class="fs-2 fw-bold" id="weatherTemp">--°C</div>
+                <div class="text-muted" id="weatherDesc">--</div>
+            </div>
+        </div>
+
+        <div class="row g-2 mb-3">
+            <div class="col-6">
+                <div class="p-2 rounded bg-light text-center">
+                    <small class="text-muted d-block">Humidite</small>
+                    <strong id="weatherHumidity">--%</strong>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="p-2 rounded bg-light text-center">
+                    <small class="text-muted d-block">Vent</small>
+                    <strong id="weatherWind">-- km/h</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2">
+            <input id="weatherCity" type="text" class="form-control form-control-sm" placeholder="Ville (ex: Tunis)" value="Tunis" />
+            <button id="weatherRefresh" class="btn btn-sm btn-primary" type="button">Actualiser</button>
+        </div>
+
+        <div id="weatherLoader" class="mt-3 d-none">
+            <div class="placeholder-glow">
+                <span class="placeholder col-12"></span>
+                <span class="placeholder col-8"></span>
+            </div>
+        </div>
+        <div id="weatherError" class="alert alert-danger mt-3 py-2 px-3 d-none mb-0"></div>
+    </div>
+</div>

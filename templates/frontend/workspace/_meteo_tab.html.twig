@@ -1,0 +1,7 @@
+<div class="weather-dashboard grid grid-cols-1 xl:grid-cols-2 gap-6 p-3 md:p-6 rounded-2xl"
+     id="weatherDashboard"
+     data-weather-endpoint="{{ path('app_weather_current') }}"
+     data-default-city="Tunis">
+    {% include 'components/_weather_card.html.twig' %}
+    {% include 'components/_agriculture_tips.html.twig' %}
+</div>

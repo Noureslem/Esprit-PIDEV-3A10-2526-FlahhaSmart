@@ -1,0 +1,195 @@
+{% extends 'frontend/base.html.twig' %}
+
+{% block title %}{{ 'equipement.index.title'|trans }}{% endblock %}
+{% block navbar_title %}{{ 'equipement.index.navbar_title'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="page-header d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">
+                <i class="bi bi-box-seam me-2"></i>{{ 'equipement.index.title'|trans }}
+            </h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">{{ 'common.home'|trans }}</a></li>
+                    <li class="breadcrumb-item active">{{ 'nav.equipements'|trans }}</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="submit"
+                    class="btn btn-danger"
+                    form="equipement-bulk-delete-form"
+                    data-bulk-delete-trigger
+                    data-confirm-message="{{ 'equipement.bulk.confirm'|trans }}">
+                <i class="bi bi-trash me-1"></i>
+                {{ 'app.actions.delete_selection'|trans }}
+            </button>
+            <a href="{{ path('app_equipement_new') }}" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-1"></i>
+                {{ 'app.actions.new_equipement'|trans }}
+            </a>
+        </div>
+    </div>
+
+    {# Search and Filter Form #}
+    <div class="search-filter-section mb-4 p-3 bg-light rounded border">
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <label for="filterNom" class="form-label">{{ 'equipement.index.filter.name_label'|trans }}</label>
+                <input type="text" 
+                       id="filterNom" 
+                       name="nom" 
+                       class="form-control" 
+                       placeholder="{{ 'equipement.index.filter.name_placeholder'|trans }}"
+                       value="{{ filters.nom ?? '' }}">
+            </div>
+            <div class="col-md-3">
+                <label for="filterType" class="form-label">{{ 'equipement.index.filter.type_label'|trans }}</label>
+                <select id="filterType" name="type" class="form-select">
+                    <option value="">{{ 'equipement.index.filter.type_all'|trans }}</option>
+                    {% for typeVal in types %}
+                        <option value="{{ typeVal }}" 
+                                {% if filters.type == typeVal %}selected{% endif %}>
+                            {{ typeVal }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="filterEtat" class="form-label">{{ 'equipement.index.filter.state_label'|trans }}</label>
+                <select id="filterEtat" name="etat" class="form-select">
+                    <option value="">{{ 'equipement.index.filter.state_all'|trans }}</option>
+                    {% for etatVal in etats %}
+                        <option value="{{ etatVal }}" 
+                                {% if filters.etat == etatVal %}selected{% endif %}>
+                            {{ etatVal }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3 d-flex align-items-end gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-1">
+                    <i class="bi bi-search me-1"></i>{{ 'common.search'|trans }}
+                </button>
+                <a href="{{ path('app_equipement_index') }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i>{{ 'common.reset'|trans }}
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-container">
+        {# Keep bulk form separate to avoid invalid nested forms inside table rows #}
+        <form id="equipement-bulk-delete-form"
+              method="post"
+              action="{{ path('app_equipement_bulk_delete') }}"
+              data-bulk-form>
+            <input type="hidden" name="_token" value="{{ csrf_token('bulk_delete_equipement') }}">
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 40px;">
+                            <input type="checkbox"
+                                   class="form-check-input js-bulk-select-all"
+                                   data-bulk-form-id="equipement-bulk-delete-form"
+                                   aria-label="{{ 'common.select_all'|trans }}">
+                        </th>
+                        <th scope="col">
+                            {{ 'equipement.index.table.name'|trans }}
+                            <span class="sort-links">
+                                <a href="{{ path('app_equipement_index', filters|merge({'sort': 'nom', 'direction': 'ASC'})) }}" 
+                                   title="{{ 'common.sort.asc'|trans }}" class="sort-link">▲</a>
+                                <a href="{{ path('app_equipement_index', filters|merge({'sort': 'nom', 'direction': 'DESC'})) }}" 
+                                   title="{{ 'common.sort.desc'|trans }}" class="sort-link">▼</a>
+                            </span>
+                        </th>
+                        <th scope="col">
+                            {{ 'equipement.index.table.type'|trans }}
+                            <span class="sort-links">
+                                <a href="{{ path('app_equipement_index', filters|merge({'sort': 'type', 'direction': 'ASC'})) }}" 
+                                   title="{{ 'common.sort.asc'|trans }}" class="sort-link">▲</a>
+                                <a href="{{ path('app_equipement_index', filters|merge({'sort': 'type', 'direction': 'DESC'})) }}" 
+                                   title="{{ 'common.sort.desc'|trans }}" class="sort-link">▼</a>
+                            </span>
+                        </th>
+                        <th scope="col">
+                            {{ 'equipement.index.table.state'|trans }}
+                            <span class="sort-links">
+                                <a href="{{ path('app_equipement_index', filters|merge({'sort': 'etat', 'direction': 'ASC'})) }}" 
+                                   title="{{ 'common.sort.asc'|trans }}" class="sort-link">▲</a>
+                                <a href="{{ path('app_equipement_index', filters|merge({'sort': 'etat', 'direction': 'DESC'})) }}" 
+                                   title="{{ 'common.sort.desc'|trans }}" class="sort-link">▼</a>
+                            </span>
+                        </th>
+                        <th scope="col" class="text-end">{{ 'common.actions'|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for equipement in equipements %}
+                    <tr>
+                        <td>
+                            {% set isReserved = (equipement.etat|lower == 'réservé') %}
+                            <input type="checkbox"
+                                   class="form-check-input js-bulk-item"
+                                   form="equipement-bulk-delete-form"
+                                   name="ids[]"
+                                   value="{{ equipement.id }}"
+                                   {% if isReserved %}disabled{% endif %}
+                                aria-label="{{ 'equipement.bulk.item_aria'|trans({'%id%': equipement.id}) }}">
+                        </td>
+                        <td>
+                            <strong>{{ equipement.nom }}</strong>
+                        </td>
+                        <td>
+                            <i class="bi bi-tag me-1 text-muted"></i>
+                            {{ equipement.type }}
+                        </td>
+                        <td>
+                            <span class="badge badge-status-{{ equipement.etat|lower|replace({' ': '_', 'é': 'e'}) }}">
+                                {{ equipement.etat }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group-actions justify-content-end">
+                                <a href="{{ path('app_equipement_edit', {'id': equipement.id}) }}" 
+                                   class="btn btn-outline-warning btn-action" title="{{ 'common.update'|trans }}">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                {% if equipement.etat|lower != 'réservé' %}
+                                    <form method="post" action="{{ path('app_equipement_delete', {'id': equipement.id}) }}" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ equipement.id) }}">
+                                        <button type="button" class="btn btn-outline-danger btn-action delete-btn" title="{{ 'common.delete'|trans }}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <button type="button" class="btn btn-outline-secondary btn-action" disabled title="{{ 'equipement.delete.reserved_tooltip'|trans }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <i class="bi bi-inbox d-block"></i>
+                                <p class="mb-3">{{ 'equipement.index.empty'|trans }}</p>
+                                <a href="{{ path('app_equipement_new') }}" class="btn btn-primary btn-sm">
+                                    <i class="bi bi-plus-lg me-1"></i>
+                                    {{ 'equipement.index.empty_cta'|trans }}
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+        </div>
+    </div>
+{% endblock %}
