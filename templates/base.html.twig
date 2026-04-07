@@ -24,14 +24,12 @@
         <div class="sidebar-nav">
             <div class="nav-section-title">{{ 'nav.section.navigation'|trans }}</div>
             <ul class="nav flex-column">
-                {% if app.request.pathInfo starts with '/dashboard' %}
                 <li class="nav-item">
                     <a class="nav-link {% if app.request.pathInfo starts with '/dashboard' %}active{% endif %}" href="{{ path('app_dashboard_index') }}">
                         <i class="bi bi-bar-chart"></i>
                         <span>{{ 'nav.dashboard'|trans }}</span>
                     </a>
                 </li>
-                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link {% if app.request.pathInfo starts with '/equipement' %}active{% endif %}" href="{{ path('app_equipement_index') }}">
                         <i class="bi bi-box-seam"></i>

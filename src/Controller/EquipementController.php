@@ -44,7 +44,7 @@ final class EquipementController extends AbstractController
         $types = array_column($allTypes, 'type');
         $etats = array_column($allEtats, 'etat');
 
-        return $this->render('backend/equipement/index.html.twig', [
+        return $this->render('frontend/equipement/index.html.twig', [
             'equipements' => $equipements,
             'filters' => [
                 'nom' => $nom,
@@ -73,7 +73,7 @@ final class EquipementController extends AbstractController
             return $this->redirectToRoute('app_equipement_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('backend/equipement/new.html.twig', [
+        return $this->render('frontend/equipement/new.html.twig', [
             'equipement' => $equipement,
             'form' => $form,
         ]);
@@ -82,7 +82,7 @@ final class EquipementController extends AbstractController
     #[Route('/{id}', name: 'app_equipement_show', methods: ['GET'], requirements: ['id' => '\\d+'])]
     public function show(Equipement $equipement): Response
     {
-        return $this->render('backend/equipement/show.html.twig', [
+        return $this->render('frontend/equipement/show.html.twig', [
             'equipement' => $equipement,
         ]);
     }
@@ -99,7 +99,7 @@ final class EquipementController extends AbstractController
             return $this->redirectToRoute('app_equipement_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('backend/equipement/edit.html.twig', [
+        return $this->render('frontend/equipement/edit.html.twig', [
             'equipement' => $equipement,
             'form' => $form,
         ]);

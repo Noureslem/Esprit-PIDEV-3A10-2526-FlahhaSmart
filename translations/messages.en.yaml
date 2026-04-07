@@ -1,0 +1,200 @@
+nav:
+  language: "Language"
+  section:
+    navigation: "Navigation"
+    quick_actions: "Quick Actions"
+  dashboard: "Dashboard"
+  equipements: "Equipment"
+  operations: "Operations"
+  new_equipement: "New equipment"
+  new_operation: "New operation"
+
+workspace:
+  title: "Workspace"
+
+common:
+  ok: "OK"
+  loading: "Loading..."
+  home: "Home"
+  new: "New"
+  day_singular: "day"
+  day_plural: "days"
+  completed: "Completed"
+  terminated: "Terminated"
+  search: "Search"
+  reset: "Reset"
+  save: "Save"
+  update: "Update"
+  back_to_list: "Back to list"
+  actions: "Actions"
+  quick_actions: "Quick actions"
+  select_all: "Select all"
+  id: "ID"
+  close: "Close"
+  error: "Error"
+  please_fix_errors: "Please fix the errors below."
+  bulk_select_at_least_one: "Please select at least one item."
+  confirm_bulk_delete_count: "Confirm deletion of %count% item(s)?"
+  sort:
+    asc: "Sort ascending"
+    desc: "Sort descending"
+  cancel: "Cancel"
+  delete: "Delete"
+  view: "View"
+  edit: "Edit"
+  confirm_delete:
+    title: "Confirm deletion"
+    message: "Are you sure you want to delete this item? This action cannot be undone."
+
+operation:
+  index:
+    title: "Operations"
+    navbar_title: "Operations management"
+    filter:
+      type_label: "Operation type"
+      type_placeholder: "Search by type..."
+      status_label: "Status"
+      status_all: "-- All statuses --"
+    table:
+      type: "Type"
+      equipment: "Equipment"
+      start_date: "Start date"
+      end_date: "End date"
+      status: "Status"
+    empty: "No operations found"
+    empty_cta: "Add an operation"
+  bulk:
+    confirm: "Delete selected operations?"
+    item_aria: "Select operation #%id%"
+  new:
+    title: "New operation"
+    navbar_title: "Create an operation"
+    card_header: "Operation information"
+  edit:
+    title: "Edit operation"
+    navbar_title: "Edit operation"
+  show:
+    page_title: "Operation #%id%"
+    navbar_title: "Operation details"
+    user_id: "User ID"
+    operation_type: "Operation type"
+    start_date: "Start date"
+    end_date: "End date"
+    status: "Status"
+    equipment: "Equipment"
+    associated_equipment: "Associated equipment"
+    view_equipment: "View equipment"
+  actions:
+    finish: "Finish"
+  form:
+    type_operation:
+      label: "Operation type"
+      placeholder: "e.g., Maintenance, Repair..."
+    date_debut:
+      label: "Start date"
+    date_fin:
+      label: "End date"
+    equipement:
+      label: "Equipment"
+
+equipement:
+  state:
+    available: "Available"
+    reserved: "Reserved"
+  index:
+    title: "Equipment"
+    navbar_title: "Equipment management"
+    filter:
+      name_label: "Name"
+      name_placeholder: "Search by name..."
+      type_label: "Type"
+      type_all: "-- All types --"
+      state_label: "State"
+      state_all: "-- All states --"
+    table:
+      name: "Name"
+      type: "Type"
+      state: "State"
+    empty: "No equipment found"
+    empty_cta: "Add equipment"
+  bulk:
+    confirm: "Delete selected equipment?"
+    item_aria: "Select equipment #%id%"
+  new:
+    title: "New equipment"
+    navbar_title: "Create equipment"
+    card_header: "Equipment information"
+  edit:
+    title: "Edit equipment"
+    navbar_title: "Edit equipment"
+  show:
+    page_title: "Equipment - %name%"
+    navbar_title: "Equipment details"
+    name: "Name"
+    type: "Type"
+    state: "State"
+  delete:
+    reserved_tooltip: "Cannot delete reserved equipment"
+  form:
+    nom:
+      label: "Equipment name"
+      placeholder: "Enter the name..."
+    type:
+      label: "Type"
+      placeholder: "Choose a type"
+  type:
+    machine: "Machine"
+    irrigation: "Irrigation"
+    elevage: "Livestock"
+    outil_manuel: "Hand tool"
+    transport: "Transport"
+
+app:
+  title: "Operations & equipment management"
+  actions:
+    delete_selection: "Delete selection"
+    new_operation: "New operation"
+    new_equipement: "New equipment"
+    create_now: "Create now"
+  common:
+    view: "View"
+    edit: "Edit"
+    delete: "Delete"
+
+dashboard:
+  index:
+    title: "Dashboard"
+    navbar_title: "Dashboard - Statistics"
+  actions:
+    refresh: "Refresh"
+    refreshing: "Refreshing..."
+    terminating: "Finishing..."
+  confirm:
+    terminate: "Are you sure you want to finish this operation?"
+  kpi:
+    operations_total: "Total operations"
+    operations_in_progress: "In progress"
+    operations_completed: "Completed"
+    completion_rate: "%rate%% completed"
+  charts:
+    equipment_by_type: "Equipment by type"
+    equipment_usage: "Equipment usage"
+  upcoming:
+    title: "Upcoming operations"
+    empty: "No upcoming operations"
+    actions:
+      terminate_tooltip: "Finish this operation"
+    table:
+      operation: "Operation"
+      equipment: "Equipment"
+      end_date: "End date"
+      days_remaining: "Days remaining"
+      status: "Status"
+      action: "Action"
+  last_updated: "Last updated"
+  notifications:
+    stats_updated: "Statistics updated"
+    operation_terminated: "Operation finished successfully"
+  errors:
+    termination: "Error finishing operation"
+    update: "Error while updating"

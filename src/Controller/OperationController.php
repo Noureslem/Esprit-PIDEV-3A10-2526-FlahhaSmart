@@ -37,7 +37,7 @@ final class OperationController extends AbstractController
 
         $statuts = array_column($allStatuts, 'statut');
 
-        return $this->render('backend/operation/index.html.twig', [
+        return $this->render('frontend/operation/index.html.twig', [
             'operations' => $operations,
             'filters' => [
                 'type' => $type,
@@ -68,7 +68,7 @@ final class OperationController extends AbstractController
             return $this->redirectToRoute('app_operation_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('backend/operation/new.html.twig', [
+        return $this->render('frontend/operation/new.html.twig', [
             'operation' => $operation,
             'form' => $form,
         ]);
@@ -77,7 +77,7 @@ final class OperationController extends AbstractController
     #[Route('/{id}', name: 'app_operation_show', methods: ['GET'], requirements: ['id' => '\\d+'])]
     public function show(Operation $operation): Response
     {
-        return $this->render('backend/operation/show.html.twig', [
+        return $this->render('frontend/operation/show.html.twig', [
             'operation' => $operation,
         ]);
     }
@@ -94,7 +94,7 @@ final class OperationController extends AbstractController
             return $this->redirectToRoute('app_operation_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('backend/operation/edit.html.twig', [
+        return $this->render('frontend/operation/edit.html.twig', [
             'operation' => $operation,
             'form' => $form,
         ]);

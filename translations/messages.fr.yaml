@@ -1,0 +1,200 @@
+nav:
+  language: "Langue"
+  section:
+    navigation: "Navigation"
+    quick_actions: "Actions Rapides"
+  dashboard: "Tableau de Bord"
+  equipements: "Équipements"
+  operations: "Opérations"
+  new_equipement: "Nouvel Équipement"
+  new_operation: "Nouvelle Opération"
+
+workspace:
+  title: "Espace de Travail"
+
+common:
+  ok: "OK"
+  loading: "Chargement..."
+  home: "Accueil"
+  new: "Nouveau"
+  day_singular: "jour"
+  day_plural: "jours"
+  completed: "Terminée"
+  terminated: "Terminé"
+  search: "Rechercher"
+  reset: "Réinitialiser"
+  save: "Enregistrer"
+  update: "Mettre à jour"
+  back_to_list: "Retour à la liste"
+  actions: "Actions"
+  quick_actions: "Actions Rapides"
+  select_all: "Tout sélectionner"
+  id: "Identifiant"
+  close: "Fermer"
+  error: "Erreur"
+  please_fix_errors: "Veuillez corriger les erreurs ci-dessous."
+  bulk_select_at_least_one: "Veuillez sélectionner au moins un élément."
+  confirm_bulk_delete_count: "Confirmer la suppression de %count% élément(s) ?"
+  sort:
+    asc: "Trier croissant"
+    desc: "Trier décroissant"
+  cancel: "Annuler"
+  delete: "Supprimer"
+  view: "Voir"
+  edit: "Modifier"
+  confirm_delete:
+    title: "Confirmer la suppression"
+    message: "Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible."
+
+operation:
+  index:
+    title: "Opérations"
+    navbar_title: "Gestion des Opérations"
+    filter:
+      type_label: "Type d'opération"
+      type_placeholder: "Rechercher par type..."
+      status_label: "Statut"
+      status_all: "-- Tous les statuts --"
+    table:
+      type: "Type"
+      equipment: "Équipement"
+      start_date: "Date Début"
+      end_date: "Date Fin"
+      status: "Statut"
+    empty: "Aucune opération trouvée"
+    empty_cta: "Ajouter une opération"
+  bulk:
+    confirm: "Supprimer les opérations sélectionnées ?"
+    item_aria: "Sélectionner l'opération #%id%"
+  new:
+    title: "Nouvelle Opération"
+    navbar_title: "Créer une Opération"
+    card_header: "Informations de l'Opération"
+  edit:
+    title: "Modifier l'Opération"
+    navbar_title: "Modifier l'Opération"
+  show:
+    page_title: "Opération #%id%"
+    navbar_title: "Détails de l'Opération"
+    user_id: "ID Utilisateur"
+    operation_type: "Type d'Opération"
+    start_date: "Date de Début"
+    end_date: "Date de Fin"
+    status: "Statut"
+    equipment: "Équipement"
+    associated_equipment: "Équipement Associé"
+    view_equipment: "Voir l'équipement"
+  actions:
+    finish: "Terminer"
+  form:
+    type_operation:
+      label: "Type d'Opération"
+      placeholder: "Ex: Maintenance, Réparation..."
+    date_debut:
+      label: "Date de Début"
+    date_fin:
+      label: "Date de Fin"
+    equipement:
+      label: "Équipement"
+
+equipement:
+  state:
+    available: "Disponible"
+    reserved: "Réservé"
+  index:
+    title: "Équipements"
+    navbar_title: "Gestion des Équipements"
+    filter:
+      name_label: "Nom"
+      name_placeholder: "Rechercher par nom..."
+      type_label: "Type"
+      type_all: "-- Tous les types --"
+      state_label: "État"
+      state_all: "-- Tous les états --"
+    table:
+      name: "Nom"
+      type: "Type"
+      state: "État"
+    empty: "Aucun équipement trouvé"
+    empty_cta: "Ajouter un équipement"
+  bulk:
+    confirm: "Supprimer les équipements sélectionnés ?"
+    item_aria: "Sélectionner l'équipement #%id%"
+  new:
+    title: "Nouvel Équipement"
+    navbar_title: "Créer un Équipement"
+    card_header: "Informations de l'Équipement"
+  edit:
+    title: "Modifier l'Équipement"
+    navbar_title: "Modifier l'Équipement"
+  show:
+    page_title: "Équipement - %name%"
+    navbar_title: "Détails de l'Équipement"
+    name: "Nom"
+    type: "Type"
+    state: "État"
+  delete:
+    reserved_tooltip: "Impossible de supprimer un équipement réservé"
+  form:
+    nom:
+      label: "Nom de l'équipement"
+      placeholder: "Entrez le nom..."
+    type:
+      label: "Type"
+      placeholder: "Choisir un type"
+  type:
+    machine: "Machine"
+    irrigation: "Irrigation"
+    elevage: "Élevage"
+    outil_manuel: "Outil manuel"
+    transport: "Transport"
+
+app:
+  title: "Gestion des opérations et équipements"
+  actions:
+    delete_selection: "Supprimer la sélection"
+    new_operation: "Nouvelle opération"
+    new_equipement: "Nouvel équipement"
+    create_now: "Créer maintenant"
+  common:
+    view: "Voir"
+    edit: "Modifier"
+    delete: "Supprimer"
+
+dashboard:
+  index:
+    title: "Tableau de Bord"
+    navbar_title: "Tableau de Bord - Statistiques"
+  actions:
+    refresh: "Actualiser"
+    refreshing: "Actualisation..."
+    terminating: "Termination..."
+  confirm:
+    terminate: "Êtes-vous sûr de vouloir terminer cette opération ?"
+  kpi:
+    operations_total: "Opérations Totales"
+    operations_in_progress: "En Cours"
+    operations_completed: "Terminées"
+    completion_rate: "%rate%% complétées"
+  charts:
+    equipment_by_type: "Équipements par Type"
+    equipment_usage: "Utilisation des Équipements"
+  upcoming:
+    title: "Opérations les plus proches"
+    empty: "Aucune opération à venir"
+    actions:
+      terminate_tooltip: "Terminer cette opération"
+    table:
+      operation: "Opération"
+      equipment: "Équipement"
+      end_date: "Date de Fin"
+      days_remaining: "Jours Restants"
+      status: "Statut"
+      action: "Action"
+  last_updated: "Dernière mise à jour"
+  notifications:
+    stats_updated: "Statistiques mises à jour"
+    operation_terminated: "Opération terminée avec succès"
+  errors:
+    termination: "Erreur lors de la termination"
+    update: "Erreur lors de la mise à jour"
