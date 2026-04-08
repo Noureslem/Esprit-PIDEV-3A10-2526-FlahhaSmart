@@ -6,6 +6,7 @@
     <title>{% block title %}FlahaSmart{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     {# Dans <head> #}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -91,6 +92,10 @@
             <a class="nav-link" href="{{ path('app_equipement_index') }}">
                 <i class="bi bi-tools"></i> Équipements
             </a>
+    
+            <a class="nav-link {% if app.request.attributes.get('_route') starts  with 'workspace' %}active{% endif %}" 
+              href="{{ path('app_workspace_index') }}"> <i class="bi bi-kanban"></i> Workspace </a>
+
             <a class="nav-link" href="{{ path('agriculteur_consommation_index') }}">
                 <i class="bi bi-box-seam"></i> Consommations
             </a>
@@ -154,6 +159,129 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-{% block javascripts %}{% endblock %}
+
+
+
+    <!-- Chatbot Widget -->
+    {% include 'components/chatbot.html.twig' %}
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Bulk selection (no build step) -->
+    <script src="{{ asset('js/bulk-selection.js') }}" defer></script>
+    <!-- Chatbot Widget -->
+    <script src="{{ asset('js/chatbot-widget.js') }}" defer></script>
+    
+    <script>
+        // Sidebar Toggle
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        const i18nOk = {{ 'common.ok'|trans|json_encode|raw }};
+        const i18nCancel = {{ 'common.cancel'|trans|json_encode|raw }};
+        const i18nSingleDeleteMessage = {{ 'common.confirm_delete.message'|trans|json_encode|raw }};
+
+        // Reusable Bootstrap confirmation modal (single delete + bulk delete)
+        (function () {
+            const modalEl = document.getElementById('deleteModal');
+            if (!modalEl || typeof bootstrap === 'undefined') {
+                return;
+            }
+
+            const modal = new bootstrap.Modal(modalEl);
+            const bodyEl = modalEl.querySelector('.modal-body');
+            const cancelBtn = modalEl.querySelector('.modal-footer .btn.btn-secondary');
+            const confirmBtn = document.getElementById('confirmDelete');
+
+            let onConfirm = null;
+
+            function setMessage(message) {
+                if (!bodyEl) return;
+                const p = bodyEl.querySelector('p');
+                if (p) {
+                    p.textContent = message;
+                } else {
+                    bodyEl.textContent = message;
+                }
+            }
+
+            function openInfo(message) {
+                setMessage(message);
+                if (confirmBtn) confirmBtn.classList.add('d-none');
+                if (cancelBtn) cancelBtn.textContent = i18nOk;
+                onConfirm = null;
+                modal.show();
+            }
+
+            function openConfirm(message, callback) {
+                setMessage(message);
+                if (confirmBtn) confirmBtn.classList.remove('d-none');
+                if (cancelBtn) cancelBtn.textContent = i18nCancel;
+                onConfirm = callback;
+                modal.show();
+            }
+
+            confirmBtn?.addEventListener('click', function () {
+                if (typeof onConfirm === 'function') {
+                    modal.hide();
+                    onConfirm();
+                }
+            });
+
+            // Single delete buttons
+            document.addEventListener('click', function (e) {
+                const btn = e.target.closest('.delete-btn');
+                if (!btn) return;
+
+                e.preventDefault();
+                const form = btn.closest('form');
+                if (!form) return;
+
+                openConfirm(i18nSingleDeleteMessage, function () {
+                    form.submit();
+                });
+            });
+
+            // Expose helpers for other scripts (bulk selection)
+            window.AppConfirmModal = {
+                info: openInfo,
+                confirm: openConfirm,
+            };
+        })();
+
+        // Simple i18n strings for standalone JS files
+        window.AppI18n = Object.assign(window.AppI18n || {}, {
+            emptySelectionMessage: {{ 'common.bulk_select_at_least_one'|trans|json_encode|raw }},
+            bulkConfirmCountMessage: {{ 'common.confirm_bulk_delete_count'|trans|json_encode|raw }},
+        });
+        
+        // Auto-hide alerts after 5 seconds
+        setTimeout(() => {
+            document.querySelectorAll('.alert').forEach(alert => {
+                new bootstrap.Alert(alert).close();
+            });
+        }, 5000);
+
+        // Initialize Flatpickr for all inputs with .js-flatpickr
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof flatpickr !== 'undefined') {
+                document.querySelectorAll('.js-flatpickr').forEach(function(el) {
+                    flatpickr(el, {
+                        dateFormat: 'Y-m-d',
+                        altInput: true,
+                        altFormat: 'd/m/Y',
+                        allowInput: true
+                    });
+                });
+            }
+        });
+
+    </script>
+    
+    {% block javascripts %}{% endblock %}
+
 </body>
 </html>
