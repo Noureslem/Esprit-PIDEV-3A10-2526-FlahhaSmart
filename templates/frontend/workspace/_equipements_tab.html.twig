@@ -1,0 +1,88 @@
+<!-- Équipements Tab Content -->
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="page-title mb-0">
+            <i class="bi bi-box-seam me-2"></i>{{ 'nav.equipements'|trans }}
+        </h2>
+    </div>
+    <div class="d-flex gap-2">
+        <button type="submit"
+                class="btn btn-danger"
+                form="equipement-bulk-delete-form"
+                data-bulk-delete-trigger
+                data-confirm-message="{{ 'equipement.bulk.confirm'|trans }}">
+            <i class="bi bi-trash me-1"></i>
+            {{ 'app.actions.delete_selection'|trans }}
+        </button>
+        <a href="{{ path('app_equipement_new') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i>
+            {{ 'app.actions.new_equipement'|trans }}
+        </a>
+    </div>
+</div>
+
+<!-- Formulaire de suppression en masse -->
+<form method="post" id="equipement-bulk-delete-form" class="d-none">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete') }}">
+    <input type="hidden" name="ids" value="">
+</form>
+
+<!-- Table des équipements -->
+{% if equipements|length > 0 %}
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 40px;">
+                        <input type="checkbox" class="form-check-input" id="check-all" data-bulk-select-all>
+                    </th>
+                    <th>{{ 'equipement.table.name'|trans }}</th>
+                    <th>{{ 'equipement.table.model'|trans }}</th>
+                    <th>{{ 'equipement.table.serial'|trans }}</th>
+                    <th>{{ 'equipement.table.status'|trans }}</th>
+                    <th style="width: 120px;">{{ 'common.actions'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for equipement in equipements %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="form-check-input bulk-select-item" data-bulk-item-id="{{ equipement.id }}">
+                        </td>
+                        <td><strong>{{ equipement.nom }}</strong></td>
+                        <td>{{ equipement.type }}</td>
+                        <td>-</td>
+                        <td>
+                            <span class="badge bg-{% if equipement.etat == 'Active' %}success{% elseif equipement.etat == 'Maintenance' %}warning{% else %}secondary{% endif %}">
+                                {{ equipement.etat }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a href="{{ path('app_equipement_show', {id: equipement.id}) }}" class="btn btn-outline-primary" title="{{ 'common.view'|trans }}">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ path('app_equipement_edit', {id: equipement.id}) }}" class="btn btn-outline-warning" title="{{ 'common.edit'|trans }}">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form method="post" action="{{ path('app_equipement_delete', {id: equipement.id}) }}" style="display:inline;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ equipement.id) }}">
+                                    <button type="submit" class="btn btn-outline-danger delete-btn" title="{{ 'common.delete'|trans }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle me-2"></i>
+        {{ 'equipement.index.empty'|trans }}
+        <a href="{{ path('app_equipement_new') }}" class="alert-link">{{ 'app.actions.create_now'|trans }}</a>
+    </div>
+{% endif %}

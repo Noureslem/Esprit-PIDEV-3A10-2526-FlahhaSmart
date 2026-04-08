@@ -1,0 +1,226 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'workspace.title'|trans }}{% endblock %}
+{% block navbar_title %}{{ 'workspace.title'|trans }}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+
+{% block body %}
+<div class="workspace-container">
+    <ul class="nav nav-tabs nav-tabs-custom mb-4" id="workspaceTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{ activeTab == 'rotation' ? 'active' : '' }}"
+                    id="rotation-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#rotation-content"
+                    type="button"
+                    role="tab"
+                    aria-controls="rotation-content"
+                    aria-selected="{{ activeTab == 'rotation' ? 'true' : 'false' }}"
+                    data-tab="rotation">
+                <i class="bi bi-flower1 me-2"></i>
+                Rotation des cultures
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{ activeTab == 'meteo' ? 'active' : '' }}"
+                    id="meteo-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#meteo-content"
+                    type="button"
+                    role="tab"
+                    aria-controls="meteo-content"
+                    aria-selected="{{ activeTab == 'meteo' ? 'true' : 'false' }}"
+                    data-tab="meteo">
+                <i class="bi bi-cloud-sun me-2"></i>
+                Meteo
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{ activeTab == 'irrigation' ? 'active' : '' }}"
+                    id="irrigation-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#irrigation-content"
+                    type="button"
+                    role="tab"
+                    aria-controls="irrigation-content"
+                    aria-selected="{{ activeTab == 'irrigation' ? 'true' : 'false' }}"
+                    data-tab="irrigation">
+                <i class="bi bi-droplet-half me-2"></i>
+                Irrigation intelligente
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="workspaceTabContent">
+        <div class="tab-pane fade {{ activeTab == 'rotation' ? 'show active' : '' }}"
+             id="rotation-content"
+             role="tabpanel"
+             aria-labelledby="rotation-tab">
+            <div id="rotation-loader" class="text-center d-none">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">{{ 'common.loading'|trans }}</span>
+                </div>
+            </div>
+            <div id="rotation-data">
+                {% if activeTab == 'rotation' %}
+                    {% include 'frontend/workspace/_rotation_tab.html.twig' %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="tab-pane fade {{ activeTab == 'meteo' ? 'show active' : '' }}"
+             id="meteo-content"
+             role="tabpanel"
+             aria-labelledby="meteo-tab">
+            <div id="meteo-loader" class="text-center d-none">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">{{ 'common.loading'|trans }}</span>
+                </div>
+            </div>
+            <div id="meteo-data">
+                {% if activeTab == 'meteo' %}
+                    {% include 'frontend/workspace/_meteo_tab.html.twig' %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="tab-pane fade {{ activeTab == 'irrigation' ? 'show active' : '' }}"
+             id="irrigation-content"
+             role="tabpanel"
+             aria-labelledby="irrigation-tab">
+            <div id="irrigation-loader" class="text-center d-none">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">{{ 'common.loading'|trans }}</span>
+                </div>
+            </div>
+            <div id="irrigation-data">
+                {% if activeTab == 'irrigation' %}
+                    {% include 'frontend/workspace/_irrigation_tab.html.twig' %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.nav-tabs-custom {
+    border-bottom: 2px solid #dee2e6;
+    padding-bottom: 0;
+}
+
+.nav-tabs-custom .nav-link {
+    color: #6c757d;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs-custom .nav-link:hover {
+    color: #0d6efd;
+    border-bottom-color: #0d6efd;
+}
+
+.nav-tabs-custom .nav-link.active {
+    color: #0d6efd;
+    background-color: transparent;
+    border-bottom-color: #0d6efd;
+}
+
+.tab-content {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.hover-lift {
+    transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3) !important;
+}
+
+.weather-card.sun {
+    border-left: 4px solid #ffc107;
+}
+
+.weather-card.rain {
+    border-left: 4px solid #0d6efd;
+}
+
+.weather-card.cloud {
+    border-left: 4px solid #6c757d;
+}
+
+.workspace-iframe {
+    width: 100%;
+    min-height: 900px;
+    border: 1px solid #e9ecef;
+    border-radius: 0.75rem;
+    background: #fff;
+}
+</style>
+
+<script src="{{ asset('js/weather.js') }}" defer></script>
+<script src="{{ asset('js/irrigation.js') }}" defer></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tabButtons = document.querySelectorAll('#workspaceTabs button[role="tab"]');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('shown.bs.tab', function() {
+            const tabName = this.getAttribute('data-tab');
+            const targetId = this.getAttribute('data-bs-target');
+            const contentDiv = document.querySelector(targetId + ' [id$="-data"]');
+            const loaderDiv = document.querySelector(targetId + ' [id$="-loader"]');
+
+            if (contentDiv.innerHTML.trim()) {
+                return;
+            }
+
+            loaderDiv.classList.remove('d-none');
+            const tabRoute = `{{ path('app_workspace_index') }}/tab/${tabName}`;
+
+            fetch(tabRoute)
+                .then(response => response.text())
+                .then(html => {
+                    contentDiv.innerHTML = html;
+                    loaderDiv.classList.add('d-none');
+
+                    if (tabName === 'meteo' && typeof window.initWeatherDashboard === 'function') {
+                        window.initWeatherDashboard(contentDiv);
+                    }
+
+                    if (tabName === 'irrigation' && typeof window.initIrrigationModule === 'function') {
+                        window.initIrrigationModule(contentDiv);
+                    }
+                })
+                .catch(() => {
+                    loaderDiv.classList.add('d-none');
+                    contentDiv.innerHTML = '<div class="alert alert-danger">Erreur de chargement</div>';
+                });
+        });
+    });
+
+    const meteoContent = document.getElementById('meteo-data');
+    if (meteoContent && meteoContent.innerHTML.trim() && typeof window.initWeatherDashboard === 'function') {
+        window.initWeatherDashboard(meteoContent);
+    }
+
+    const irrigationContent = document.getElementById('irrigation-data');
+    if (irrigationContent && irrigationContent.innerHTML.trim() && typeof window.initIrrigationModule === 'function') {
+        window.initIrrigationModule(irrigationContent);
+    }
+});
+</script>
+{% endblock %}

@@ -1,10 +1,29 @@
 # config/services.yaml
+
 parameters:
 
 services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            string $azureTranslatorEndpoint: '%env(string:AZURE_TRANSLATOR_ENDPOINT)%'
+            string $azureTranslatorRegion: '%env(string:AZURE_TRANSLATOR_REGION)%'
+            string $azureTranslatorKeyPrimary: '%env(string:AZURE_TRANSLATOR_KEY_PRIMARY)%'
+            $azureTranslatorKeySecondary: '%env(string:AZURE_TRANSLATOR_KEY_SECONDARY)%'
+            int $azureTranslatorCacheTtlSeconds: '%env(int:AZURE_TRANSLATOR_CACHE_TTL_SECONDS)%'
+
+            # Gemini API Configuration
+            string $geminiApiEndpoint: '%env(string:GEMINI_API_ENDPOINT)%'
+            string $geminiModelName: '%env(string:GEMINI_MODEL_NAME)%'
+            string $geminiApiKey: '%env(string:GEMINI_API_KEY)%'
+            int $geminiApiTimeout: '%env(int:GEMINI_API_TIMEOUT)%'
+            bool $geminiChatbotEnabled: '%env(bool:GEMINI_CHATBOT_ENABLED)%'
+
+            # Weatherstack API Configuration
+            string $weatherstackApiKey: '%env(string:WEATHERSTACK_API_KEY)%'
+            string $weatherstackEndpoint: '%env(string:WEATHERSTACK_ENDPOINT)%'
+            int $weatherstackTimeout: '%env(int:WEATHERSTACK_TIMEOUT)%'
 
     App\:
         resource: '../src/'

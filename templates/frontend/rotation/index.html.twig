@@ -1,0 +1,13 @@
+{# Workspace UI moderne pour rotation des cultures #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Rotation des Cultures - Recommandations{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+
+{% block body %}
+    {% include 'frontend/rotation/_workspace_content.html.twig' %}
+{% endblock %}

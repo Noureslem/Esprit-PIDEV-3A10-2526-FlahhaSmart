@@ -1,0 +1,55 @@
+{#
+  Usage:
+  - Include this partial where you need a dynamic translation UI:
+      {% include 'translation/_widget.html.twig' %}
+  - And include the JS on that page:
+      {% block javascripts %}
+          <script src="{{ asset('js/azure-translate-widget.js') }}" defer></script>
+      {% endblock %}
+#}
+
+<div class="card"
+     data-translate-widget
+     data-translate-endpoint="{{ path('app_api_translate') }}"
+     data-csrf-token="{{ csrf_token('ajax_translate') }}">
+    <div class="card-body">
+        <h5 class="card-title mb-3">Traduction (Azure)</h5>
+
+        <div class="mb-3">
+            <label class="form-label">Texte</label>
+            <textarea class="form-control" rows="3" data-translate-source></textarea>
+        </div>
+
+        <div class="row g-2 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label">Vers</label>
+                <select class="form-select" data-translate-to>
+                    <option value="en">Anglais</option>
+                    <option value="fr">Français</option>
+                    <option value="ar">Arabe</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Depuis (optionnel)</label>
+                <select class="form-select" data-translate-from>
+                    <option value="">Auto</option>
+                    <option value="fr">Français</option>
+                    <option value="en">Anglais</option>
+                    <option value="ar">Arabe</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button type="button" class="btn btn-primary w-100" data-translate-submit>
+                    Traduire
+                </button>
+            </div>
+        </div>
+
+        <hr class="my-3">
+
+        <div>
+            <label class="form-label">Résultat</label>
+            <div class="form-control" style="min-height: 3rem;" data-translate-result></div>
+        </div>
+    </div>
+</div>

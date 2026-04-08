@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -11,35 +12,26 @@ class GenerateRepositoriesCommand extends Command
 {
     protected static $defaultName = 'app:generate-repositories';
 
-    private $filesystem;
-    private $finder;
-
-    public function __construct(Filesystem $filesystem, Finder $finder)
-    {
-        parent::__construct();
-
-        $this->filesystem = $filesystem;
-        $this->finder = $finder;
-    }
-
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Generates repository classes for all entities.')
-            ->setHelp('This command will generate repository classes for all entities in src/Entity.');
+            ->setHelp('This command generates repository classes for all entities in src/Entity.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('Generating repositories for all entities...');
 
-        $this->finder->files()->in('src/Entity')->name('*.php'); // Look for PHP files in the Entity directory
+        $filesystem = new Filesystem();
+        $finder = new Finder();
 
-        foreach ($this->finder as $file) {
+        $finder->files()->in('src/Entity')->name('*.php');
+
+        foreach ($finder as $file) {
             $entityClass = $file->getBasename('.php');
             $repositoryClass = 'App\\Repository\\' . $entityClass . 'Repository';
 
-            // Create the repository class file
             $repositoryCode = <<<PHP
 <?php
 
@@ -60,12 +52,10 @@ class {$entityClass}Repository extends ServiceEntityRepository
 }
 PHP;
 
-            // Define the repository file path
             $repositoryPath = 'src/Repository/' . $entityClass . 'Repository.php';
 
-            // Only generate if the repository does not already exist
-            if (!$this->filesystem->exists($repositoryPath)) {
-                $this->filesystem->dumpFile($repositoryPath, $repositoryCode);
+            if (!$filesystem->exists($repositoryPath)) {
+                $filesystem->dumpFile($repositoryPath, $repositoryCode);
                 $output->writeln("Generated repository: $repositoryClass");
             } else {
                 $output->writeln("Repository already exists for: $entityClass");
@@ -73,6 +63,7 @@ PHP;
         }
 
         $output->writeln('Repository generation complete!');
+
         return Command::SUCCESS;
     }
 }

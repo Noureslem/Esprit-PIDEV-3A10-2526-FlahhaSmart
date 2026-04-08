@@ -1,0 +1,55 @@
+<section class="weather-card-main rounded-2xl shadow-lg p-6 md:p-8 relative overflow-hidden">
+    <div class="weather-card-glass absolute inset-0"></div>
+    <div class="relative z-10">
+        <header class="flex items-center justify-between mb-5">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">☀️</span>
+                <h3 class="text-xl md:text-2xl font-semibold mb-0 weather-title">Conditions actuelles</h3>
+            </div>
+            <span id="weatherThemeBadge" class="px-3 py-1 rounded-full text-xs font-semibold weather-badge">Live</span>
+        </header>
+
+        <div class="flex gap-2 mb-5">
+            <input
+                id="weatherCityInput"
+                type="text"
+                value="Tunis"
+                placeholder="Entrez une ville..."
+                class="flex-1 rounded-lg border weather-input px-4 py-3 text-slate-900 placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+            <button
+                id="weatherSearchBtn"
+                type="button"
+                class="rounded-lg weather-search-btn transition px-4 py-3 font-semibold"
+                aria-label="Rechercher la meteo">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+
+        <div class="text-center mb-4">
+            <p id="weatherLocationText" class="text-lg font-semibold mb-1 weather-location">--</p>
+            <p id="weatherMainTemp" class="text-6xl md:text-7xl font-bold leading-none weather-temp">--°C</p>
+            <p id="weatherMainDesc" class="italic mt-2 weather-desc">--</p>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 mb-4">
+            <div class="rounded-lg weather-stat-card p-3 text-center border">
+                <p class="text-xs uppercase tracking-wide weather-stat-label mb-1">Ressenti</p>
+                <p id="weatherFeelsLike" class="text-lg font-semibold text-slate-900">--°C</p>
+            </div>
+            <div class="rounded-lg weather-stat-card p-3 text-center border">
+                <p class="text-xs uppercase tracking-wide weather-stat-label mb-1">Humidite</p>
+                <p id="weatherHumidity" class="text-lg font-semibold text-slate-900">--%</p>
+            </div>
+            <div class="rounded-lg weather-stat-card p-3 text-center border">
+                <p class="text-xs uppercase tracking-wide weather-stat-label mb-1">Vent</p>
+                <p id="weatherWind" class="text-lg font-semibold text-slate-900">-- km/h</p>
+            </div>
+        </div>
+
+        <div id="weatherLoader" class="hidden text-sm weather-loader mb-2">Chargement...</div>
+        <div id="weatherError" class="hidden rounded-lg bg-red-500/20 border border-red-300 px-3 py-2 text-sm mb-2"></div>
+        <footer class="text-xs weather-footer">
+            Mise a jour : <span id="weatherUpdatedAt">--</span>
+        </footer>
+    </div>
+</section>

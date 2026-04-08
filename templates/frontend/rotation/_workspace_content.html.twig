@@ -1,0 +1,465 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-green-50 to-slate-100">
+    <div class="bg-white shadow-sm border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-6 py-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-slate-900">🌱 Rotation des Cultures</h1>
+                    <p class="text-slate-600 mt-2">Generez un plan de rotation adapte a votre parcelle</p>
+                </div>
+                <div class="flex gap-3">
+                    <button id="resetBtn" class="px-4 py-2 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-900 font-medium transition-colors">
+                        Reinitialiser
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white rounded-xl shadow-lg p-8 border border-slate-200">
+                <h2 class="text-2xl font-bold text-slate-900 mb-6">Informations Parcelle</h2>
+
+                <form id="rotationForm" class="space-y-6">
+                    <div>
+                        <label for="surface" class="block text-sm font-semibold text-slate-700 mb-2">
+                            Surface (hectares)
+                        </label>
+                        <input type="number" id="surface" name="surface" step="0.1" min="0.1" value="1" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label for="typeSol" class="block text-sm font-semibold text-slate-700 mb-2">
+                            Type de sol
+                        </label>
+                        <select id="typeSol" name="type_sol" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                            <option value="">-- Selectionner --</option>
+                            {% for key, label in types_sol %}
+                                <option value="{{ key }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="derniereCulture" class="block text-sm font-semibold text-slate-700 mb-2">
+                                Derniere culture
+                            </label>
+                            <select id="derniereCulture" name="derniere_culture" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                <option value="">-- Aucune --</option>
+                                {% for key, label in cultures %}
+                                    <option value="{{ key }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="avantDerniereCulture" class="block text-sm font-semibold text-slate-700 mb-2">
+                                Avant-derniere culture
+                            </label>
+                            <select id="avantDerniereCulture" name="avant_derniere_culture" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                <option value="">-- Aucune --</option>
+                                {% for key, label in cultures %}
+                                    <option value="{{ key }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-green-50 to-lime-50 rounded-lg p-5">
+                        <h3 class="font-semibold text-slate-900 mb-4">Nutriments (0-10)</h3>
+
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <label class="text-sm font-semibold text-slate-700">Azote (N)</label>
+                                    <span id="azoteValue" class="text-green-600 font-bold">5</span>
+                                </div>
+                                <input type="range" id="azote" name="azote" min="0" max="10" value="5" class="w-full h-2 bg-slate-300 rounded-lg appearance-none cursor-pointer slider-nitrogen">
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <label class="text-sm font-semibold text-slate-700">Phosphore (P)</label>
+                                    <span id="phosphoreValue" class="text-amber-600 font-bold">5</span>
+                                </div>
+                                <input type="range" id="phosphore" name="phosphore" min="0" max="10" value="5" class="w-full h-2 bg-slate-300 rounded-lg appearance-none cursor-pointer slider-phosphore">
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <label class="text-sm font-semibold text-slate-700">Potassium (K)</label>
+                                    <span id="potassiumValue" class="text-orange-600 font-bold">5</span>
+                                </div>
+                                <input type="range" id="potassium" name="potassium" min="0" max="10" value="5" class="w-full h-2 bg-slate-300 rounded-lg appearance-none cursor-pointer slider-potassium">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-semibold text-slate-700">pH du sol</label>
+                            <span id="phValue" class="text-blue-600 font-bold">6.5</span>
+                        </div>
+                        <input type="range" id="ph" name="ph" min="4" max="8" step="0.1" value="6.5" class="w-full h-2 bg-slate-300 rounded-lg appearance-none cursor-pointer slider-ph">
+                        <p class="text-xs text-slate-500 mt-2">4.0 (Tres acide) -> 8.0 (Tres basique)</p>
+                    </div>
+
+                    <div>
+                        <label for="annees" class="block text-sm font-semibold text-slate-700 mb-2">
+                            Annees depuis jachere
+                        </label>
+                        <input type="number" id="annees" name="annees_jachaire" min="0" value="1" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label for="dureePlan" class="block text-sm font-semibold text-slate-700 mb-2">
+                            Duree du plan (annees)
+                        </label>
+                        <select id="dureePlan" name="duree_plan" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                            <option value="3">3 annees</option>
+                            <option value="5" selected>5 annees</option>
+                            <option value="7">7 annees</option>
+                            <option value="10">10 annees</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="w-full py-4 px-6 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold rounded-lg transition-all duration-300 transform hover:shadow-lg hover:scale-105 flex items-center justify-center gap-2">
+                        <span id="submitIcon">Analyser</span>
+                        <span id="submitText">ma parcelle</span>
+                    </button>
+                </form>
+            </div>
+
+            <div id="resultsZone" class="space-y-6">
+                <div class="bg-white rounded-xl shadow-lg p-8 border border-slate-200 text-center">
+                    <p class="text-slate-600 text-lg">Remplissez le formulaire pour afficher les resultats</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<template id="summaryTemplate">
+    <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-900 mb-4">Resume Parcelle</h3>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-slate-50 rounded-lg p-4">
+                <p class="text-xs text-slate-600 font-semibold">Surface</p>
+                <p class="text-2xl font-bold text-slate-900 mt-1"><span class="surface">0</span> ha</p>
+            </div>
+            <div class="bg-slate-50 rounded-lg p-4">
+                <p class="text-xs text-slate-600 font-semibold">Type de sol</p>
+                <p class="text-lg font-bold text-slate-900 mt-1"><span class="type-sol">--</span></p>
+            </div>
+            <div class="bg-slate-50 rounded-lg p-4">
+                <p class="text-xs text-slate-600 font-semibold">pH</p>
+                <p class="text-2xl font-bold text-blue-600 mt-1"><span class="ph">--</span></p>
+            </div>
+            <div class="bg-slate-50 rounded-lg p-4">
+                <p class="text-xs text-slate-600 font-semibold">Etat du sol</p>
+                <p class="text-lg font-bold mt-1"><span class="etat-sol">--</span></p>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="nutrientsTemplate">
+    <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-900 mb-4">Profil Nutrimental</h3>
+        <div class="space-y-3">
+            <div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-sm font-semibold text-slate-700">Azote (N)</span>
+                    <span class="azote-value font-bold">5/10</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-2">
+                    <div class="azote-bar h-2 rounded-full bg-gradient-to-r from-green-400 to-green-600"></div>
+                </div>
+            </div>
+            <div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-sm font-semibold text-slate-700">Phosphore (P)</span>
+                    <span class="phosphore-value font-bold">5/10</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-2">
+                    <div class="phosphore-bar h-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-600"></div>
+                </div>
+            </div>
+            <div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-sm font-semibold text-slate-700">Potassium (K)</span>
+                    <span class="potassium-value font-bold">5/10</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-2">
+                    <div class="potassium-bar h-2 rounded-full bg-gradient-to-r from-orange-400 to-orange-600"></div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <p class="text-sm text-blue-900"><strong>Score Global:</strong> <span class="nutrient-total-score">15/30</span></p>
+        </div>
+    </div>
+</template>
+
+<template id="recommendationsTemplate">
+    <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-900 mb-4">Top 5 Recommandations</h3>
+        <div class="space-y-3" id="recommendationsList"></div>
+    </div>
+</template>
+
+<template id="cultureTemplate">
+    <div class="border-l-4 rounded-lg p-4 transition-all hover:shadow-md">
+        <div class="flex items-start justify-between">
+            <div class="flex-1">
+                <h4 class="font-bold text-lg mb-1"><span class="culture-name">--</span></h4>
+                <p class="text-xs text-slate-600 mb-2"><span class="culture-famille">--</span></p>
+                <p class="text-sm text-slate-700"><span class="culture-raison">--</span></p>
+                <p class="text-xs text-slate-600 mt-2"><span class="culture-periode">--</span></p>
+            </div>
+            <div class="text-right">
+                <div class="text-3xl font-bold mb-1"><span class="culture-score">0</span></div>
+                <span class="culture-label px-2 py-1 rounded text-xs font-semibold">--</span>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="planTemplate">
+    <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200">
+        <h3 class="text-xl font-bold text-slate-900 mb-4">Plan de Rotation</h3>
+
+        <div class="flex items-center gap-3 overflow-x-auto pb-4">
+            <div id="planTimeline" class="flex gap-3"></div>
+        </div>
+
+        <div class="mt-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
+            <div class="grid grid-cols-3 gap-4 text-center">
+                <div>
+                    <p class="text-xs text-slate-600 font-semibold">Duree</p>
+                    <p class="text-2xl font-bold text-slate-900"><span class="plan-duree">--</span> ans</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-600 font-semibold">Diversite</p>
+                    <p class="text-2xl font-bold text-slate-900"><span class="plan-diversite">--</span> cultures</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-600 font-semibold">Score Plan</p>
+                    <p class="text-2xl font-bold text-emerald-600"><span class="plan-score">--</span>/100</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="anneeTemplate">
+    <div class="flex-shrink-0 w-32 bg-gradient-to-b from-green-50 to-green-100 rounded-lg p-4 border-2 border-green-300 text-center">
+        <p class="text-xs font-semibold text-slate-600 mb-2">Annee <span class="annee-numero">0</span></p>
+        <p class="text-lg font-bold text-green-700"><span class="annee-culture">--</span></p>
+    </div>
+</template>
+
+<style>
+    input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        height: 8px;
+        border-radius: 999px;
+        background: #cbd5e1;
+    }
+
+    .slider-nitrogen::-webkit-slider-thumb {
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #16a34a, #22c55e);
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(22, 163, 74, 0.4);
+    }
+
+    .slider-phosphore::-webkit-slider-thumb {
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #b45309, #f59e0b);
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(180, 83, 9, 0.4);
+    }
+
+    .slider-potassium::-webkit-slider-thumb {
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #b45309, #ff8c42);
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(180, 83, 9, 0.4);
+    }
+
+    .slider-ph::-webkit-slider-thumb {
+        appearance: none;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2563eb, #3b82f6);
+        cursor: pointer;
+        border: 2px solid #ffffff;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+    }
+
+    .slider-ph::-moz-range-thumb {
+        width: 22px;
+        height: 22px;
+        border: 2px solid #ffffff;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2563eb, #3b82f6);
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+    }
+
+    .slider-ph::-moz-range-track {
+        height: 8px;
+        border-radius: 999px;
+        background: #cbd5e1;
+    }
+
+    #phValue { color: #2563eb; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('rotationForm');
+    const resultsZone = document.getElementById('resultsZone');
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    if (!form || !resultsZone || !submitBtn || !resetBtn) {
+        return;
+    }
+
+    document.getElementById('azote').addEventListener('input', (e) => {
+        document.getElementById('azoteValue').textContent = e.target.value;
+    });
+    document.getElementById('phosphore').addEventListener('input', (e) => {
+        document.getElementById('phosphoreValue').textContent = e.target.value;
+    });
+    document.getElementById('potassium').addEventListener('input', (e) => {
+        document.getElementById('potassiumValue').textContent = e.target.value;
+    });
+    document.getElementById('ph').addEventListener('input', (e) => {
+        document.getElementById('phValue').textContent = parseFloat(e.target.value).toFixed(1);
+    });
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Analyse en cours...';
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+
+        try {
+            const response = await fetch('{{ path('app_rotation_analyser') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                afficherResultats(result);
+            } else {
+                alert('Erreur: ' + result.error);
+            }
+        } catch (error) {
+            alert('Erreur reseau: ' + error.message);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Analyser ma parcelle';
+        }
+    });
+
+    resetBtn.addEventListener('click', () => {
+        form.reset();
+        resultsZone.innerHTML = '<div class="bg-white rounded-xl shadow-lg p-8 border border-slate-200 text-center"><p class="text-slate-600 text-lg">Remplissez le formulaire pour afficher les resultats</p></div>';
+        document.getElementById('azoteValue').textContent = '5';
+        document.getElementById('phosphoreValue').textContent = '5';
+        document.getElementById('potassiumValue').textContent = '5';
+        document.getElementById('phValue').textContent = '6.5';
+    });
+
+    function afficherResultats(data) {
+        resultsZone.innerHTML = '';
+
+        const summaryClone = document.getElementById('summaryTemplate').content.cloneNode(true);
+        summaryClone.querySelector('.surface').textContent = data.resume.surface;
+        summaryClone.querySelector('.type-sol').textContent = data.resume.type_sol;
+        summaryClone.querySelector('.ph').textContent = data.resume.ph.toFixed(1);
+        summaryClone.querySelector('.etat-sol').textContent = data.resume.etat_sol;
+        resultsZone.appendChild(summaryClone);
+
+        const nutrientsClone = document.getElementById('nutrientsTemplate').content.cloneNode(true);
+        nutrientsClone.querySelector('.azote-value').textContent = data.resume.nutrients.azote + '/10';
+        nutrientsClone.querySelector('.azote-bar').style.width = (data.resume.nutrients.azote * 10) + '%';
+        nutrientsClone.querySelector('.phosphore-value').textContent = data.resume.nutrients.phosphore + '/10';
+        nutrientsClone.querySelector('.phosphore-bar').style.width = (data.resume.nutrients.phosphore * 10) + '%';
+        nutrientsClone.querySelector('.potassium-value').textContent = data.resume.nutrients.potassium + '/10';
+        nutrientsClone.querySelector('.potassium-bar').style.width = (data.resume.nutrients.potassium * 10) + '%';
+        nutrientsClone.querySelector('.nutrient-total-score').textContent = data.resume.nutrients.total + '/30';
+        resultsZone.appendChild(nutrientsClone);
+
+        const recommendationsClone = document.getElementById('recommendationsTemplate').content.cloneNode(true);
+        const list = recommendationsClone.querySelector('#recommendationsList');
+
+        data.recommendations.forEach((rec) => {
+            const cultureClone = document.getElementById('cultureTemplate').content.cloneNode(true);
+            const couleurMap = {
+                green: 'border-green-500 bg-green-50',
+                yellow: 'border-yellow-500 bg-yellow-50',
+                red: 'border-red-500 bg-red-50',
+            };
+
+            cultureClone.querySelector('.border-l-4').className = 'border-l-4 rounded-lg p-4 transition-all hover:shadow-md ' + couleurMap[rec.couleur];
+            cultureClone.querySelector('.culture-name').textContent = rec.culture;
+            cultureClone.querySelector('.culture-famille').textContent = rec.famille.toUpperCase();
+            cultureClone.querySelector('.culture-raison').textContent = rec.raison;
+            cultureClone.querySelector('.culture-periode').textContent = rec.periode;
+            cultureClone.querySelector('.culture-score').textContent = rec.score;
+            cultureClone.querySelector('.culture-label').textContent = rec.label;
+            cultureClone.querySelector('.culture-label').className = 'culture-label px-2 py-1 rounded text-xs font-semibold ' + (
+                rec.couleur === 'green' ? 'bg-green-200 text-green-900' :
+                rec.couleur === 'yellow' ? 'bg-yellow-200 text-yellow-900' :
+                'bg-red-200 text-red-900'
+            );
+
+            list.appendChild(cultureClone);
+        });
+
+        resultsZone.appendChild(recommendationsClone);
+
+        const planClone = document.getElementById('planTemplate').content.cloneNode(true);
+        const timeline = planClone.querySelector('#planTimeline');
+
+        data.plan.annees.forEach((culture, index) => {
+            const anneeClone = document.getElementById('anneeTemplate').content.cloneNode(true);
+            anneeClone.querySelector('.annee-numero').textContent = index + 1;
+            anneeClone.querySelector('.annee-culture').textContent = culture;
+            timeline.appendChild(anneeClone);
+        });
+
+        planClone.querySelector('.plan-duree').textContent = data.plan.duree;
+        planClone.querySelector('.plan-diversite').textContent = data.plan.diversite;
+        planClone.querySelector('.plan-score').textContent = data.plan.score;
+
+        resultsZone.appendChild(planClone);
+        resultsZone.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+});
+</script>

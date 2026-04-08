@@ -1,0 +1,199 @@
+nav:
+  language: "اللغة"
+  section:
+    navigation: "التنقل"
+    quick_actions: "إجراءات سريعة"
+  dashboard: "لوحة التحكم"
+  equipements: "المعدات"
+  operations: "العمليات"
+  new_equipement: "معدات جديدة"
+  new_operation: "عملية جديدة"
+
+workspace:
+  title: "مساحة العمل"
+
+common:
+  ok: "حسناً"
+  loading: "جاري التحميل..."
+  home: "الرئيسية"
+  new: "جديد"
+  day_singular: "يوم"
+  day_plural: "يوم"
+  completed: "منتهية"
+  terminated: "منتهٍ"
+  search: "بحث"
+  reset: "إعادة ضبط"
+  save: "حفظ"
+  update: "تحديث"
+  back_to_list: "العودة إلى القائمة"
+  actions: "الإجراءات"
+  quick_actions: "إجراءات سريعة"
+  select_all: "تحديد الكل"
+  id: "المعرّف"
+  close: "إغلاق"
+  error: "خطأ"
+  please_fix_errors: "يرجى تصحيح الأخطاء أدناه."
+  bulk_select_at_least_one: "يرجى تحديد عنصر واحد على الأقل."
+  confirm_bulk_delete_count: "تأكيد حذف %count% عنصر/عناصر؟"
+  sort:
+    asc: "ترتيب تصاعدي"
+    desc: "ترتيب تنازلي"
+  cancel: "إلغاء"
+  delete: "حذف"
+  view: "عرض"
+  edit: "تعديل"
+  confirm_delete:
+    title: "تأكيد الحذف"
+    message: "هل أنت متأكد من حذف هذا العنصر؟ هذا الإجراء لا يمكن التراجع عنه."
+
+operation:
+  index:
+    title: "العمليات"
+    navbar_title: "إدارة العمليات"
+    filter:
+      type_label: "نوع العملية"
+      type_placeholder: "ابحث حسب النوع..."
+      status_label: "الحالة"
+      status_all: "-- جميع الحالات --"
+    table:
+      type: "النوع"
+      equipment: "المعدات"
+      start_date: "تاريخ البدء"
+      end_date: "تاريخ الانتهاء"
+      status: "الحالة"
+    empty: "لا توجد عمليات"
+    empty_cta: "إضافة عملية"
+  bulk:
+    confirm: "حذف العمليات المحددة؟"
+    item_aria: "تحديد العملية #%id%"
+  new:
+    title: "عملية جديدة"
+    navbar_title: "إنشاء عملية"
+    card_header: "معلومات العملية"
+  edit:
+    title: "تعديل العملية"
+    navbar_title: "تعديل العملية"
+  show:
+    page_title: "العملية #%id%"
+    navbar_title: "تفاصيل العملية"
+    user_id: "معرّف المستخدم"
+    operation_type: "نوع العملية"
+    start_date: "تاريخ البدء"
+    end_date: "تاريخ الانتهاء"
+    status: "الحالة"
+    equipment: "المعدات"
+    associated_equipment: "المعدات المرتبطة"
+    view_equipment: "عرض المعدات"
+  actions:
+    finish: "إنهاء"
+  form:
+    type_operation:
+      label: "نوع العملية"
+      placeholder: "مثال: صيانة، إصلاح..."
+    date_debut:
+      label: "تاريخ البدء"
+    date_fin:
+      label: "تاريخ الانتهاء"
+    equipement:
+      label: "المعدات"
+
+equipement:
+  state:
+    available: "متاح"
+    reserved: "محجوز"
+  index:
+    title: "المعدات"
+    navbar_title: "إدارة المعدات"
+    filter:
+      name_label: "الاسم"
+      name_placeholder: "ابحث حسب الاسم..."
+      type_label: "النوع"
+      type_all: "-- جميع الأنواع --"
+      state_label: "الحالة"
+      state_all: "-- جميع الحالات --"
+    table:
+      name: "الاسم"
+      type: "النوع"
+      state: "الحالة"
+    empty: "لا توجد معدات"
+    empty_cta: "إضافة معدات"
+  bulk:
+    confirm: "حذف المعدات المحددة؟"
+    item_aria: "تحديد المعدّة #%id%"
+  new:
+    title: "معدات جديدة"
+    navbar_title: "إنشاء معدات"
+    card_header: "معلومات المعدّة"
+  edit:
+    title: "تعديل المعدّة"
+    navbar_title: "تعديل المعدّة"
+  show:
+    page_title: "المعدّة - %name%"
+    navbar_title: "تفاصيل المعدّة"
+    name: "الاسم"
+    type: "النوع"
+    state: "الحالة"
+  delete:
+    reserved_tooltip: "لا يمكن حذف معدّة محجوزة"
+  form:
+    nom:
+      label: "اسم المعدّة"
+      placeholder: "أدخل الاسم..."
+    type:
+      label: "النوع"
+      placeholder: "اختر نوعًا"
+  type:
+    machine: "آلة"
+    irrigation: "الري"
+    elevage: "تربية المواشي"
+    outil_manuel: "أداة يدوية"
+    transport: "النقل"
+
+app:
+  title: "إدارة العمليات والمعدات"
+  actions:
+    delete_selection: "حذف المحدد"
+    new_operation: "عملية جديدة"
+    new_equipement: "معدات جديدة"
+    create_now: "إنشاء الآن"
+  common:
+    view: "عرض"
+    edit: "تعديل"
+    delete: "حذف"
+dashboard:
+  index:
+    title: "لوحة التحكم"
+    navbar_title: "لوحة التحكم - الإحصاءات"
+  actions:
+    refresh: "تحديث"
+    refreshing: "جارٍ التحديث..."
+    terminating: "جارٍ الإنهاء..."
+  confirm:
+    terminate: "هل أنت متأكد أنك تريد إنهاء هذه العملية؟"
+  kpi:
+    operations_total: "إجمالي العمليات"
+    operations_in_progress: "قيد التنفيذ"
+    operations_completed: "منتهية"
+    completion_rate: "%rate%% منتهية"
+  charts:
+    equipment_by_type: "المعدات حسب النوع"
+    equipment_usage: "استخدام المعدات"
+  upcoming:
+    title: "العمليات الأقرب"
+    empty: "لا توجد عمليات قادمة"
+    actions:
+      terminate_tooltip: "إنهاء هذه العملية"
+    table:
+      operation: "العملية"
+      equipment: "المعدات"
+      end_date: "تاريخ الانتهاء"
+      days_remaining: "الأيام المتبقية"
+      status: "الحالة"
+      action: "إجراء"
+  last_updated: "آخر تحديث"
+  notifications:
+    stats_updated: "تم تحديث الإحصاءات"
+    operation_terminated: "تم إنهاء العملية بنجاح"
+  errors:
+    termination: "حدث خطأ أثناء إنهاء العملية"
+    update: "حدث خطأ أثناء التحديث"
