@@ -1,5 +1,6 @@
+{% set currentLocale = app.request.locale|default('fr')|lower %}
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ currentLocale }}" dir="{{ currentLocale starts with 'ar' ? 'rtl' : 'ltr' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -96,10 +97,45 @@
             background: linear-gradient(135deg, #f03e3e, #c92a2a);
             box-shadow: 0 10px 22px rgba(201, 42, 42, .28);
         }
+
+        /* Language switcher */
+        .lang-switch-group {
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+            background: #fff;
+            border: 1px solid #d7dee8;
+            border-radius: 999px;
+            padding: .2rem;
+        }
+        .lang-chip {
+            min-width: 40px;
+            text-align: center;
+            text-decoration: none;
+            color: #2f3f50;
+            background: transparent;
+            border-radius: 999px;
+            padding: .22rem .55rem;
+            font-size: .78rem;
+            font-weight: 700;
+            transition: all .2s ease;
+        }
+        .lang-chip:hover {
+            color: #163a30;
+            background: #e8f5ef;
+        }
+        .lang-chip.active {
+            color: #fff;
+            background: linear-gradient(135deg, #1a8f61, #146c4b);
+            box-shadow: 0 6px 16px rgba(20, 108, 75, .3);
+        }
     </style>
     {% block stylesheets %}{% endblock %}
 </head>
-<body>
+<body
+    data-auto-translate-endpoint="{{ path('app_api_translate') }}"
+    data-auto-translate-csrf="{{ csrf_token('ajax_translate') }}"
+    data-auto-translate-locale="{{ currentLocale }}">
 
 {# AFFICHER LA SIDEBAR SEULEMENT SI L'UTILISATEUR EST CONNECTÉ #}
 {% if app.user %}
@@ -199,8 +235,25 @@
             <strong>{% block page_title %}Tableau de bord{% endblock %}</strong>
         </div>
         <div class="d-flex align-items-center gap-3">
+            <div class="lang-switch-group" role="group" aria-label="Language switch" data-no-auto-translate>
+                {% for locale, label in {'fr': 'FR', 'en': 'EN', 'ar': 'AR'} %}
+                    <a class="lang-chip {% if currentLocale starts with locale %}active{% endif %}" href="{{ path('app_locale_switch', {'_locale': locale}) }}" title="{{ locale|upper }}">
+                        {{ label }}
+                    </a>
+                {% endfor %}
+            </div>
             <span class="text-muted small">{{ "now"|date("d/m/Y H:i") }}</span>
             <span class="badge bg-secondary">{{ app.user.role }}</span>
+        </div>
+    </div>
+    {% else %}
+    <div class="d-flex justify-content-end mb-3">
+        <div class="lang-switch-group" role="group" aria-label="Language switch" data-no-auto-translate>
+            {% for locale, label in {'fr': 'FR', 'en': 'EN', 'ar': 'AR'} %}
+                <a class="lang-chip {% if currentLocale starts with locale %}active{% endif %}" href="{{ path('app_locale_switch', {'_locale': locale}) }}" title="{{ locale|upper }}">
+                    {{ label }}
+                </a>
+            {% endfor %}
         </div>
     </div>
     {% endif %}
@@ -255,6 +308,8 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <!-- Bulk selection (no build step) -->
     <script src="{{ asset('js/bulk-selection.js') }}" defer></script>
+    <!-- Global page auto-translation for hardcoded labels -->
+    <script src="{{ asset('js/page-auto-translate.js') }}" defer></script>
     <!-- Chatbot Widget -->
     <script src="{{ asset('js/chatbot-widget.js') }}" defer></script>
     

@@ -20,15 +20,21 @@ final class LocaleSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if (!$request->hasSession()) {
-            return;
+        $sessionLocale = null;
+        if ($request->hasSession()) {
+            $session = $request->getSession();
+            $sessionLocale = $session->get('_locale');
         }
-
-        $session = $request->getSession();
-        $sessionLocale = $session->get('_locale');
 
         if (is_string($sessionLocale) && $sessionLocale !== '') {
             $request->setLocale($sessionLocale);
+
+            return;
+        }
+
+        $cookieLocale = $request->cookies->get('_locale');
+        if (\is_string($cookieLocale) && \in_array($cookieLocale, ['fr', 'en', 'ar'], true)) {
+            $request->setLocale($cookieLocale);
         }
     }
 

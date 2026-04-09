@@ -23,6 +23,7 @@ final class TranslationApiController extends AbstractController
         }
 
         $text = isset($payload['text']) && is_string($payload['text']) ? $payload['text'] : '';
+        $texts = $this->extractTexts($payload);
         $to = isset($payload['to']) && is_string($payload['to']) ? $payload['to'] : '';
         $from = isset($payload['from']) && is_string($payload['from']) ? $payload['from'] : null;
 
@@ -39,6 +40,19 @@ final class TranslationApiController extends AbstractController
         }
 
         try {
+            if ($texts !== []) {
+                $translations = [];
+                foreach ($texts as $item) {
+                    $translations[$item] = $translatorService->translate($item, $to, $from);
+                }
+
+                return new JsonResponse([
+                    'translations' => $translations,
+                    'to' => $to,
+                    'from' => $from,
+                ]);
+            }
+
             $translated = $translatorService->translate($text, $to, $from);
 
             return new JsonResponse([
@@ -54,5 +68,32 @@ final class TranslationApiController extends AbstractController
         } catch (\Throwable) {
             return new JsonResponse(['error' => 'server_error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function extractTexts(array $payload): array
+    {
+        $rawTexts = $payload['texts'] ?? null;
+        if (!\is_array($rawTexts)) {
+            return [];
+        }
+
+        $texts = [];
+        foreach ($rawTexts as $value) {
+            if (!\is_string($value)) {
+                continue;
+            }
+
+            $value = trim($value);
+            if ($value === '') {
+                continue;
+            }
+
+            $texts[] = $value;
+        }
+
+        return array_slice(array_values(array_unique($texts)), 0, 250);
     }
 }
