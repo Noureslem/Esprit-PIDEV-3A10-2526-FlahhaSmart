@@ -22,6 +22,12 @@
             <div class="opacity-75">Mes threads</div>
         </div>
     </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card" style="--c1:#7a3e9d;--c2:#9d5ccc;">
+            <div class="fs-1 fw-bold">{{ operations|length }}</div>
+            <div class="opacity-75">Mes opérations</div>
+        </div>
+    </div>
 </div>
 
 {# Articles #}
@@ -57,6 +63,66 @@
                     </tr>
                 {% else %}
                     <tr><td colspan="5" class="text-center text-muted py-3">Aucun article</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{# Operations #}
+<div class="card mb-4">
+    <div class="card-header bg-white border-0 pt-3 pb-0 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Mes 3 opérations les plus proches</h5>
+        <div class="d-flex gap-2">
+            <a href="{{ path('app_operation_index') }}" class="btn btn-sm btn-outline-secondary">Voir tout</a>
+            <a href="{{ path('app_operation_new') }}" class="btn btn-sm btn-success">+ Ajouter</a>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Type</th>
+                        <th>Equipement</th>
+                        <th>Date fin</th>
+                        <th>Jours restants</th>
+                        <th>Statut</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in closestOperations %}
+                    {% set operation = item.operation %}
+                    <tr>
+                        <td><strong>{{ operation.typeOperation }}</strong></td>
+                        <td>{{ operation.equipement ? operation.equipement.nom : '-' }}</td>
+                        <td class="text-muted small">{{ operation.dateFin ? operation.dateFin|date('d/m/Y') : '-' }}</td>
+                        <td>
+                            <span class="badge bg-info-subtle text-info-emphasis">
+                                {{ item.daysRemaining }} jour{{ item.daysRemaining > 1 ? 's' : '' }}
+                            </span>
+                        </td>
+                        <td>
+                            {% set status = operation.statut|lower %}
+                            {% if status == 'terminé' %}
+                                <span class="badge bg-success-subtle text-success">{{ operation.statut }}</span>
+                            {% elseif status == 'en cours' %}
+                                <span class="badge bg-warning-subtle text-warning-emphasis">{{ operation.statut }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary-subtle text-secondary">{{ operation.statut }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <form method="post" action="{{ path('app_operation_finish', {'id': operation.id}) }}" class="d-inline">
+                                <input type="hidden" name="_token" value="{{ csrf_token('finish' ~ operation.id) }}">
+                                <button type="submit" class="btn btn-sm btn-success">Terminé</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="6" class="text-center text-muted py-3">Aucune opération proche</td></tr>
                 {% endfor %}
                 </tbody>
             </table>

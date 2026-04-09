@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Users;
+use App\Repository\OperationRepository;
 use App\Repository\UserRepository;
-use App\Service\StatisticsService;
 use App\Service\OperationService;
+use App\Service\StatisticsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,14 +64,26 @@ class DashboardController extends AbstractController
     }
 
     #[Route('/agriculteur', name: 'dashboard_agriculteur')]
-    public function agriculteur(): Response
+    public function agriculteur(OperationRepository $operationRepository, OperationService $operationService): Response
     {
         $this->denyAccessUnlessGranted('ROLE_AGRICULTEUR');
 
+        $user = $this->getUser();
+        if (!$user instanceof Users || $user->getIdUser() === null) {
+            throw $this->createAccessDeniedException('Utilisateur non authentifie.');
+        }
+
+        $operations = $operationRepository->search(null, null, 'date_debut', 'DESC', $user->getIdUser());
+        $closestOperations = $operationService->calculateDaysForOperations(
+            $operationService->getUpcomingOperations(3, $user->getIdUser())
+        );
+
         return $this->render('dashboard/agriculteur.html.twig', [
-            'user'     => $this->getUser(),
+            'user'     => $user,
             'articles' => [],
             'threads'  => [],
+            'operations' => $operations,
+            'closestOperations' => $closestOperations,
         ]);
     }
 

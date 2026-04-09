@@ -6,6 +6,7 @@
     <title>{% block title %}FlahaSmart{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     {# Dans <head> #}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -36,6 +37,64 @@
         @media (max-width: 768px) {
             .sidebar { transform: translateX(-100%); transition: .3s; }
             .main { margin-left: 0; padding: 1rem; }
+        }
+
+        /* Modern confirmation modal for delete actions */
+        #deleteModal .modal-dialog {
+            max-width: 460px;
+        }
+        .confirm-modal {
+            border: 0;
+            border-radius: 18px;
+            box-shadow: 0 24px 50px rgba(13, 24, 35, .2);
+        }
+        .confirm-modal .modal-header {
+            border-bottom: 0;
+            padding: 1.1rem 1.25rem .35rem;
+        }
+        .confirm-modal__icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #ffe3e3, #ffd1d1);
+            color: #c92a2a;
+            font-size: 1.1rem;
+        }
+        .confirm-modal .modal-title {
+            font-weight: 700;
+            color: #15332d;
+        }
+        .confirm-modal .modal-body {
+            padding: .25rem 1.25rem 1rem;
+            color: #4c5d6d;
+            font-size: .98rem;
+        }
+        .confirm-modal .modal-footer {
+            border-top: 0;
+            padding: 0 1.25rem 1.25rem;
+            gap: .55rem;
+        }
+        .confirm-modal .btn {
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        .confirm-modal .btn.btn-secondary {
+            background: #eef2f6;
+            border-color: #eef2f6;
+            color: #22313f;
+        }
+        .confirm-modal .btn.btn-secondary:hover {
+            background: #e2e8ef;
+            border-color: #e2e8ef;
+            color: #1a2733;
+        }
+        .confirm-modal .btn.btn-danger {
+            border: 0;
+            background: linear-gradient(135deg, #f03e3e, #c92a2a);
+            box-shadow: 0 10px 22px rgba(201, 42, 42, .28);
         }
     </style>
     {% block stylesheets %}{% endblock %}
@@ -158,6 +217,31 @@
     {% block body %}{% endblock %}
 </div>
 
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content confirm-modal">
+            <div class="modal-header">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="confirm-modal__icon">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                    </span>
+                    <h5 class="modal-title" id="deleteModalLabel">Confirmer la suppression</h5>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'common.cancel'|trans }}"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">{{ 'common.confirm_delete.message'|trans }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-confirm-cancel data-bs-dismiss="modal">{{ 'common.cancel'|trans }}</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">
+                    <i class="bi bi-trash me-1"></i>{{ 'common.delete'|trans }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
@@ -187,14 +271,12 @@
         // Reusable Bootstrap confirmation modal (single delete + bulk delete)
         (function () {
             const modalEl = document.getElementById('deleteModal');
-            if (!modalEl || typeof bootstrap === 'undefined') {
-                return;
-            }
+            const canUseBootstrapModal = !!modalEl && typeof bootstrap !== 'undefined';
 
-            const modal = new bootstrap.Modal(modalEl);
-            const bodyEl = modalEl.querySelector('.modal-body');
-            const cancelBtn = modalEl.querySelector('.modal-footer .btn.btn-secondary');
-            const confirmBtn = document.getElementById('confirmDelete');
+            const modal = canUseBootstrapModal ? new bootstrap.Modal(modalEl) : null;
+            const bodyEl = canUseBootstrapModal ? modalEl.querySelector('.modal-body') : null;
+            const cancelBtn = canUseBootstrapModal ? modalEl.querySelector('[data-confirm-cancel]') : null;
+            const confirmBtn = canUseBootstrapModal ? document.getElementById('confirmDelete') : null;
 
             let onConfirm = null;
 
@@ -209,24 +291,36 @@
             }
 
             function openInfo(message) {
+                if (!canUseBootstrapModal) {
+                    window.alert(message);
+                    return;
+                }
+
                 setMessage(message);
                 if (confirmBtn) confirmBtn.classList.add('d-none');
                 if (cancelBtn) cancelBtn.textContent = i18nOk;
                 onConfirm = null;
-                modal.show();
+                modal?.show();
             }
 
             function openConfirm(message, callback) {
+                if (!canUseBootstrapModal) {
+                    if (window.confirm(message) && typeof callback === 'function') {
+                        callback();
+                    }
+                    return;
+                }
+
                 setMessage(message);
                 if (confirmBtn) confirmBtn.classList.remove('d-none');
                 if (cancelBtn) cancelBtn.textContent = i18nCancel;
                 onConfirm = callback;
-                modal.show();
+                modal?.show();
             }
 
             confirmBtn?.addEventListener('click', function () {
                 if (typeof onConfirm === 'function') {
-                    modal.hide();
+                    modal?.hide();
                     onConfirm();
                 }
             });
@@ -273,7 +367,8 @@
                         dateFormat: 'Y-m-d',
                         altInput: true,
                         altFormat: 'd/m/Y',
-                        allowInput: true
+                        allowInput: true,
+                        disableMobile: true
                     });
                 });
             }

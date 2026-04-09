@@ -51,9 +51,9 @@ class OperationService
      * Get the 3 closest upcoming operations
      * Ordered by date_fin ascending
      */
-    public function getUpcomingOperations(int $limit = 3): array
+    public function getUpcomingOperations(int $limit = 3, ?int $userId = null): array
     {
-        return $this->operationRepository->findUpcomingOperations($limit);
+        return $this->operationRepository->findUpcomingOperations($limit, $userId);
     }
 
     /**

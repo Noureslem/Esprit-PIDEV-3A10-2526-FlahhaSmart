@@ -23,11 +23,17 @@ class OperationRepository extends ServiceEntityRepository
      * @param string|null $statut Filter by statut (exact match)
      * @param string|null $sort Column to sort by (date_debut, date_fin, type_operation)
      * @param string|null $direction Sort direction (ASC, DESC)
+     * @param int|null $userId Filter by owner user id
      * @return Operation[] Returns an array of Operation objects
      */
-    public function search(?string $type = null, ?string $statut = null, ?string $sort = null, ?string $direction = null): array
+    public function search(?string $type = null, ?string $statut = null, ?string $sort = null, ?string $direction = null, ?int $userId = null): array
     {
         $qb = $this->createQueryBuilder('o');
+
+        if ($userId !== null) {
+            $qb->andWhere('o.id_user = :userId')
+               ->setParameter('userId', $userId);
+        }
 
         // Filter by type_operation using LIKE
         if ($type) {
@@ -93,16 +99,23 @@ class OperationRepository extends ServiceEntityRepository
 
     /**
      * Find upcoming operations ordered by date_fin
-     * Excludes terminated operations
+     * Excludes terminated operations and only keeps operations ending today or later
      */
-    public function findUpcomingOperations(int $limit = 3): array
+    public function findUpcomingOperations(int $limit = 3, ?int $userId = null): array
     {
-        return $this->createQueryBuilder('o')
+        $qb = $this->createQueryBuilder('o')
             ->andWhere("LOWER(o.statut) != 'terminé'")
+            ->andWhere('o.date_fin >= :today')
+            ->setParameter('today', new \DateTimeImmutable('today'))
             ->orderBy('o.date_fin', 'ASC')
-            ->setMaxResults($limit)
-            ->getQuery()
-            ->getResult();
+            ->setMaxResults($limit);
+
+        if ($userId !== null) {
+            $qb->andWhere('o.id_user = :userId')
+               ->setParameter('userId', $userId);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     /**

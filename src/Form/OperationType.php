@@ -25,7 +25,7 @@ class OperationType extends AbstractType
             ])
             ->add('date_debut', DateType::class, [
                 'widget' => 'single_text',
-                'html5' => true,
+                'html5' => false,
                 'required' => true,
                 'label' => 'operation.form.date_debut.label',
                 'attr' => [
@@ -35,7 +35,7 @@ class OperationType extends AbstractType
             ])
             ->add('date_fin', DateType::class, [
                 'widget' => 'single_text',
-                'html5' => true,
+                'html5' => false,
                 'required' => true,
                 'label' => 'operation.form.date_fin.label',
                 'attr' => [
