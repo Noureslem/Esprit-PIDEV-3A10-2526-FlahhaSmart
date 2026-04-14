@@ -98,13 +98,21 @@
                         <a class="nav-link {{ app.request.get('_route') starts with 'app_todo' ? 'active' : '' }}" href="{{ path('app_todo_index') }}">Todo List</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ app.request.get('_route') starts with 'app_consultant' ? 'active' : '' }}" href="{{ path('app_consultant') }}">Consultant IA</a>
+                        <a class="nav-link {{ app.request.get('_route') starts with 'app_price_estimator' ? 'active' : '' }}" href="{{ path('app_price_estimator') }}">
+                             Prix d'article
+                        </a>
                     </li>
                     <li class="nav-item">
-    <a class="nav-link {{ app.request.get('_route') starts with 'app_price_estimator' ? 'active' : '' }}" href="{{ path('app_price_estimator') }}">
-         Prix d'article
-    </a>
-</li>
+                        <a class="nav-link {{ app.request.get('_route') starts with 'app_shop' ? 'active' : '' }}" href="{{ path('app_shop_index') }}">
+                            <i class="fas fa-shopping-bag"></i> Shop
+                        </a>
+                    </li>
+                    <!-- NEW CALENDAR LINK -->
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.request.get('_route') starts with 'app_calendar' ? 'active' : '' }}" href="{{ path('app_calendar') }}">
+                             Calendrier
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

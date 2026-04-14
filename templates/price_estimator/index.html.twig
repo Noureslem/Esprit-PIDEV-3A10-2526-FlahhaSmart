@@ -1,3 +1,5 @@
+{# templates/price_estimator/index.html.twig #}
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Estimation de prix - FlahaSmart{% endblock %}
@@ -15,11 +17,9 @@
                 </p>
             </div>
             <div class="card-body p-4">
-                {# We use form_start to include CSRF token, but manually render the file field #}
                 {{ form_start(form, {'attr': {'id': 'upload-form'}}) }}
                 
                 <div class="upload-area border-2 border-dashed rounded-4 p-5 text-center bg-light" id="drop-zone">
-                    {# Hidden file input #}
                     <input type="file" 
                            id="price_estimator_image" 
                            name="{{ field_name(form.image) }}" 
@@ -57,8 +57,8 @@
                 
                 {{ form_end(form) }}
 
-                {% if estimatedPrice is not null %}
-                <div class="mt-5">
+                <!-- Dynamic result container (replaces the old estimatedPrice block) -->
+                <div id="result-container" class="mt-5" style="display: none;">
                     <div class="alert alert-success border-0 rounded-4 p-4 shadow-sm" style="background: linear-gradient(145deg, #e8f5e9, #c8e6c9);">
                         <div class="row align-items-center">
                             <div class="col-3 text-center">
@@ -66,19 +66,17 @@
                             </div>
                             <div class="col-9">
                                 <p class="text-muted mb-1">Prix estimé</p>
-                                <h2 class="display-5 fw-bold text-success mb-0">{{ estimatedPrice|trim }}</h2>
+                                <h2 class="display-5 fw-bold text-success mb-0" id="estimated-price"></h2>
                                 <small class="text-secondary">en dinars tunisiens (TND)</small>
                             </div>
                         </div>
                     </div>
                 </div>
-                {% endif %}
 
-                {% if error is not null %}
-                <div class="alert alert-danger mt-4 rounded-4">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ error }}
+                <!-- Dynamic error container -->
+                <div id="error-container" class="mt-4" style="display: none;">
+                    <div class="alert alert-danger rounded-4" id="error-message"></div>
                 </div>
-                {% endif %}
             </div>
         </div>
     </div>
@@ -108,6 +106,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const changeBtn = document.getElementById('change-btn');
     const spinner = document.getElementById('loading-spinner');
     const form = document.getElementById('upload-form');
+    const resultContainer = document.getElementById('result-container');
+    const estimatedPriceSpan = document.getElementById('estimated-price');
+    const errorContainer = document.getElementById('error-container');
+    const errorMessageSpan = document.getElementById('error-message');
 
     // Browse button triggers file dialog
     browseBtn.addEventListener('click', function(e) {
@@ -115,18 +117,15 @@ document.addEventListener('DOMContentLoaded', function() {
         fileInput.click();
     });
 
-    // Handle file selection
     function handleFile(file) {
         if (!file) return;
         
-        // Validate type
         const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
         if (!validTypes.includes(file.type)) {
             alert('Type de fichier non supporté. Utilisez JPEG, PNG ou WEBP.');
             return;
         }
         
-        // Validate size (5MB)
         if (file.size > 5 * 1024 * 1024) {
             alert('Fichier trop volumineux. Maximum 5 Mo.');
             return;
@@ -136,6 +135,10 @@ document.addEventListener('DOMContentLoaded', function() {
         uploadPrompt.style.display = 'none';
         previewContainer.style.display = 'block';
         submitBtn.disabled = false;
+        
+        // Hide previous results when new image is selected
+        resultContainer.style.display = 'none';
+        errorContainer.style.display = 'none';
     }
 
     fileInput.addEventListener('change', function() {
@@ -144,7 +147,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Change image button resets
     changeBtn.addEventListener('click', function(e) {
         e.stopPropagation();
         fileInput.value = '';
@@ -152,6 +154,8 @@ document.addEventListener('DOMContentLoaded', function() {
         previewContainer.style.display = 'none';
         previewImg.src = '#';
         submitBtn.disabled = true;
+        resultContainer.style.display = 'none';
+        errorContainer.style.display = 'none';
     });
 
     // Drag & drop
@@ -172,25 +176,62 @@ document.addEventListener('DOMContentLoaded', function() {
         dropZone.classList.remove('dragover');
         const files = e.dataTransfer.files;
         if (files.length > 0) {
-            // Assign dropped file to the hidden input
             fileInput.files = files;
-            // Manually trigger change event
             fileInput.dispatchEvent(new Event('change', { bubbles: true }));
         }
     });
 
-    // Click on drop zone (not on buttons) triggers browse
     dropZone.addEventListener('click', function(e) {
         if (!e.target.closest('button')) {
             fileInput.click();
         }
     });
 
-    // Show loading spinner on submit
-    form.addEventListener('submit', function() {
-        if (!submitBtn.disabled) {
-            submitBtn.disabled = true;
-            spinner.classList.remove('d-none');
+    // AJAX form submission
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        if (submitBtn.disabled) return;
+
+        // Hide previous results
+        resultContainer.style.display = 'none';
+        errorContainer.style.display = 'none';
+
+        // Show loading spinner, disable submit
+        submitBtn.disabled = true;
+        spinner.classList.remove('d-none');
+
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch('{{ path('app_price_estimator') }}', {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.price) {
+                estimatedPriceSpan.textContent = data.price.trim();
+                resultContainer.style.display = 'block';
+            } else if (data.error) {
+                errorMessageSpan.textContent = data.error;
+                errorContainer.style.display = 'block';
+            } else {
+                throw new Error('Réponse inattendue du serveur');
+            }
+        } catch (err) {
+            errorMessageSpan.textContent = 'Une erreur est survenue. Veuillez réessayer.';
+            errorContainer.style.display = 'block';
+        } finally {
+            spinner.classList.add('d-none');
+            // Re-enable submit button only if an image is still selected
+            if (fileInput.files.length > 0) {
+                submitBtn.disabled = false;
+            }
         }
     });
 });

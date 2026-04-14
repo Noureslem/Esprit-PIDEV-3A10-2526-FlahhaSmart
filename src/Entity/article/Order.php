@@ -2,8 +2,9 @@
 namespace App\Entity\article;
 
 use App\Repository\article\OrderRepository;
-
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 use DateTimeInterface;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]  // <-- correct
@@ -38,6 +39,50 @@ class Order
 
     #[ORM\Column(name: 'id_user', type: 'integer', nullable: true)]
     private ?int $idUser = null;
+
+
+    #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderLine::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+private Collection $orderLines;
+
+public function __construct()
+{
+    $this->orderLines = new ArrayCollection();
+    $this->dateCommande = new \DateTime(); // si pas déjà fait
+}
+
+public function getOrderLines(): Collection
+{
+    return $this->orderLines;
+}
+
+public function addOrderLine(OrderLine $line): self
+{
+    if (!$this->orderLines->contains($line)) {
+        $this->orderLines[] = $line;
+        $line->setOrder($this);
+    }
+    return $this;
+}
+
+public function removeOrderLine(OrderLine $line): self
+{
+    if ($this->orderLines->removeElement($line)) {
+        if ($line->getOrder() === $this) {
+            $line->setOrder(null);
+        }
+    }
+    return $this;
+}
+
+// Optionnel : recalculer montantTotal à partir des lignes
+public function recalculateTotal(): void
+{
+    $total = 0;
+    foreach ($this->orderLines as $line) {
+        $total += $line->getSubtotal();
+    }
+    $this->montantTotal = $total + ($this->fraisLivraison ?? 0);
+}
 
     // Getters and Setters (keep the same)
     public function getId(): ?int { return $this->id; }

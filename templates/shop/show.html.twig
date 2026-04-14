@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.nom }} - FlahaSmart{% endblock %}
+
+{% block body %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_shop_index') }}">Boutique</a></li>
+            <li class="breadcrumb-item active">{{ article.nom }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-5">
+            {% if article.imageUrl %}
+                <img src="{{ article.imageUrl }}" class="img-fluid rounded shadow" alt="{{ article.nom }}">
+            {% else %}
+                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 300px;">
+                    🌿 <span class="text-muted">Image non disponible</span>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-md-7">
+            <h1>{{ article.nom }}</h1>
+            <p class="lead">{{ article.description }}</p>
+            <hr>
+            <div class="row mb-3">
+                <div class="col-6">
+                    <strong>💰 Prix :</strong> {{ article.prix }} €
+                </div>
+                <div class="col-6">
+                    <strong>📦 Stock :</strong> {{ article.stock }} unités
+                </div>
+                <div class="col-6 mt-2">
+                    <strong>🏷️ Catégorie :</strong> {{ article.categorie }}
+                </div>
+                <div class="col-6 mt-2">
+                    <strong>⚖️ Poids :</strong> {{ article.poids ?? 'Non spécifié' }} {{ article.unite ?? 'kg' }}
+                </div>
+                <div class="col-6 mt-2">
+                    <strong>📅 Date d'ajout :</strong> {{ article.dateAjout|date('d/m/Y') }}
+                </div>
+                <div class="col-6 mt-2">
+                    <strong>👤 Vendeur :</strong> {{ article.idUser ? 'Agriculteur partenaire' : 'FlahaSmart' }}
+                </div>
+            </div>
+            <hr>
+            <form action="{{ path('app_cart_add', {id: article.id}) }}" method="get" class="d-flex gap-2">
+                <input type="number" name="quantity" value="1" min="1" max="{{ article.stock }}" class="form-control w-25">
+                <button type="submit" class="btn btn-success flex-grow-1">🛒 Ajouter au panier</button>
+            </form>
+            <a href="{{ path('app_shop_index') }}" class="btn btn-secondary mt-2">← Retour à la boutique</a>
+        </div>
+    </div>
+
+    <!-- QR Code section (shop) -->
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <strong>📱 Partager cet article</strong>
+                </div>
+                <div class="card-body">
+                    {% if article.qrCodeFilename %}
+                        <img src="{{ asset('uploads/qrcodes/' ~ article.qrCodeFilename) }}" alt="QR Code" style="width: 180px;">
+                        <p class="mt-2">Scannez ce QR code pour partager l'article facilement.</p>
+                    {% else %}
+                        <p class="text-muted">QR code non disponible.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

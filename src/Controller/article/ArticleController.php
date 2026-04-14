@@ -4,11 +4,7 @@ namespace App\Controller\article;
 use App\Entity\article\Article;
 use App\Form\article\ArticleType;
 use App\Repository\article\ArticleRepository;
-
-
-
 use Doctrine\ORM\EntityManagerInterface;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,7 +35,7 @@ class ArticleController extends AbstractController
                 case 'date_asc': return $a->getDateAjout() <=> $b->getDateAjout();
                 case 'name_asc': return strcasecmp($a->getNom(), $b->getNom());
                 case 'name_desc': return strcasecmp($b->getNom(), $a->getNom());
-                default: return $b->getId() <=> $a->getId(); // id descending
+                default: return $b->getId() <=> $a->getId();
             }
         });
 
@@ -60,12 +56,21 @@ class ArticleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($article);
             $em->flush();
+
             $this->addFlash('success', 'Article ajouté avec succès.');
             return $this->redirectToRoute('app_article_index');
         }
 
         return $this->render('article/new.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/{id}', name: 'app_article_show', methods: ['GET'])]
+    public function show(Article $article): Response
+    {
+        return $this->render('article/show.html.twig', [
+            'article' => $article,
         ]);
     }
 

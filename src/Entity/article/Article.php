@@ -18,6 +18,9 @@ class Article
     #[ORM\Column(name: 'nom', type: 'string', length: 100)]
     private ?string $nom = null;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $qrCodeFilename = null;
+
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     private ?string $description = null;
 
@@ -50,6 +53,19 @@ class Article
         $this->dateAjout = new DateTimeImmutable();
     }
 
+
+
+    
+    public function getQrCodeFilename(): ?string
+{
+    return $this->qrCodeFilename;
+}
+
+public function setQrCodeFilename(?string $qrCodeFilename): self
+{
+    $this->qrCodeFilename = $qrCodeFilename;
+    return $this;
+}
     // Getters and Setters (keep the same as before)
     public function getId(): ?int { return $this->id; }
     public function setId(int $id): self { $this->id = $id; return $this; }
@@ -73,4 +89,7 @@ class Article
     public function setDateAjout(DateTimeImmutable $dateAjout): self { $this->dateAjout = $dateAjout; return $this; }
     public function getIdUser(): ?int { return $this->idUser; }
     public function setIdUser(?int $idUser): self { $this->idUser = $idUser; return $this; }
+
+// src/Entity/article/Article.php
+
 }
