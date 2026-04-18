@@ -85,8 +85,14 @@
                 </div>
                 
                 <div class="flex items-center gap-2">
-                    <span class="px-3 py-1 bg-yellow-100 text-yellow-700 text-[10px] font-black uppercase rounded-lg">
-                        {{ thread.sentiment|default('Analyse...') }}
+                    <span class="px-3 py-1.5 text-[10px] font-black uppercase rounded-lg flex items-center gap-1.5
+                        {% if thread.sentiment == 'positif' %}bg-green-100 text-green-700 ring-1 ring-green-200
+                        {% elseif thread.sentiment == 'negatif' %}bg-red-100 text-red-700 ring-1 ring-red-200
+                        {% else %}bg-yellow-100 text-yellow-700 ring-1 ring-yellow-200{% endif %}">
+                        {% if thread.sentiment == 'positif' %}😊
+                        {% elseif thread.sentiment == 'negatif' %}😟
+                        {% else %}😐{% endif %}
+                        {{ thread.sentiment|default('Neutre') }}
                     </span>
                 </div>
             </div>
@@ -136,7 +142,15 @@
                                 data-id="{{ comment.idCommentaire }}" data-type="comment">
                             <i class="fas fa-language mr-1"></i>Translate
                         </button>
-                        <span class="text-[10px] font-bold uppercase tracking-tighter opacity-50">{{ comment.sentiment }}</span>
+                        <span class="text-[10px] font-black uppercase tracking-tighter flex items-center gap-1
+                            {% if comment.sentiment == 'positif' %}text-green-600
+                            {% elseif comment.sentiment == 'negatif' %}text-red-500
+                            {% else %}text-gray-400{% endif %}">
+                            {% if comment.sentiment == 'positif' %}😊
+                            {% elseif comment.sentiment == 'negatif' %}😟
+                            {% else %}😐{% endif %}
+                            {{ comment.sentiment }}
+                        </span>
                     </div>
                 </div>
             {% else %}
