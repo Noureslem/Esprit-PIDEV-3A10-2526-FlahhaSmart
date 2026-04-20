@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon panier - FlahaSmart{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>🛒 Mon panier</h1>
+    {% if cart is empty %}
+        <div class="alert alert-info">Votre panier est vide. <a href="{{ path('app_shop_index') }}">Continuer vos achats</a></div>
+    {% else %}
+        <table class="table table-hover">
+            <thead>
+                <tr><th>Article</th><th>Prix unitaire</th><th>Quantité</th><th>Sous-total</th><th></th></tr>
+            </thead>
+            <tbody>
+                {% for item in cart %}
+                <tr>
+                    <td><a href="{{ path('app_shop_show', {id: item.article.id}) }}">{{ item.article.nom }}</a></td>
+                    <td>{{ item.article.prix }} €</td>
+                    <td>
+                        <div class="input-group w-50">
+                            <input type="number" value="{{ item.quantity }}" min="1" max="{{ item.article.stock }}" class="form-control quantity-input" data-id="{{ item.article.id }}">
+                            <button class="btn btn-outline-secondary update-qty" data-id="{{ item.article.id }}">Mettre à jour</button>
+                        </div>
+                    </td>
+                    <td>{{ item.subtotal }} €</td>
+                    <td><a href="{{ path('app_cart_remove', {id: item.article.id}) }}" class="btn btn-sm btn-danger">Supprimer</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="table-success">
+                    <td colspan="3" class="text-end"><strong>Total :</strong></td>
+                    <td><strong>{{ total }} €</strong></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="d-flex justify-content-between">
+            <a href="{{ path('app_shop_index') }}" class="btn btn-secondary">Continuer les achats</a>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#checkoutModal">
+                Valider la commande
+            </button>
+        </div>
+    {% endif %}
+</div>
+
+<!-- MODALE pour les infos de commande -->
+<div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" action="{{ path('app_cart_checkout_submit') }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="checkoutModalLabel">Finaliser votre commande</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="statut" class="form-label">Statut</label>
+                        <input type="text" class="form-control" id="statut" name="statut" required placeholder="Ex: En attente, Payé, Expédié...">
+                    </div>
+                    <div class="mb-3">
+                        <label for="modePaiement" class="form-label">Mode de paiement</label>
+                        <input type="text" class="form-control" id="modePaiement" name="modePaiement" required placeholder="Carte bancaire, PayPal, ...">
+                    </div>
+                    <div class="mb-3">
+                        <label for="adresse" class="form-label">Adresse de livraison</label>
+                        <textarea class="form-control" id="adresse" name="adresse" rows="2" required placeholder="Votre adresse complète"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Confirmer la commande</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.update-qty').forEach(btn => {
+        btn.addEventListener('click', function() {
+            let id = this.dataset.id;
+            let input = this.parentElement.querySelector('.quantity-input');
+            let qty = input.value;
+            window.location.href = `/cart/update/${id}/${qty}`;
+        });
+    });
+</script>
+{% endblock %}

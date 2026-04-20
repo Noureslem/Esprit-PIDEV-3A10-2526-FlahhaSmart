@@ -1,0 +1,202 @@
+{% extends 'base.html.twig' %}
+{% block title %}Stocks - Admin{% endblock %}
+{% block body %}
+    <h3 class="text-dark fw-bold mb-4" style="font-size: 1.5rem;">Liste des stocks</h3>
+
+    <div class="row mb-3 align-items-center">
+        <div class="col-md-5">
+            <div class="input-group input-group-sm shadow-sm">
+                <span class="input-group-text bg-white border-end-0 text-success"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" class="form-control border-start-0 ps-0 js-search-input" placeholder="Rechercher..." style="font-size: 0.85rem;">
+            </div>
+        </div>
+        <div class="col-md-4 mt-2 mt-md-0">
+            <div class="input-group input-group-sm shadow-sm">
+                <span class="input-group-text bg-white border-end-0 text-success"><i class="fa-solid fa-filter"></i></span>
+                <select class="form-select border-start-0 js-sort-select" style="font-size: 0.85rem;">
+                    <option value="default">Trier par défaut (ID)</option>
+                    <option value="name_asc">Nom (A-Z)</option>
+                    <option value="name_desc">Nom (Z-A)</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3 mt-2 mt-md-0 text-md-end">
+            <a href="{{ path('admin_stock_new') }}" class="btn btn-success btn-sm shadow-sm fw-bold"><i class="fa-solid fa-plus me-1"></i> Nouveau stock</a>
+        </div>
+    </div>
+
+    <div class="table-responsive bg-white rounded shadow-sm border">
+        <table class="table table-hover table-custom mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Type de Produit</th>
+                    <th scope="col">Variété</th>
+                    <th scope="col">Date début</th>
+                    <th scope="col">Date fin est.</th>
+                    <th scope="col">Agriculteur</th>
+                    <th scope="col">Statut</th>
+                    <th scope="col" class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="stock-table-body">
+            {% for stock in stocks %}
+                <tr class="js-filterable-row" data-id="{{ stock.idProduit }}" data-name="{{ stock.typeProduit }}" data-variete="{{ stock.variete }}" data-agriculteur="{{ stock.user ? stock.user.nom : '' }}">
+                    <td class="fw-bold">{{ stock.idProduit }}</td>
+                    <td class="type-produit">{{ stock.typeProduit }}</td>
+                    <td>{{ stock.variete }}</td>
+                    <td>{{ stock.dateDebut ? stock.dateDebut|date('d/m/Y') : '--' }}</td>
+                    <td>{{ stock.dateFinEstimee ? stock.dateFinEstimee|date('d/m/Y') : '--' }}</td>
+                    <td class="agriculteur">{{ stock.user ? stock.user.nom : '--' }}</td>
+                    <td>
+                        <span class="badge {% if stock.statut == 'en cours' %}bg-primary{% elseif stock.statut == 'terminé' %}bg-success{% else %}bg-secondary{% endif %}" style="font-size: 0.70rem;">
+                            {{ stock.statut|capitalize }}
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex justify-content-end gap-1">
+                            <a href="{{ path('admin_stock_edit', {'idProduit': stock.idProduit}) }}" class="btn btn-outline-primary btn-action">Modifier</a>
+                            <form method="post" action="{{ path('admin_stock_delete', {'idProduit': stock.idProduit}) }}" onsubmit="return confirm('Supprimer ce stock définitivement ?');" style="display:inline-block; margin:0;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ stock.idProduit) }}">
+                                <button class="btn btn-outline-danger btn-action">Supprimer</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8" class="text-center py-4 text-muted">Aucun stock trouvé.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <style>
+        .table-custom th {
+            background-color: #eaf3ed !important;
+            color: #198754;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #198754;
+        }
+        .table-custom td {
+            font-size: 0.85rem;
+            color: #444;
+            vertical-align: middle;
+        }
+        .btn-action {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+    </style>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('.js-search-input');
+            const sortSelect = document.querySelector('.js-sort-select');
+            const applySortBtn = document.querySelector('.js-apply-sort');
+            const tbody = document.getElementById('stock-table-body');
+            
+            // Fonction pour obtenir toutes les lignes comme tableau
+            function getRowsArray() {
+                return Array.from(document.querySelectorAll('.js-filterable-row'));
+            }
+            
+            // Fonction pour afficher les lignes (avec filtre)
+            function filterRows(rows, searchTerm) {
+                return rows.filter(row => {
+                    const text = row.textContent.toLowerCase();
+                    return text.includes(searchTerm);
+                });
+            }
+            
+            // Fonction pour trier les lignes
+            function sortRows(rows, sortType) {
+                const sortedRows = [...rows];
+                
+                switch(sortType) {
+                    case 'name_asc':
+                        sortedRows.sort((a, b) => {
+                            const nameA = a.querySelector('.type-produit').textContent.toLowerCase();
+                            const nameB = b.querySelector('.type-produit').textContent.toLowerCase();
+                            return nameA.localeCompare(nameB);
+                        });
+                        break;
+                    case 'name_desc':
+                        sortedRows.sort((a, b) => {
+                            const nameA = a.querySelector('.type-produit').textContent.toLowerCase();
+                            const nameB = b.querySelector('.type-produit').textContent.toLowerCase();
+                            return nameB.localeCompare(nameA);
+                        });
+                        break;
+                    default: // 'default' - tri par ID
+                        sortedRows.sort((a, b) => {
+                            const idA = parseInt(a.dataset.id);
+                            const idB = parseInt(b.dataset.id);
+                            return idA - idB;
+                        });
+                        break;
+                }
+                
+                return sortedRows;
+            }
+            
+            // Fonction pour mettre à jour l'affichage
+            function updateDisplay() {
+                const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+                const sortType = sortSelect ? sortSelect.value : 'default';
+                
+                // Récupérer toutes les lignes
+                const allRows = getRowsArray();
+                
+                // Appliquer le filtre
+                let filteredRows = filterRows(allRows, searchTerm);
+                
+                // Appliquer le tri
+                const sortedRows = sortRows(filteredRows, sortType);
+                
+                // Réorganiser le DOM
+                sortedRows.forEach(row => {
+                    tbody.appendChild(row);
+                });
+                
+                // Gérer l'affichage du message "aucun résultat"
+                const noDataRow = tbody.querySelector('.no-data-row');
+                if (filteredRows.length === 0 && !noDataRow) {
+                    const emptyRow = document.createElement('tr');
+                    emptyRow.className = 'no-data-row';
+                    emptyRow.innerHTML = '<td colspan="8" class="text-center py-4 text-muted">Aucun stock trouvé.</td>';
+                    tbody.appendChild(emptyRow);
+                } else if (filteredRows.length > 0 && noDataRow) {
+                    noDataRow.remove();
+                } else if (filteredRows.length === 0 && noDataRow) {
+                    // Garder le message existant
+                }
+            }
+            
+            // Événement de recherche (live)
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    updateDisplay();
+                });
+            }
+            
+            // Événement de tri (au clic sur le bouton)
+            if (applySortBtn) {
+                applySortBtn.addEventListener('click', function() {
+                    updateDisplay();
+                });
+            }
+            
+            // Tri automatique quand on change la sélection (optionnel)
+            if (sortSelect) {
+                sortSelect.addEventListener('change', function() {
+                    updateDisplay();
+                });
+            }
+        });
+    </script>
+{% endblock %}

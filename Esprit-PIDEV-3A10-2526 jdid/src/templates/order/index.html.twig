@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commandes - FlahaSmart{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3">Liste des commandes</h1>
+    <a href="{{ path('app_order_new') }}" class="btn btn-primary">+ Ajouter une commande</a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-6">
+                <input type="text" name="search" class="form-control" placeholder="Rechercher par référence" value="{{ search }}">
+            </div>
+            <div class="col-md-4">
+                <select name="sort" class="form-select">
+                    <option value="id" {% if sort == 'id' %}selected{% endif %}>Trier par défaut (ID)</option>
+                    <option value="date_desc" {% if sort == 'date_desc' %}selected{% endif %}>Date plus récente</option>
+                    <option value="date_asc" {% if sort == 'date_asc' %}selected{% endif %}>Date plus ancienne</option>
+                    <option value="amount_asc" {% if sort == 'amount_asc' %}selected{% endif %}>Montant croissant</option>
+                    <option value="amount_desc" {% if sort == 'amount_desc' %}selected{% endif %}>Montant décroissant</option>
+                    <option value="ref_asc" {% if sort == 'ref_asc' %}selected{% endif %}>Référence A-Z</option>
+                    <option value="ref_desc" {% if sort == 'ref_desc' %}selected{% endif %}>Référence Z-A</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Appliquer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Référence</th>
+                    <th>Date</th>
+                    <th>Statut</th>
+                    <th>Mode paiement</th>
+                    <th>Adresse</th>
+                    <th>Montant (€)</th>
+                    <th>Frais (€)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.reference }}</td>
+                    <td>{{ order.dateCommande|date('d/m/Y') }}</td>
+                    <td>{{ order.statut }}</td>
+                    <td>{{ order.modePaiement }}</td>
+                    <td>{{ order.adresseLivraison|slice(0, 40) }}{% if order.adresseLivraison|length > 40 %}...{% endif %}</td>
+                    <td>{{ order.montantTotal|number_format(2, ',', ' ') }}</td>
+                    <td>{{ order.fraisLivraison|number_format(2, ',', ' ') }}</td>
+                    <td>
+                        <a href="{{ path('app_order_edit', {id: order.id}) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
+                        <form method="post" action="{{ path('app_order_delete', {id: order.id}) }}" style="display:inline-block;" onsubmit="return confirm('Supprimer cette commande ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ order.id) }}">
+                            <button class="btn btn-sm btn-outline-danger">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="9" class="text-center">Aucune commande trouvée</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <a href="{{ path('app_order_stats_amount') }}" class="btn btn-outline-success w-100">💰 Statistiques des montants</a>
+    </div>
+    <div class="col-md-6">
+        <a href="{{ path('app_order_stats_fees') }}" class="btn btn-outline-success w-100">🚚 Statistiques des frais</a>
+    </div>
+</div>
+{% endblock %}
