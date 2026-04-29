@@ -27,7 +27,7 @@ class CartController extends AbstractController
         foreach ($cart as $id => $quantity) {
             $article = $articleRepo->find($id);
             if ($article) {
-                $subtotal = (float) $article->getPrix() * $quantity;  // Cast en float
+                $subtotal = (float) $article->getPrix() * $quantity;
                 $total += $subtotal;
                 $cartData[] = [
                     'article' => $article,
@@ -118,29 +118,29 @@ class CartController extends AbstractController
     #[Route('/checkout/submit', name: 'app_cart_checkout_submit', methods: ['POST'])]
     public function checkoutSubmit(Request $request, SessionInterface $session, EntityManagerInterface $em, ArticleRepository $articleRepo): Response
     {
-        // Récupération des champs du formulaire modal
-        $statut = $request->request->get('statut');
-        $modePaiement = $request->request->get('modePaiement');
-        $adresse = $request->request->get('adresse');
-
+        // Récupération des champs du formulaire modal avec cast string
+        $statut = (string) $request->request->get('statut');
+        $modePaiement = (string) $request->request->get('modePaiement');
+        $adresse = (string) $request->request->get('adresse');
+    
         // Validation simple
         if (empty($statut) || empty($modePaiement) || empty($adresse)) {
             $this->addFlash('error', 'Tous les champs sont obligatoires.');
             return $this->redirectToRoute('app_cart_index');
         }
-
+    
         $cart = $session->get('cart', []);
         if (empty($cart)) {
             $this->addFlash('error', 'Votre panier est vide.');
             return $this->redirectToRoute('app_article_index');
         }
-
+    
         // Génération d'une référence unique pour la commande
         $reference = 'REF-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -4));
-
+    
         // Frais de livraison aléatoire entre 10 et 50 € (entier)
         $fraisLivraison = random_int(10, 50);
-
+    
         // Création de la commande
         $order = new Order();
         $order->setReference($reference);
@@ -149,37 +149,40 @@ class CartController extends AbstractController
         $order->setModePaiement($modePaiement);
         $order->setAdresseLivraison($adresse);
         $order->setFraisLivraison($fraisLivraison);
-        $order->setIdUser($this->getUser() ? $this->getUser()->getId() : null);
-
+    
+        // ID utilisateur : vérification du type pour satisfaire PHPStan
+        $user = $this->getUser();
+        $order->setIdUser($user instanceof \App\Entity\User ? $user->getId() : null);
+    
         $totalArticles = 0;
-
+    
         foreach ($cart as $id => $qty) {
             $article = $articleRepo->find($id);
             if (!$article || $qty > $article->getStock()) {
                 $this->addFlash('error', "Stock insuffisant pour l'article ID $id");
                 return $this->redirectToRoute('app_cart_index');
             }
-
+    
             $line = new OrderLine();
             $line->setArticle($article);
             $line->setQuantity($qty);
             $line->setPriceAtOrder($article->getPrix()); // Accepte float|string, ok
             $order->addOrderLine($line);
-
+    
             // Mise à jour du stock
             $article->setStock($article->getStock() - $qty);
-            $totalArticles += (float) $article->getPrix() * $qty;  // Cast en float
+            $totalArticles += (float) $article->getPrix() * $qty;
         }
-
+    
         // Montant total = somme des articles + frais de livraison
         $order->setMontantTotal($totalArticles + $fraisLivraison);
-
+    
         $em->persist($order);
         $em->flush();
-
+    
         // Vider le panier après validation réussie
         $session->remove('cart');
-
+    
         $this->addFlash('success', "Commande validée ! Référence : $reference - Frais de livraison : $fraisLivraison €");
         return $this->redirectToRoute('app_order_index');
     }

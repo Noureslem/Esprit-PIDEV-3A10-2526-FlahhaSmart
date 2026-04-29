@@ -1,6 +1,4 @@
 <?php
-// src/Entity/article/OrderLine.php
-
 namespace App\Entity\article;
 
 use App\Repository\article\OrderLineRepository;
@@ -13,14 +11,15 @@ class OrderLine
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    /** @phpstan-ignore-next-line */
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderLines')]
-    #[ORM\JoinColumn(referencedColumnName: 'id_commande', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'order_id', referencedColumnName: 'id_commande', nullable: false, onDelete: 'CASCADE')]
     private Order $order;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(referencedColumnName: 'id_article', nullable: false)]
+    #[ORM\JoinColumn(name: 'article_id', referencedColumnName: 'id_article', nullable: false)]
     private Article $article;
 
     #[ORM\Column(type: 'integer')]
@@ -29,14 +28,13 @@ class OrderLine
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private string $priceAtOrder;
 
-    // Getters & setters
     public function getId(): ?int { return $this->id; }
 
     public function getOrder(): Order { return $this->order; }
-    public function setOrder(?Order $order): self { $this->order = $order; return $this; }
+    public function setOrder(Order $order): self { $this->order = $order; return $this; }
 
     public function getArticle(): Article { return $this->article; }
-    public function setArticle(?Article $article): self { $this->article = $article; return $this; }
+    public function setArticle(Article $article): self { $this->article = $article; return $this; }
 
     public function getQuantity(): int { return $this->quantity; }
     public function setQuantity(int $quantity): self { $this->quantity = $quantity; return $this; }

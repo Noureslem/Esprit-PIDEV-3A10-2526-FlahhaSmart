@@ -2,10 +2,12 @@
 namespace App\Repository\article;
 
 use App\Entity\article\Todo;
-
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Todo>
+ */
 class TodoRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -13,6 +15,9 @@ class TodoRepository extends ServiceEntityRepository
         parent::__construct($registry, Todo::class);
     }
 
+    /**
+     * @return Todo[]
+     */
     public function findAllOrdered(): array
     {
         return $this->findBy([], ['nomTache' => 'ASC', 'tache' => 'ASC']);

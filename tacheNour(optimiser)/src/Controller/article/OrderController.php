@@ -90,7 +90,8 @@ public function index(OrderRepository $repository, Request $request): Response
     #[Route('/{id}/delete', name: 'app_order_delete', methods: ['POST'])]
     public function delete(Request $request, Order $order, EntityManagerInterface $em): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$order->getId(), $request->request->get('_token'))) {
+        $token = $request->request->get('_token');
+        if ($this->isCsrfTokenValid('delete'.(string)$order->getId(), is_scalar($token) ? (string) $token : '')) {
             $em->remove($order);
             $em->flush();
             $this->addFlash('success', 'Commande supprimée avec succès.');
@@ -184,9 +185,10 @@ public function index(OrderRepository $repository, Request $request): Response
         $sorted = $orders;
         usort($sorted, fn($a, $b) => (float)$a->getFraisLivraison() <=> (float)$b->getFraisLivraison()); // Cast
         $count = count($sorted);
-        $q1 = (float) ($sorted[floor($count/4)]->getFraisLivraison() ?? 0);
-        $median = (float) ($sorted[floor($count/2)]->getFraisLivraison() ?? 0);
-        $q3 = (float) ($sorted[floor(3*$count/4)]->getFraisLivraison() ?? 0);
+
+        $q1 = (float) ($sorted[(int) floor($count/4)]->getFraisLivraison() ?? 0);
+        $median = (float) ($sorted[(int) floor($count/2)]->getFraisLivraison() ?? 0);
+        $q3 = (float) ($sorted[(int) floor(3*$count/4)]->getFraisLivraison() ?? 0);
 
         return $this->render('order/stats_fees.html.twig', [
             'orders' => $sorted,

@@ -40,6 +40,9 @@ class Order
     #[ORM\Column(name: 'id_user', type: 'integer', nullable: true)]
     private ?int $idUser = null;
 
+    /**
+     * @var Collection<int, OrderLine>
+     */
     #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderLine::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $orderLines;
 
@@ -49,7 +52,9 @@ class Order
         $this->dateCommande = new \DateTime();
         $this->montantTotal = '0.00';
     }
-
+    /**
+     * @return Collection<int, OrderLine>
+     */
     public function getOrderLines(): Collection
     {
         return $this->orderLines;
@@ -68,7 +73,7 @@ class Order
     {
         if ($this->orderLines->removeElement($line)) {
             if ($line->getOrder() === $this) {
-                $line->setOrder(null);
+                //$line->setOrder(null);
             }
         }
         return $this;

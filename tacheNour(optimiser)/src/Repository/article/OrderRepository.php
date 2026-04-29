@@ -5,6 +5,10 @@ use App\Entity\article\Order;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Order>
+ */
+
 class OrderRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -50,6 +54,9 @@ class OrderRepository extends ServiceEntityRepository
 
     /**
      * Ancienne méthode de recherche – conservée pour compatibilité éventuelle.
+     */
+        /**
+     * @return Order[]
      */
     public function searchByReference(string $term): array
     {

@@ -5,7 +5,6 @@ use App\Entity\article\Todo;
 use App\Form\article\TodoType;
 use App\Repository\article\TodoRepository;
 
-
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,8 +31,10 @@ class TodoController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Check if already exists
-            $existing = $repo->findByNomTacheAndTache($todo->getNomTache(), $todo->getTache());
+            // On s'assure que les chaînes ne sont pas null (normalement le formulaire les fournit)
+            $nomTache = (string) $todo->getNomTache();
+            $tache = (string) $todo->getTache();
+            $existing = $repo->findByNomTacheAndTache($nomTache, $tache);
             if ($existing) {
                 $this->addFlash('error', 'Cette tâche existe déjà pour ce consultant.');
                 return $this->redirectToRoute('app_todo_new');
@@ -52,6 +53,10 @@ class TodoController extends AbstractController
     #[Route('/{nomTache}/{tache}/edit', name: 'app_todo_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, string $nomTache, string $tache, TodoRepository $repo, EntityManagerInterface $em): Response
     {
+        // Cast pour satisfaire PHPStan (même si ce sont déjà des string)
+        $nomTache = (string) $nomTache;
+        $tache = (string) $tache;
+
         $todo = $repo->findByNomTacheAndTache($nomTache, $tache);
         if (!$todo) {
             throw $this->createNotFoundException('Tâche non trouvée');
@@ -61,22 +66,20 @@ class TodoController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // If consultant/task changed, check uniqueness
-            $newNom = $todo->getNomTache();
-            $newTache = $todo->getTache();
+            $newNom = (string) $todo->getNomTache();
+            $newTache = (string) $todo->getTache();
             if ($newNom !== $nomTache || $newTache !== $tache) {
                 $existing = $repo->findByNomTacheAndTache($newNom, $newTache);
                 if ($existing && $existing !== $todo) {
                     $this->addFlash('error', 'Cette combinaison consultant/tâche existe déjà.');
                     return $this->redirectToRoute('app_todo_edit', ['nomTache' => $nomTache, 'tache' => $tache]);
                 }
-                // Delete old composite key and persist new one (Doctrine will handle if we remove then persist)
-                // We need to remove old and persist new because primary key changed
+                // Suppression de l'ancienne entité (clé composite modifiée)
                 $em->remove($todo);
                 $newTodo = new Todo();
                 $newTodo->setNomTache($newNom);
                 $newTodo->setTache($newTache);
-                $newTodo->setStatut($todo->getStatut());
+                $newTodo->setStatut((string) $todo->getStatut());
                 $em->persist($newTodo);
                 $em->flush();
                 $this->addFlash('success', 'Tâche modifiée avec succès.');
@@ -97,8 +100,11 @@ class TodoController extends AbstractController
     #[Route('/{nomTache}/{tache}/delete', name: 'app_todo_delete', methods: ['POST'])]
     public function delete(Request $request, string $nomTache, string $tache, TodoRepository $repo, EntityManagerInterface $em): Response
     {
+        $nomTache = (string) $nomTache;
+        $tache = (string) $tache;
         $todo = $repo->findByNomTacheAndTache($nomTache, $tache);
-        if ($todo && $this->isCsrfTokenValid('delete'.$nomTache.$tache, $request->request->get('_token'))) {
+        $token = $request->request->get('_token');
+        if ($todo && $this->isCsrfTokenValid('delete' . $nomTache . $tache, is_scalar($token) ? (string) $token : '')) {
             $em->remove($todo);
             $em->flush();
             $this->addFlash('success', 'Tâche supprimée avec succès.');

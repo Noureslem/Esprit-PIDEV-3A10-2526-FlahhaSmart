@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Service\article;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -7,7 +6,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImagePriceEstimatorService
 {
-    private $httpClient;
+    private HttpClientInterface $httpClient;
     private string $ollamaUrl;
     private string $model;
 
@@ -21,8 +20,10 @@ class ImagePriceEstimatorService
     public function estimatePrice(UploadedFile $imageFile): ?string
     {
         try {
-            // Read file and encode to base64
             $imageData = file_get_contents($imageFile->getPathname());
+            if ($imageData === false) {
+                return null; // ou lancer une exception
+            }
             $base64Image = base64_encode($imageData);
 
             $prompt = "based on this image can you guess the price of it just tell me the price dont explain or write anything tell me the price instantly give me the price of this product in tunisian dinars";

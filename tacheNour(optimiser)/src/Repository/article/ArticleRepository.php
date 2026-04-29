@@ -6,6 +6,11 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
+
+/**
+ * @extends ServiceEntityRepository<Article>
+ */
+
 class ArticleRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -51,7 +56,10 @@ class ArticleRepository extends ServiceEntityRepository
         ];
     }
 
-
+    /**
+     * @return Article[]
+     */
+    
     public function searchByName(string $term): array
     {
         return $this->createQueryBuilder('a')

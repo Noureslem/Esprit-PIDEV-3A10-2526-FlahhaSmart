@@ -46,7 +46,7 @@ class ShopController extends AbstractController
     }
 
     #[Route('/shop/article/{id}', name: 'app_shop_show')]
-    public function show($id, ArticleRepository $articleRepository): Response
+    public function show(int $id, ArticleRepository $articleRepository): Response
     {
         $article = $articleRepository->find($id);
         if (!$article) {

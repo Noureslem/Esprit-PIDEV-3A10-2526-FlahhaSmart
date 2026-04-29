@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PriceEstimatorController extends AbstractController
 {
@@ -52,7 +53,7 @@ class PriceEstimatorController extends AbstractController
         ]);
     }
 
-    private function validateImageFile($file): ?string
+    private function validateImageFile(UploadedFile $file): ?string
     {
         $filename = $file->getClientOriginalName();
         $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));

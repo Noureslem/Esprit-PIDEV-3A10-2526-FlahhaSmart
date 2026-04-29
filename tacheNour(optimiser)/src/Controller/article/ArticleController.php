@@ -99,7 +99,8 @@ class ArticleController extends AbstractController
     #[Route('/{id}/delete', name: 'app_article_delete', methods: ['POST'])]
     public function delete(Request $request, Article $article, EntityManagerInterface $em): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
+        $token = $request->request->get('_token');
+        if ($this->isCsrfTokenValid('delete'.(string)$article->getId(), is_scalar($token) ? (string) $token : '')) {
             $em->remove($article);
             $em->flush();
             $this->addFlash('success', 'Article supprimé avec succès.');
