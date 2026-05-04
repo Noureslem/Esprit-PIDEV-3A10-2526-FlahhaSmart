@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.commande.PriceEstimatorController"
+      spacing="20"
+      styleClass="price-estimator-root">
+
+    <!-- En-tête -->
+    <HBox spacing="20" alignment="CENTER">
+        <Label style="-fx-font-size: 22px; -fx-font-weight: bold;" text="💰 Estimation de prix par IA"/>
+    </HBox>
+    <Label text="Prenez une photo du produit, notre IA estime son prix en dinars tunisiens"
+           textAlignment="CENTER" wrapText="true"
+           style="-fx-text-fill: #555;"/>
+
+    <!-- Zone d'upload -->
+    <VBox fx:id="uploadArea"
+          styleClass="upload-area"
+          spacing="10"
+          alignment="CENTER">
+        <padding><Insets top="40" right="20" bottom="40" left="20"/></padding>
+
+        <Label fx:id="uploadPrompt" alignment="CENTER">
+            <VBox spacing="10" alignment="CENTER">
+                <Label text="📸" style="-fx-font-size: 36px;"/>
+                <Label text="Glissez-déposez votre image ici" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+                <Label text="ou" style="-fx-text-fill: #888;"/>
+                <Button text="Parcourir" styleClass="browse-btn"/>
+                <Label text="JPEG, PNG, WEBP - Max 5 Mo" style="-fx-text-fill: #888; -fx-font-size: 12px;"/>
+            </VBox>
+        </Label>
+
+        <!-- Prévisualisation -->
+        <VBox fx:id="previewContainer" visible="false" spacing="10" alignment="CENTER">
+            <ImageView fx:id="imagePreview" fitHeight="250" preserveRatio="true"/>
+            <Button text="Changer d’image" onAction="#handleChangeImage" styleClass="change-btn"/>
+        </VBox>
+    </VBox>
+
+    <!-- Bouton d’estimation -->
+    <HBox alignment="CENTER">
+        <Button fx:id="submitBtn"
+                text="Estimer le prix"
+                onAction="#handleSubmit"
+                styleClass="submit-btn"
+                disable="true">
+            <graphic>
+                <ProgressIndicator fx:id="loadingSpinner" visible="false" prefWidth="20" prefHeight="20"/>
+            </graphic>
+        </Button>
+    </HBox>
+
+    <!-- Résultat -->
+    <VBox fx:id="resultContainer" visible="false" styleClass="result-box" spacing="10" alignment="CENTER">
+        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+        <Label text="💰" style="-fx-font-size: 36px;"/>
+        <Label text="Prix estimé" style="-fx-font-weight: bold; -fx-text-fill: #333;"/>
+        <Label fx:id="estimatedPrice" styleClass="estimated-price"/>
+        <Label text="en dinars tunisiens (TND)" style="-fx-text-fill: #666;"/>
+    </VBox>
+
+    <!-- Erreur -->
+    <VBox fx:id="errorContainer" visible="false" styleClass="error-box" spacing="10" alignment="CENTER">
+        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+        <Label text="❌" style="-fx-font-size: 36px;"/>
+        <Label fx:id="errorMessage" wrapText="true" styleClass="error-message"/>
+    </VBox>
+</VBox>
