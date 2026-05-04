@@ -24,16 +24,27 @@ class CartController extends AbstractController
         $cartData = [];
         $total = 0;
 
-        foreach ($cart as $id => $quantity) {
-            $article = $articleRepo->find($id);
-            if ($article) {
-                $subtotal = (float) $article->getPrix() * $quantity;
-                $total += $subtotal;
-                $cartData[] = [
-                    'article' => $article,
-                    'quantity' => $quantity,
-                    'subtotal' => $subtotal,
-                ];
+        if (!empty($cart)) {
+            // Conversion des clés en entiers
+            $ids = array_map('intval', array_keys($cart));
+            $articles = $articleRepo->findByIds($ids);
+            // Indexer par id pour retrouver rapidement
+            $articlesById = [];
+            foreach ($articles as $article) {
+                $articlesById[$article->getId()] = $article;
+            }
+
+            foreach ($cart as $id => $quantity) {
+                $article = $articlesById[(int)$id] ?? null;
+                if ($article) {
+                    $subtotal = (float) $article->getPrix() * $quantity;
+                    $total += $subtotal;
+                    $cartData[] = [
+                        'article' => $article,
+                        'quantity' => $quantity,
+                        'subtotal' => $subtotal,
+                    ];
+                }
             }
         }
 
@@ -112,9 +123,6 @@ class CartController extends AbstractController
         return $this->redirectToRoute('app_cart_index');
     }
 
-    /**
-     * Nouvelle route : traitement du formulaire de validation de commande (modal)
-     */
     #[Route('/checkout/submit', name: 'app_cart_checkout_submit', methods: ['POST'])]
     public function checkoutSubmit(Request $request, SessionInterface $session, EntityManagerInterface $em, ArticleRepository $articleRepo): Response
     {
@@ -122,26 +130,32 @@ class CartController extends AbstractController
         $statut = (string) $request->request->get('statut');
         $modePaiement = (string) $request->request->get('modePaiement');
         $adresse = (string) $request->request->get('adresse');
-    
+
         // Validation simple
         if (empty($statut) || empty($modePaiement) || empty($adresse)) {
             $this->addFlash('error', 'Tous les champs sont obligatoires.');
             return $this->redirectToRoute('app_cart_index');
         }
-    
+
         $cart = $session->get('cart', []);
         if (empty($cart)) {
             $this->addFlash('error', 'Votre panier est vide.');
             return $this->redirectToRoute('app_article_index');
         }
-    
+
+        // Convertir les clés du panier en entiers pour findByIds
+        $ids = array_map('intval', array_keys($cart));
+        $articles = $articleRepo->findByIds($ids);
+        // Indexer par id
+        $articlesById = [];
+        foreach ($articles as $article) {
+            $articlesById[$article->getId()] = $article;
+        }
+
         // Génération d'une référence unique pour la commande
         $reference = 'REF-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -4));
-    
-        // Frais de livraison aléatoire entre 10 et 50 € (entier)
         $fraisLivraison = random_int(10, 50);
-    
-        // Création de la commande
+
         $order = new Order();
         $order->setReference($reference);
         $order->setDateCommande(new \DateTime());
@@ -149,40 +163,36 @@ class CartController extends AbstractController
         $order->setModePaiement($modePaiement);
         $order->setAdresseLivraison($adresse);
         $order->setFraisLivraison($fraisLivraison);
-    
-        // ID utilisateur : vérification du type pour satisfaire PHPStan
+
         $user = $this->getUser();
         $order->setIdUser($user instanceof \App\Entity\User ? $user->getId() : null);
-    
+
         $totalArticles = 0;
-    
+
         foreach ($cart as $id => $qty) {
-            $article = $articleRepo->find($id);
+            $article = $articlesById[(int)$id] ?? null;
             if (!$article || $qty > $article->getStock()) {
                 $this->addFlash('error', "Stock insuffisant pour l'article ID $id");
                 return $this->redirectToRoute('app_cart_index');
             }
-    
+
             $line = new OrderLine();
             $line->setArticle($article);
             $line->setQuantity($qty);
-            $line->setPriceAtOrder($article->getPrix()); // Accepte float|string, ok
+            $line->setPriceAtOrder($article->getPrix());
             $order->addOrderLine($line);
-    
-            // Mise à jour du stock
+
             $article->setStock($article->getStock() - $qty);
             $totalArticles += (float) $article->getPrix() * $qty;
         }
-    
-        // Montant total = somme des articles + frais de livraison
+
         $order->setMontantTotal($totalArticles + $fraisLivraison);
-    
+
         $em->persist($order);
         $em->flush();
-    
-        // Vider le panier après validation réussie
+
         $session->remove('cart');
-    
+
         $this->addFlash('success', "Commande validée ! Référence : $reference - Frais de livraison : $fraisLivraison €");
         return $this->redirectToRoute('app_order_index');
     }

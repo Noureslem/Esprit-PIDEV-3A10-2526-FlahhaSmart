@@ -20,13 +20,12 @@ class ArticleController extends AbstractController
         $search = $request->query->get('search', '');
         $sort = $request->query->get('sort', 'id');
         $page = max(1, $request->query->getInt('page', 1));
-        $limit = 10; // Ajustable
-    
+        $limit = 10;
+
         $result = $repository->findPaginated($search, $sort, $page, $limit);
         $articles = $result['items'];
         $total = $result['total'];
-    
-        // Tri en mémoire (comme avant) sur le lot paginé
+
         usort($articles, function($a, $b) use ($sort) {
             switch ($sort) {
                 case 'price_asc': return (float)$a->getPrix() <=> (float)$b->getPrix();
@@ -38,7 +37,7 @@ class ArticleController extends AbstractController
                 default: return $b->getId() <=> $a->getId();
             }
         });
-    
+
         return $this->render('article/index.html.twig', [
             'articles' => $articles,
             'search' => $search,
@@ -111,18 +110,19 @@ class ArticleController extends AbstractController
     #[Route('/statistiques/prix', name: 'app_article_stats_price', methods: ['GET'])]
     public function statsPrice(ArticleRepository $repository): Response
     {
+        // Agrégats SQL pour éviter de parcourir tous les articles en PHP
+        $stats = $repository->createQueryBuilder('a')
+            ->select('MIN(a.prix) as min_price, MAX(a.prix) as max_price, AVG(a.prix) as avg_price')
+            ->getQuery()
+            ->getSingleResult();
+
+        $max = (float) $stats['max_price'];
+        $min = (float) $stats['min_price'];
+        $avg = (float) $stats['avg_price'];
+
+        // Chargement de tous les articles pour le graphique (tri en PHP conservé)
         $articles = $repository->findAll();
-        $max = 0;
-        $min = PHP_INT_MAX;
-        $sum = 0;
-        foreach ($articles as $a) {
-            $p = (float) $a->getPrix();          // Cast
-            if ($p > $max) $max = $p;
-            if ($p < $min) $min = $p;
-            $sum += $p;
-        }
-        $avg = count($articles) ? $sum / count($articles) : 0;
-        usort($articles, fn($a, $b) => (float)$a->getPrix() <=> (float)$b->getPrix()); // Cast
+        usort($articles, fn($a, $b) => (float)$a->getPrix() <=> (float)$b->getPrix());
 
         return $this->render('article/stats_price.html.twig', [
             'articles' => $articles,
@@ -135,20 +135,17 @@ class ArticleController extends AbstractController
     #[Route('/statistiques/poids', name: 'app_article_stats_weight', methods: ['GET'])]
     public function statsWeight(ArticleRepository $repository): Response
     {
-        $articles = $repository->findAll();
-        $max = 0;
-        $min = PHP_INT_MAX;
-        $sum = 0;
-        foreach ($articles as $a) {
-            $p = $a->getPoids() ?? 0;   // poids est déjà float
-            if ($p > $max) $max = $p;
-            if ($p < $min) $min = $p;
-            $sum += $p;
-        }
-        $avg = count($articles) ? $sum / count($articles) : 0;
-        $total = $sum;
+        $stats = $repository->createQueryBuilder('a')
+            ->select('MIN(a.poids) as min_weight, MAX(a.poids) as max_weight, AVG(a.poids) as avg_weight, SUM(a.poids) as total_weight')
+            ->getQuery()
+            ->getSingleResult();
 
-        // weight ranges
+        $max = (float) ($stats['max_weight'] ?? 0);
+        $min = (float) ($stats['min_weight'] ?? 0);
+        $avg = (float) ($stats['avg_weight'] ?? 0);
+        $total = (float) ($stats['total_weight'] ?? 0);
+
+        $articles = $repository->findAll();
         $ranges = [
             '0-1 kg' => 0,
             '1-5 kg' => 0,

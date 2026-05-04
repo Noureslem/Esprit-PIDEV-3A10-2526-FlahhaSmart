@@ -4,7 +4,6 @@ namespace App\Controller\article;
 use App\Entity\article\Order;
 use App\Form\article\OrderType;
 use App\Repository\article\OrderRepository;
-
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,40 +14,39 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 {
     #[Route('/', name: 'app_order_index', methods: ['GET'])]
-public function index(OrderRepository $repository, Request $request): Response
-{
-    $search = $request->query->get('search', '');
-    $sort = $request->query->get('sort', 'id');
-    $page = max(1, $request->query->getInt('page', 1));
-    $limit = 10;
+    public function index(OrderRepository $repository, Request $request): Response
+    {
+        $search = $request->query->get('search', '');
+        $sort = $request->query->get('sort', 'id');
+        $page = max(1, $request->query->getInt('page', 1));
+        $limit = 10;
 
-    $result = $repository->findPaginated($search, $sort, $page, $limit);
-    $orders = $result['items'];
-    $total = $result['total'];
+        $result = $repository->findPaginated($search, $sort, $page, $limit);
+        $orders = $result['items'];
+        $total = $result['total'];
 
-    // Tri identique à l’original
-    usort($orders, function($a, $b) use ($sort) {
-        switch ($sort) {
-            case 'date_desc': return $b->getDateCommande() <=> $a->getDateCommande();
-            case 'date_asc': return $a->getDateCommande() <=> $b->getDateCommande();
-            case 'amount_asc': return (float)$a->getMontantTotal() <=> (float)$b->getMontantTotal();
-            case 'amount_desc': return (float)$b->getMontantTotal() <=> (float)$a->getMontantTotal();
-            case 'ref_asc': return strcasecmp($a->getReference(), $b->getReference());
-            case 'ref_desc': return strcasecmp($b->getReference(), $a->getReference());
-            default: return $b->getId() <=> $a->getId();
-        }
-    });
+        usort($orders, function($a, $b) use ($sort) {
+            switch ($sort) {
+                case 'date_desc': return $b->getDateCommande() <=> $a->getDateCommande();
+                case 'date_asc': return $a->getDateCommande() <=> $b->getDateCommande();
+                case 'amount_asc': return (float)$a->getMontantTotal() <=> (float)$b->getMontantTotal();
+                case 'amount_desc': return (float)$b->getMontantTotal() <=> (float)$a->getMontantTotal();
+                case 'ref_asc': return strcasecmp($a->getReference(), $b->getReference());
+                case 'ref_desc': return strcasecmp($b->getReference(), $a->getReference());
+                default: return $b->getId() <=> $a->getId();
+            }
+        });
 
-    return $this->render('order/index.html.twig', [
-        'orders' => $orders,
-        'search' => $search,
-        'sort' => $sort,
-        'page' => $page,
-        'limit' => $limit,
-        'total' => $total,
-        'nbPages' => (int) ceil($total / $limit),
-    ]);
-}
+        return $this->render('order/index.html.twig', [
+            'orders' => $orders,
+            'search' => $search,
+            'sort' => $sort,
+            'page' => $page,
+            'limit' => $limit,
+            'total' => $total,
+            'nbPages' => (int) ceil($total / $limit),
+        ]);
+    }
 
     #[Route('/new', name: 'app_order_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $em): Response
@@ -102,20 +100,17 @@ public function index(OrderRepository $repository, Request $request): Response
     #[Route('/statistiques/montant', name: 'app_order_stats_amount', methods: ['GET'])]
     public function statsAmount(OrderRepository $repository): Response
     {
-        $orders = $repository->findAll();
-        $max = 0;
-        $min = PHP_INT_MAX;
-        $sum = 0;
-        foreach ($orders as $o) {
-            $m = (float) $o->getMontantTotal();        // Cast
-            if ($m > $max) $max = $m;
-            if ($m < $min) $min = $m;
-            $sum += $m;
-        }
-        $avg = count($orders) ? $sum / count($orders) : 0;
-        $total = $sum;
+        $stats = $repository->createQueryBuilder('o')
+            ->select('MIN(o.montantTotal) as min_amount, MAX(o.montantTotal) as max_amount, AVG(o.montantTotal) as avg_amount, SUM(o.montantTotal) as total_amount')
+            ->getQuery()
+            ->getSingleResult();
 
-        // montant ranges
+        $max = (float) $stats['max_amount'];
+        $min = (float) $stats['min_amount'];
+        $avg = (float) $stats['avg_amount'];
+        $total = (float) $stats['total_amount'];
+
+        $orders = $repository->findAll();
         $ranges = [
             '0-50 €' => 0,
             '50-100 €' => 0,
@@ -124,7 +119,7 @@ public function index(OrderRepository $repository, Request $request): Response
             '500+ €' => 0,
         ];
         foreach ($orders as $o) {
-            $m = (float) $o->getMontantTotal();        // Cast
+            $m = (float) $o->getMontantTotal();
             if ($m <= 50) $ranges['0-50 €']++;
             elseif ($m <= 100) $ranges['50-100 €']++;
             elseif ($m <= 200) $ranges['100-200 €']++;
@@ -132,9 +127,8 @@ public function index(OrderRepository $repository, Request $request): Response
             else $ranges['500+ €']++;
         }
 
-        // top 10 by amount
         $top = $orders;
-        usort($top, fn($a, $b) => (float)$b->getMontantTotal() <=> (float)$a->getMontantTotal()); // Cast
+        usort($top, fn($a, $b) => (float)$b->getMontantTotal() <=> (float)$a->getMontantTotal());
         $top = array_slice($top, 0, 10);
 
         return $this->render('order/stats_amount.html.twig', [
@@ -151,20 +145,17 @@ public function index(OrderRepository $repository, Request $request): Response
     #[Route('/statistiques/frais', name: 'app_order_stats_fees', methods: ['GET'])]
     public function statsFees(OrderRepository $repository): Response
     {
-        $orders = $repository->findAll();
-        $max = 0;
-        $min = PHP_INT_MAX;
-        $sum = 0;
-        foreach ($orders as $o) {
-            $f = (float) $o->getFraisLivraison();        // Cast
-            if ($f > $max) $max = $f;
-            if ($f < $min) $min = $f;
-            $sum += $f;
-        }
-        $avg = count($orders) ? $sum / count($orders) : 0;
-        $total = $sum;
+        $stats = $repository->createQueryBuilder('o')
+            ->select('MIN(o.fraisLivraison) as min_fee, MAX(o.fraisLivraison) as max_fee, AVG(o.fraisLivraison) as avg_fee, SUM(o.fraisLivraison) as total_fee')
+            ->getQuery()
+            ->getSingleResult();
 
-        // frais ranges
+        $max = (float) $stats['max_fee'];
+        $min = (float) $stats['min_fee'];
+        $avg = (float) $stats['avg_fee'];
+        $total = (float) $stats['total_fee'];
+
+        $orders = $repository->findAll();
         $ranges = [
             '0-5 €' => 0,
             '5-10 €' => 0,
@@ -173,7 +164,7 @@ public function index(OrderRepository $repository, Request $request): Response
             '20+ €' => 0,
         ];
         foreach ($orders as $o) {
-            $f = (float) $o->getFraisLivraison();        // Cast
+            $f = (float) $o->getFraisLivraison();
             if ($f <= 5) $ranges['0-5 €']++;
             elseif ($f <= 10) $ranges['5-10 €']++;
             elseif ($f <= 15) $ranges['10-15 €']++;
@@ -181,11 +172,9 @@ public function index(OrderRepository $repository, Request $request): Response
             else $ranges['20+ €']++;
         }
 
-        // quartiles
         $sorted = $orders;
-        usort($sorted, fn($a, $b) => (float)$a->getFraisLivraison() <=> (float)$b->getFraisLivraison()); // Cast
+        usort($sorted, fn($a, $b) => (float)$a->getFraisLivraison() <=> (float)$b->getFraisLivraison());
         $count = count($sorted);
-
         $q1 = (float) ($sorted[(int) floor($count/4)]->getFraisLivraison() ?? 0);
         $median = (float) ($sorted[(int) floor($count/2)]->getFraisLivraison() ?? 0);
         $q3 = (float) ($sorted[(int) floor(3*$count/4)]->getFraisLivraison() ?? 0);
