@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="controllers.operation.Ajout_Op_Controller"
+           stylesheets="@/styles/style_css.css"
+           VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"
+           style="-fx-background-color: linear-gradient(to bottom right, #f0fdf4, #ecfdf5, #d1fae5);">
+
+    <!-- Contenu principal centré -->
+    <ScrollPane fitToWidth="true"
+                style="-fx-background-color: transparent; -fx-background: transparent;"
+                StackPane.alignment="CENTER">
+        <StackPane style="-fx-background-color: transparent;">
+            <!-- Carte du formulaire -->
+            <VBox styleClass="form-card" spacing="25" maxWidth="550" minWidth="400"
+                  StackPane.alignment="CENTER">
+                <padding>
+                    <Insets top="70" right="40" bottom="135" left="40"/>
+                </padding>
+
+                <!-- Icône et titre -->
+                <VBox alignment="CENTER" spacing="10">
+                    <Label text="🚜" styleClass="form-icon"/>
+                    <Label text="Détails de l'opération" styleClass="form-section-title"/>
+                </VBox>
+
+                <!-- Champs du formulaire -->
+                <VBox spacing="20">
+
+                    <!-- Type d'opération -->
+                    <VBox spacing="8" styleClass="form-group">
+                        <Label text="Type d'opération" styleClass="form-label"/>
+                        <TextField fx:id="typeField" promptText="Ex: Labour, Semis, Irrigation, Récolte..."
+                                   styleClass="form-input" prefHeight="45"/>
+                    </VBox>
+
+                    <!-- Équipement -->
+                    <VBox spacing="8" styleClass="form-group">
+                        <Label text="Équipement utilisé" styleClass="form-label"/>
+                        <ComboBox fx:id="equipementCombo" promptText="Sélectionnez un équipement"
+                                  styleClass="form-input" prefHeight="45" maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- Dates sur deux colonnes -->
+                    <HBox spacing="20">
+                        <VBox spacing="8" styleClass="form-group" HBox.hgrow="ALWAYS">
+                            <Label text="📅 Date de début" styleClass="form-label"/>
+                            <DatePicker fx:id="dateDebutPicker" styleClass="form-input"
+                                        prefHeight="45" maxWidth="Infinity"/>
+                        </VBox>
+
+                        <VBox spacing="8" styleClass="form-group" HBox.hgrow="ALWAYS">
+                            <Label text="📅 Date de fin" styleClass="form-label"/>
+                            <DatePicker fx:id="dateFinPicker" styleClass="form-input"
+                                        prefHeight="45" maxWidth="Infinity"/>
+                        </VBox>
+                    </HBox>
+
+                </VBox>
+
+                <!-- Boutons d'action -->
+                <HBox spacing="15" alignment="CENTER">
+                    <padding>
+                        <Insets top="15"/>
+                    </padding>
+
+                    <Button text=" Ajouter l'opération" onAction="#ajouterOperation"
+                            styleClass="form-submit-button" prefWidth="200" prefHeight="45"/>
+                </HBox>
+
+            </VBox>
+        </StackPane>
+    </ScrollPane>
+
+</StackPane>
