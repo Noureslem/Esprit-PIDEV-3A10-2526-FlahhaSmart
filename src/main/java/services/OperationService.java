@@ -23,10 +23,10 @@ public class OperationService implements Iservice<Operation> {
             throw new SQLException("Aucun utilisateur connecté. Impossible d'ajouter l'opération.");
         }
 
-        String sql = "INSERT INTO operation (id_equipement, id_user, type_operation, date_debut, date_fin) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO operation (equipement_id, id_user, type_operation, date_debut, date_fin) VALUES (?, ?, ?, ?, ?)";
 
         PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setInt(1, operation.getId_equipement());
+        ps.setInt(1, operation.getEquipement_id());
         ps.setInt(2, userId);
         ps.setString(3, operation.getType_operation());
         ps.setDate(4, operation.getDate_debut());
@@ -34,9 +34,9 @@ public class OperationService implements Iservice<Operation> {
 
 
         ps.executeUpdate();
-        System.out.println("ID envoyé = " + operation.getId_equipement());
+        System.out.println("ID envoyé = " + operation.getEquipement_id());
 
-        es.changerEtat(operation.getId_equipement(), "réservé");
+        es.changerEtat(operation.getEquipement_id(), "réservé");
 
         System.out.println("Operation ajoutée !");
     }
@@ -44,7 +44,7 @@ public class OperationService implements Iservice<Operation> {
     @Override
     public void modifier(Operation operation) throws SQLException {
 
-        String sql = "UPDATE operation SET type_operation = ?, date_debut = ?, date_fin = ?, statut = ?, id_equipement = ?, id_user = ? WHERE id_operation = ?";
+        String sql = "UPDATE operation SET type_operation = ?, date_debut = ?, date_fin = ?, statut = ?, equipement_id = ?, id_user = ? WHERE id = ?";
 
         PreparedStatement ps = connection.prepareStatement(sql);
 
@@ -52,7 +52,7 @@ public class OperationService implements Iservice<Operation> {
         ps.setDate(2, operation.getDate_debut());
         ps.setDate(3, operation.getDate_fin());
         ps.setString(4, operation.getStatut());
-        ps.setInt(5, operation.getId_equipement());
+        ps.setInt(5, operation.getEquipement_id());
         ps.setInt(6, operation.getId_user());
         ps.setInt(7, operation.getId_operation());
 
@@ -67,7 +67,7 @@ public class OperationService implements Iservice<Operation> {
 
     public void modifier(Operation operation, int ancienEquipementId) throws SQLException {
 
-        String sql = "UPDATE operation SET type_operation = ?, date_debut = ?, date_fin = ?, statut = ?, id_equipement = ?, id_user = ? WHERE id_operation = ?";
+        String sql = "UPDATE operation SET type_operation = ?, date_debut = ?, date_fin = ?, statut = ?, equipement_id = ?, id_user = ? WHERE id = ?";
 
         PreparedStatement ps = connection.prepareStatement(sql);
 
@@ -75,7 +75,7 @@ public class OperationService implements Iservice<Operation> {
         ps.setDate(2, operation.getDate_debut());
         ps.setDate(3, operation.getDate_fin());
         ps.setString(4, operation.getStatut());
-        ps.setInt(5, operation.getId_equipement());
+        ps.setInt(5, operation.getEquipement_id());
         ps.setInt(6, operation.getId_user());
         ps.setInt(7, operation.getId_operation());
 
@@ -83,7 +83,7 @@ public class OperationService implements Iservice<Operation> {
 
         EquipementService es = new EquipementService();
 
-        int nouveau = operation.getId_equipement();
+        int nouveau = operation.getEquipement_id();
 
         if (ancienEquipementId != nouveau) {
             es.changerEtat(ancienEquipementId, "libre");
@@ -96,11 +96,11 @@ public class OperationService implements Iservice<Operation> {
 
     @Override
     public void supprimer(Operation operation) throws SQLException {
-        String sql = "DELETE FROM operation WHERE id_operation = ?";
+        String sql = "DELETE FROM operation WHERE id = ?";
 
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, operation.getId_operation());
-        es.changerEtat(operation.getId_equipement(), "libre");
+        es.changerEtat(operation.getEquipement_id(), "libre");
         int r = ps.executeUpdate();
 
         if (r > 0) {
@@ -123,15 +123,15 @@ public class OperationService implements Iservice<Operation> {
 
         String sql = "SELECT o.*, e.nom AS nom_equipement " +
                 "FROM operation o " +
-                "JOIN equipement e ON o.id_equipement = e.id_equipement " +
+                "JOIN equipement e ON o.equipement_id = e.id " +
                 "WHERE o.id_user = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, userId);
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
-            int id_operation = rs.getInt("id_operation");
-            int idEquipement = rs.getInt("id_equipement");
+            int id_operation = rs.getInt("id");
+            int idEquipement = rs.getInt("equipement_id");
             int idUser = rs.getInt("id_user");
             String type_operation = rs.getString("type_operation");
             String nomEquipement = rs.getString("nom_equipement");
@@ -141,7 +141,7 @@ public class OperationService implements Iservice<Operation> {
 
             Operation operation = new Operation(type_operation, date_debut, date_fin, statut);
             operation.setId_operation(id_operation);
-            operation.setId_equipement(idEquipement);
+            operation.setEquipement_id(idEquipement);
             operation.setId_user(idUser);
             operation.setNomEquipement(nomEquipement);
             operations.add(operation);
@@ -174,7 +174,7 @@ public class OperationService implements Iservice<Operation> {
 
         int r = ps.executeUpdate();
         if (r > 0) {
-            es.changerEtat(operation.getId_equipement(), "libre");
+            es.changerEtat(operation.getEquipement_id(), "libre");
             System.out.println("Operation terminée avec succès !");
         } else {
             System.out.println("Aucune opération trouvée avec l'ID: " + operation.getId_operation());

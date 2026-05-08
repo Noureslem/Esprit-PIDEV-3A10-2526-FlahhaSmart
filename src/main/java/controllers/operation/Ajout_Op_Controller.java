@@ -53,7 +53,7 @@ public class Ajout_Op_Controller  {
             op.setDate_fin(Date.valueOf(dateFinPicker.getValue()));
 
             Equipement eq = equipementCombo.getValue();
-            op.setId_equipement(eq.getId_equipement());
+            op.setEquipement_id(eq.getId_equipement());
 
 
             service.ajouter(op);
