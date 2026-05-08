@@ -3,8 +3,8 @@ package entities;
 import java.sql.Date;
 
 public class Operation {
-    private int IdOperation ;
-    private int id_equipement;
+    private int id;
+    private int equipement_id;
     private int id_user;
     private String nomEquipement;
     private String TypeOperation;
@@ -13,9 +13,9 @@ public class Operation {
     private String statut;
 
 
-    public Operation(int id_operation, int id_equipement, int id_user, String type_operation, Date date_debut, Date date_fin, String statut) {
-        this.IdOperation = id_operation;
-        this.id_equipement = id_equipement;
+    public Operation(int id_operation, int equipement_id, int id_user, String type_operation, Date date_debut, Date date_fin, String statut) {
+        this.id = id_operation;
+        this.equipement_id = equipement_id;
         this.id_user = id_user;
         this.TypeOperation = type_operation;
         this.date_debut = date_debut;
@@ -24,7 +24,7 @@ public class Operation {
 
     }
     public Operation(String type_operation, Date date_debut, Date date_fin, String statut) {
-        this.id_equipement = id_equipement;
+        this.equipement_id = equipement_id;
         this.TypeOperation = type_operation;
         this.date_debut = date_debut;
         this.date_fin = date_fin;
@@ -45,10 +45,10 @@ public class Operation {
     }
 
     public int getId_operation() {
-        return IdOperation;
+        return id;
     }
     public void setId_operation(int id_operation) {
-        this.IdOperation= id_operation;
+        this.id = id_operation;
     }
     public String getType_operation() {
         return TypeOperation;
@@ -77,11 +77,11 @@ public class Operation {
     public void setDate_fin(Date date_fin) {
         this.date_fin = date_fin;
     }
-    public int getId_equipement() {
-        return id_equipement;
+    public int getEquipement_id() {
+        return equipement_id;
     }
-    public void setId_equipement(int id_equipement) {
-        this.id_equipement = id_equipement;
+    public void setEquipement_id(int equipement_id) {
+        this.equipement_id = equipement_id;
     }
     public String getNomEquipement() {
         return nomEquipement;
@@ -101,7 +101,7 @@ public class Operation {
     @Override
     public String toString() {
         return "Operation : " +
-                " id_equipement = '" + id_equipement + '\'' +
+                " id_equipement = '" + equipement_id + '\'' +
                 " id_user = '" + id_user + '\'' +
                 " type_operation = '" + TypeOperation + '\'' +
                 " Date Debut = " + date_debut +

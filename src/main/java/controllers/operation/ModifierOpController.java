@@ -53,12 +53,12 @@ public class ModifierOpController {
         dateDebutPicker.setValue(op.getDate_debut().toLocalDate());
         dateFinPicker.setValue(op.getDate_fin().toLocalDate());
         for (Equipement e : equipementCombo.getItems()) {
-            if (e.getId_equipement() == op.getId_equipement()) {
+            if (e.getId_equipement() == op.getEquipement_id()) {
                 equipementCombo.setValue(e);
                 break;
             }
         }
-        ancienEquipementId = op.getId_equipement();
+        ancienEquipementId = op.getEquipement_id();
 
     }
 
@@ -79,7 +79,7 @@ public class ModifierOpController {
         operation.setDate_debut(Date.valueOf(dateDebutPicker.getValue()));
         operation.setDate_fin(Date.valueOf(dateFinPicker.getValue()));
         Equipement eq = equipementCombo.getValue();
-        operation.setId_equipement(eq.getId_equipement());
+        operation.setEquipement_id(eq.getId_equipement());
 
 
         try {

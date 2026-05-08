@@ -31,7 +31,7 @@ public class EquipementService implements Iservice<Equipement> {
 
     @Override
     public void modifier(Equipement equipement) throws SQLException {
-        String sql = "UPDATE equipement SET nom = ?,type = ?, etat = ? WHERE id_equipement = ?";
+        String sql = "UPDATE equipement SET nom = ?,type = ?, etat = ? WHERE id = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, equipement.getNom());
         ps.setString(2, equipement.getType());
@@ -66,7 +66,7 @@ public class EquipementService implements Iservice<Equipement> {
         List<Equipement> equipements = new ArrayList<>();
         while (rs.next()) {
             Equipement e = new Equipement(
-                rs.getInt("id_equipement"),
+                rs.getInt("id"),
                 rs.getString("type"),
                 rs.getString("nom"),
                 rs.getString("etat")
@@ -81,7 +81,7 @@ public class EquipementService implements Iservice<Equipement> {
 
     public void changerEtat(int idEquipement, String etat) throws SQLException {
 
-        String sql = "UPDATE equipement SET etat = ? WHERE id_equipement = ?";
+        String sql = "UPDATE equipement SET etat = ? WHERE id = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
 
         ps.setString(1, etat);
@@ -99,7 +99,7 @@ public class EquipementService implements Iservice<Equipement> {
 
         while (rs.next()) {
             Equipement e = new Equipement();
-            e.setId_equipement(rs.getInt("id_equipement"));
+            e.setId_equipement(rs.getInt("id"));
             e.setNom(rs.getString("nom"));
             e.setType(rs.getString("type"));
             e.setEtat(rs.getString("etat"));

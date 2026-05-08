@@ -229,7 +229,7 @@ public class DashboardController {
             // Équipements utilisés dans des opérations en cours
             Set<Integer> equipementsEnCours = operations.stream()
                     .filter(o -> o.getStatut() != null && o.getStatut().equalsIgnoreCase("en cours"))
-                    .map(Operation::getId_equipement)
+                    .map(Operation::getEquipement_id)
                     .collect(Collectors.toSet());
 
             int totalEq = equipements.size();
@@ -353,7 +353,7 @@ public class DashboardController {
         header.setAlignment(Pos.CENTER_LEFT);
 
         // Équipement
-        Label eqLabel = new Label("🔧 " + (op.getNomEquipement() != null ? op.getNomEquipement() : "Équipement #" + op.getId_equipement()));
+        Label eqLabel = new Label("🔧 " + (op.getNomEquipement() != null ? op.getNomEquipement() : "Équipement #" + op.getEquipement_id()));
         eqLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #6b7280;");
 
         // Dates
@@ -465,7 +465,7 @@ public class DashboardController {
         typeLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1f2937;");
 
         // Équipement
-        Label eqLabel = new Label(op.getNomEquipement() != null ? op.getNomEquipement() : "Équipement #" + op.getId_equipement());
+        Label eqLabel = new Label(op.getNomEquipement() != null ? op.getNomEquipement() : "Équipement #" + op.getEquipement_id());
         eqLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #6b7280;");
 
         VBox infoBox = new VBox(2, typeLabel, eqLabel);
