@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.fxml.FXMLLoader.*?>
-<?import javafx.scene.Node.*?>
-<?import controllers.commande.PriceEstimatorController.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -22,7 +19,7 @@
          ============================================== -->
     <left>
         <VBox styleClass="sidebar" prefWidth="280" spacing="0">
-            <!-- Logo avec effet glassmorphism -->
+            <!-- Logo -->
             <HBox styleClass="sidebar-header" alignment="CENTER_LEFT" spacing="14">
                 <padding><Insets top="28" bottom="28" left="24" right="24"/></padding>
                 <StackPane styleClass="logo-glow">
@@ -56,7 +53,7 @@
 
             <Separator styleClass="divider-gradient"/>
 
-            <!-- ===== ZONE SCROLLABLE DU MENU ===== -->
+            <!-- Menu déroulant -->
             <ScrollPane fitToWidth="true" styleClass="sidebar-scroll" VBox.vgrow="ALWAYS">
                 <VBox styleClass="nav-menu" spacing="4">
                     <padding><Insets top="20" bottom="20" left="20" right="20"/></padding>
@@ -84,6 +81,10 @@
                         <graphic><FontAwesomeIconView glyphName="CUBES" size="16" styleClass="nav-icon"/></graphic>
                         <text>Liste équipements</text>
                     </Button>
+                    <Button styleClass="nav-item" maxWidth="Infinity" onAction="#handleProduit">
+                        <graphic><FontAwesomeIconView glyphName="CUBES" size="16" styleClass="nav-icon"/></graphic>
+                        <text>Gestion Produit</text>
+                    </Button>
 
                     <Label text="OUTILS AGRICOLES" styleClass="nav-section"/>
                     <Button styleClass="nav-item" maxWidth="Infinity" onAction="#handleMeteo">
@@ -107,7 +108,7 @@
                         <text>Rotation Cultures</text>
                     </Button>
 
-                    <!-- NOUVELLE SECTION : GESTION DES ARTICLES ET COMMANDES -->
+                    <!-- SECTION GESTION DES ARTICLES ET COMMANDES -->
                     <Label text="GESTION DES ARTICLES ET COMMANDES" styleClass="nav-section"/>
                     <Button styleClass="nav-item" maxWidth="Infinity" onAction="#handleGestionArticles">
                         <graphic><FontAwesomeIconView glyphName="SHOPPING_CART" size="16" styleClass="nav-icon"/></graphic>
@@ -125,22 +126,17 @@
                         <graphic><FontAwesomeIconView glyphName="TABLE" size="16" styleClass="nav-icon"/></graphic>
                         <text>Résultats Commandes</text>
                     </Button>
-                    <Button styleClass="nav-item" maxWidth="Infinity" onAction="#handleConsultantIA">
-                        <graphic><FontAwesomeIconView glyphName="COMMENT" size="16" styleClass="nav-icon"/></graphic>
-                        <text>Consultant IA</text>
-                    </Button>
 
+                    <!-- NOUVEAUX BOUTONS : CALENDRIER & ESTIMATION PRIX -->
+                    <Label text="OUTILS DE GESTION" styleClass="nav-section"/>
                     <Button styleClass="nav-item" maxWidth="Infinity" onAction="#handleCalendar">
                         <graphic><FontAwesomeIconView glyphName="CALENDAR" size="16" styleClass="nav-icon"/></graphic>
                         <text>Calendrier</text>
                     </Button>
-
-
                     <Button styleClass="nav-item" maxWidth="Infinity" onAction="#handlePriceEstimator">
                         <graphic><FontAwesomeIconView glyphName="MONEY" size="16" styleClass="nav-icon"/></graphic>
                         <text>Estimation de prix</text>
                     </Button>
-
                     <Button styleClass="nav-item" maxWidth="Infinity" onAction="#handleTodoList">
                         <graphic><FontAwesomeIconView glyphName="CHECK_SQUARE" size="16" styleClass="nav-icon"/></graphic>
                         <text>Todo List</text>
@@ -173,16 +169,12 @@
          ============================================== -->
     <center>
         <VBox styleClass="main-container" spacing="0">
-
-            <!-- Top bar avec bienvenue -->
             <HBox styleClass="topbar-glass" alignment="CENTER_LEFT" spacing="24">
                 <padding><Insets top="16" bottom="16" left="28" right="28"/></padding>
-
                 <VBox spacing="4" HBox.hgrow="ALWAYS">
                     <Text text="Dashboard Agriculteur" styleClass="page-title"/>
                     <Text fx:id="welcomeText" text="Bienvenue sur votre espace" styleClass="page-subtitle"/>
                 </VBox>
-
                 <MenuButton styleClass="avatar-menu">
                     <graphic>
                         <StackPane>
@@ -192,20 +184,13 @@
                         </StackPane>
                     </graphic>
                     <items>
-                        <MenuItem text="Mon Profil" onAction="#handleProfil">
-                            <graphic><FontAwesomeIconView glyphName="USER" size="14"/></graphic>
-                        </MenuItem>
-                        <MenuItem text="Paramètres" onAction="#handleParametres">
-                            <graphic><FontAwesomeIconView glyphName="COG" size="14"/></graphic>
-                        </MenuItem>
+                        <MenuItem text="Mon Profil" onAction="#handleProfil"/>
+                        <MenuItem text="Paramètres" onAction="#handleParametres"/>
                         <SeparatorMenuItem />
-                        <MenuItem text="Déconnexion" onAction="#handleDeconnexion">
-                            <graphic><FontAwesomeIconView glyphName="SIGN_OUT" size="14"/></graphic>
-                        </MenuItem>
+                        <MenuItem text="Déconnexion" onAction="#handleDeconnexion"/>
                     </items>
                 </MenuButton>
             </HBox>
-
             <StackPane fx:id="contentArea" styleClass="content-scroll-modern" VBox.vgrow="ALWAYS" />
         </VBox>
     </center>

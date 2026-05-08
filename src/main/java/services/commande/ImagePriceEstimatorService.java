@@ -16,6 +16,9 @@ public class ImagePriceEstimatorService {
     public String estimatePrice(Path imagePath) {
         priceCallCount++;
         switch (priceCallCount % 3) {
+
+            case 4:  return "250.000 DT";
+            case 3:  return "10.000 DT";
             case 1:  return "25.000 DT";
             case 2:  return "11.000.000.000 DT";
             case 0:  return "6000 DT";

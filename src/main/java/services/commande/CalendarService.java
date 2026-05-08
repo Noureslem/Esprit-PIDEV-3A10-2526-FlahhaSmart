@@ -13,7 +13,7 @@ public class CalendarService {
     private final ArticleDAO articleDAO;
 
     public CalendarService() {
-        this.articleDAO = new ArticleDAO();   // utilisation du DAO existant
+        this.articleDAO = new ArticleDAO();
     }
 
     /**
@@ -23,11 +23,25 @@ public class CalendarService {
         LocalDate firstDay = yearMonth.atDay(1);
         LocalDate lastDay = yearMonth.atEndOfMonth();
 
-        List<Article> articles = articleDAO.findByDateAjoutBetween(firstDay, lastDay);
+        // Get all articles using getAllArticles() method
+        List<Article> allArticles = articleDAO.getAllArticles();
+        List<Article> articlesInMonth = new ArrayList<>();
+
+        // Filter articles by date
+        for (Article article : allArticles) {
+            if (article.getDateAjout() != null) {
+                LocalDate articleDate = article.getDateAjout().toLocalDate();
+                // Check if article date is between firstDay and lastDay (inclusive)
+                if ((articleDate.isEqual(firstDay) || articleDate.isAfter(firstDay)) &&
+                        (articleDate.isEqual(lastDay) || articleDate.isBefore(lastDay))) {
+                    articlesInMonth.add(article);
+                }
+            }
+        }
+
         List<CalendarEvent> events = new ArrayList<>();
 
-        for (Article article : articles) {
-            // dateAjout est un LocalDateTime, on prend le LocalDate
+        for (Article article : articlesInMonth) {
             LocalDate date = article.getDateAjout().toLocalDate();
             String title = "📦 " + article.getNom();
             String description = String.format(
@@ -38,10 +52,12 @@ public class CalendarService {
             );
             events.add(new CalendarEvent(title, date, description, "#2e7d32", "white"));
         }
+
+        System.out.println("[CalendarService] ✅ " + events.size() + " événements trouvés pour " + yearMonth);
         return events;
     }
 
-    // Classe interne représentant un événement du calendrier
+    // Inner class representing a calendar event
     public static class CalendarEvent {
         private final String title;
         private final LocalDate date;
