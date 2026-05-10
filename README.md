@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL"/>
   <img src="https://img.shields.io/badge/Maven-3.6+-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white" alt="Maven"/>
   <img src="https://img.shields.io/badge/License-Academic-green?style=for-the-badge" alt="License"/>
-  <img src="https://img.shields.io/badge/Symfony-6.x-black?style=for-the-badge&logo=symfony&logoColor=white" alt="Symfony"/>
+  <img src="https://img.shields.io/badge/Symfony-6.4-black?style=for-the-badge&logo=symfony&logoColor=white" alt="Symfony"/>
 </p>
 
 <h1 align="center">🌾 FlahaSmart</h1>
