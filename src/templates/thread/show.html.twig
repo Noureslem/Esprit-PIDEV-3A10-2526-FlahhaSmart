@@ -1,0 +1,222 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ thread.titre }} - FlahaSmart{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .premium-card { background: #fff; border-radius: 16px; box-shadow: 0 1px 6px rgba(0,0,0,.07); border: 1px solid #f1f5f9; }
+    .brand-btn { background: #16a34a; color: #fff; border: none; border-radius: 12px; padding: .5rem 1.25rem; font-weight: 700; font-size: .85rem; transition: .2s; }
+    .brand-btn:hover { background: #15803d; color: #fff; transform: translateY(-1px); }
+    .vote-widget { display: flex; flex-direction: column; align-items: center; background: #f8fafc; padding: .75rem .5rem; border-radius: 14px; min-width: 3.5rem; }
+    .vote-btn { background: none; border: none; padding: .4rem .5rem; border-radius: 10px; cursor: pointer; color: #94a3b8; transition: .2s; }
+    .vote-btn:hover { background: #f0fdf4; color: #16a34a; }
+    .vote-btn.active-up { background: #f0fdf4; color: #16a34a; }
+    .vote-btn.active-down { background: #fef2f2; color: #dc2626; }
+    .score { font-weight: 900; font-size: 1.1rem; color: #0f172a; margin: .25rem 0; }
+    .sentiment-badge { font-size: .7rem; font-weight: 700; text-transform: uppercase; padding: .25rem .6rem; border-radius: 8px; }
+    .sentiment-positif { background: #dcfce7; color: #15803d; }
+    .sentiment-negatif { background: #fee2e2; color: #dc2626; }
+    .sentiment-neutre { background: #f1f5f9; color: #64748b; }
+    .translate-btn { background: #eff6ff; color: #2563eb; border: none; border-radius: 10px; padding: .3rem .9rem; font-size: .75rem; font-weight: 700; cursor: pointer; transition: .2s; }
+    .comment-card { background: #fff; border: 1px solid #f1f5f9; border-radius: 14px; padding: 1.25rem; margin-bottom: 1rem; }
+    .avatar { width: 40px; height: 40px; border-radius: 12px; }
+    .tag-badge { background: #f1f5f9; color: #475569; font-size: .7rem; font-weight: 700; text-transform: uppercase; padding: .25rem .6rem; border-radius: 8px; border: 1px solid #e2e8f0; }
+</style>
+{% endblock %}
+
+{% block body %}
+{# Bouton retour #}
+<a href="{{ path('thread_index') }}" class="d-inline-flex align-items-center text-muted text-decoration-none fw-bold small mb-4">
+    <i class="fas fa-arrow-left me-2"></i>Retour au forum
+</a>
+
+{# Article principal #}
+<div class="premium-card overflow-hidden mb-4">
+    <div style="height:4px; background:linear-gradient(90deg,#16a34a,#15803d);"></div>
+    <div class="p-4 p-md-5">
+        <div class="d-flex gap-4">
+            {# Vote widget #}
+            <div class="vote-widget flex-shrink-0">
+                <button class="vote-btn {{ thread.userVote == 'up' ? 'active-up' : '' }}" data-id="{{ thread.idThread }}" data-type="up">
+                    <i class="fas fa-chevron-up"></i>
+                </button>
+                <span class="score">{{ thread.score|default(0) }}</span>
+                <button class="vote-btn {{ thread.userVote == 'down' ? 'active-down' : '' }}" data-id="{{ thread.idThread }}" data-type="down">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+
+            <div class="flex-grow-1">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <img src="https://ui-avatars.com/api/?name={{ thread.auteur.nom|default('A') }}&background=f0fdf4&color=059669&size=64"
+                         class="avatar" alt="Avatar">
+                    <div>
+                        <h1 class="h3 fw-black mb-1">{{ thread.titre }}</h1>
+                        <div class="text-muted small fw-bold">
+                            <span class="text-success">Par {{ thread.auteur.nom|default('Anonyme') }}</span>
+                            <span class="mx-2">•</span>
+                            <span>{{ thread.dateCreation|date('d F Y à H:i') }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-secondary lh-lg mb-4" id="thread-content" style="white-space:pre-line;">{{ thread.contenu }}</p>
+
+                {% if thread.tags %}
+                <div class="d-flex flex-wrap gap-2 mb-4">
+                    {% for tag in thread.tags|split(',') %}
+                        <span class="tag-badge">#{{ tag|trim }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pt-4 border-top">
+                    <div class="d-flex gap-2 align-items-center">
+                        <button class="translate-btn" data-id="{{ thread.idThread }}" data-type="thread">
+                            <i class="fas fa-language me-1"></i>Traduire en Anglais
+                        </button>
+                        {% if app.user and thread.auteur and app.user.idUser == thread.auteur.idUser %}
+                            <a href="{{ path('thread_edit', {id: thread.idThread}) }}" class="btn btn-sm btn-outline-secondary rounded-3">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form method="post" action="{{ path('thread_delete', {id: thread.idThread}) }}" class="d-inline" onsubmit="return confirm('Supprimer ?')">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ thread.idThread) }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-3">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                    <span class="sentiment-badge sentiment-{{ thread.sentiment|default('neutre') }}">
+                        {{ thread.sentiment == 'positif' ? '😊' : (thread.sentiment == 'negatif' ? '😟' : '😐') }}
+                        {{ thread.sentiment|default('Neutre') }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Commentaires #}
+<div class="mb-4">
+    <div class="d-flex align-items-center justify-content-between border-bottom pb-3 mb-4">
+        <h4 class="fw-black mb-0">
+            <i class="fas fa-comments text-success me-2"></i>
+            Commentaires <span class="text-muted fw-normal fs-6">({{ comments|length }})</span>
+        </h4>
+    </div>
+
+    {% for comment in comments %}
+    <div class="comment-card">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="d-flex align-items-center gap-2">
+                <img src="https://ui-avatars.com/api/?name={{ comment.auteur.nom|default('A') }}&background=f8fafc&color=94a3b8&size=32"
+                     style="width:32px;height:32px;border-radius:10px;" alt="U">
+                <div>
+                    <div class="fw-bold small">{{ comment.auteur.nom|default('Anonyme') }}</div>
+                    <div class="text-muted" style="font-size:.7rem;">{{ comment.dateCreation|date('d/m/Y H:i') }}</div>
+                </div>
+            </div>
+            {% if app.user and comment.auteur and app.user.idUser == comment.auteur.idUser %}
+            <div class="d-flex gap-1">
+                <a href="{{ path('commentaire_edit', {id: comment.idCommentaire}) }}" class="btn btn-sm btn-light rounded-3">
+                    <i class="fas fa-edit text-muted"></i>
+                </a>
+                <form method="post" action="{{ path('commentaire_delete', {id: comment.idCommentaire}) }}" class="d-inline" onsubmit="return confirm('Supprimer ?')">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.idCommentaire) }}">
+                    <button type="submit" class="btn btn-sm btn-light rounded-3">
+                        <i class="fas fa-trash text-danger"></i>
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+
+        <p class="text-secondary small lh-lg mb-3 comment-content">{{ comment.contenu }}</p>
+
+        <div class="d-flex align-items-center justify-content-between">
+            <button class="translate-btn" data-id="{{ comment.idCommentaire }}" data-type="comment">
+                <i class="fas fa-language me-1"></i>Traduire
+            </button>
+            <span class="sentiment-badge sentiment-{{ comment.sentiment|default('neutre') }}">
+                {{ comment.sentiment == 'positif' ? '😊' : (comment.sentiment == 'negatif' ? '😟' : '😐') }}
+                {{ comment.sentiment }}
+            </span>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5 bg-light rounded-4 border border-dashed">
+        <p class="text-muted small mb-0">Soyez le premier à commenter cette discussion !</p>
+    </div>
+    {% endfor %}
+</div>
+
+{# Formulaire nouveau commentaire #}
+{% if app.user %}
+<div class="premium-card p-4" style="background:#f0fdf4; border-color:#bbf7d0;">
+    <h5 class="fw-bold text-success mb-4"><i class="fas fa-pen-nib me-2"></i>Votre réponse</h5>
+    <form method="post" action="{{ path('commentaire_new', {threadId: thread.idThread}) }}">
+        <textarea name="contenu" rows="4" required
+                  class="form-control rounded-3 mb-3"
+                  placeholder="Partagez vos conseils ou posez une question..."></textarea>
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="brand-btn">Publier la réponse</button>
+        </div>
+    </form>
+</div>
+{% else %}
+<div class="text-center p-5 bg-light rounded-4">
+    <p class="text-muted small mb-3">Vous devez être connecté pour participer.</p>
+    <a href="{{ path('app_login') }}" class="brand-btn text-decoration-none">Connexion</a>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.vote-btn').click(function(e) {
+        e.preventDefault();
+        let btn = $(this);
+        let id = btn.data('id');
+        let type = btn.data('type');
+        let widget = btn.closest('.vote-widget');
+
+        $.post('/thread/' + id + '/vote/' + type, function(data) {
+            widget.find('.score').fadeOut(100, function() {
+                $(this).text(data.score).fadeIn(100);
+            });
+            widget.find('.vote-btn').removeClass('active-up active-down');
+            if (type === 'up') btn.addClass('active-up');
+            else btn.addClass('active-down');
+        }).fail(function(xhr) {
+            if (xhr.status === 401) alert('Veuillez vous connecter pour voter.');
+        });
+    });
+
+    $('.translate-btn').click(function() {
+        let btn = $(this);
+        let id = btn.data('id');
+        let type = btn.data('type');
+        let contentBox;
+
+        if (type === 'thread') contentBox = $('#thread-content');
+        else contentBox = btn.closest('.comment-card').find('.comment-content');
+
+        btn.html('<i class="fas fa-spinner fa-spin me-1"></i>...').prop('disabled', true);
+
+        let url = (type === 'thread') ? '/ai/translate/thread/' + id : '/ai/translate/comment/' + id;
+
+        $.post(url, function(data) {
+            contentBox.fadeOut(300, function() {
+                $(this).html('<span class="badge bg-primary-subtle text-primary me-2">Traduit</span>' + data.translated).fadeIn(300);
+            });
+            btn.html('<i class="fas fa-check me-1"></i>OK').addClass('text-success');
+        }).fail(function() {
+            btn.html('<i class="fas fa-language me-1"></i>Retry').prop('disabled', false);
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0dd62393-fca9-412a-8652-b090a5ec4918" name="Changes" comment="Finale 2.5">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/Dashbord/ClientHomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controllers/Dashbord/ClientHomeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/Dashbord/DashboardAdmController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controllers/Dashbord/DashboardAdmController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/Dashbord/DashboardAgriculteurController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controllers/Dashbord/DashboardAgriculteurController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/home.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controllers/home.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utilies/MyDataBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utilies/MyDataBase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ClientHome.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ClientHome.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/DashboardAdm.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/DashboardAdm.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Dashboardagriculteur.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Dashboardagriculteur.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/utilies/MyDataBase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utilies/MyDataBase.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_C:/monjava/CRUD_Operation" value="39Ruq7Lj0dFMNBxkIyfj8XHFtBz" />
+    </persistenceIdMap>
+  </component>
+  <component name="CopilotUserSelectedModel">
+    <selectedModels>
+      <entry key="chat-panel" value="Claude Opus 4.5" />
+      <entry key="agent-panel" value="Claude Opus 4.5" />
+    </selectedModels>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="FxmlFile" />
+        <option value="JavaFXApplication" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Naaddiimm&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Naaddiimm/Esprit-PIDEV-3A10-2526-FlahaSmart.git&quot;,
+    &quot;accountId&quot;: &quot;09672f29-5ae0-430e-92ad-d7285b122f27&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/java/controllers/MainLayoutController.java" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="39Ruq7Lj0dFMNBxkIyfj8XHFtBz" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "Application.MainApp.executor": "Run",
+    "Application.TestDB.executor": "Run",
+    "Maven.CRUD_Operation [javafx:run].executor": "Run",
+    "Maven.CRUD_Operation [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
+    "Maven.FlahaSmart [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "devlop",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/xampp/htdocs/Java+bachar",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "MTThemeTableConfigurable",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Home\Desktop\Esprit-PIDEV-3A10-2526-FlahaSmart\src\main\java" />
+      <recent name="C:\Users\Home\Desktop\Esprit-PIDEV-3A10-2526-FlahaSmart\src\main\resources\produit" />
+      <recent name="C:\Users\Home\Desktop\Esprit-PIDEV-3A10-2526-FlahaSmart\src\main\java\services" />
+      <recent name="C:\Users\Home\Desktop\Esprit-PIDEV-3A10-2526-FlahaSmart\src\main\java\entities" />
+      <recent name="C:\Users\Home\Desktop\Esprit-PIDEV-3A10-2526-FlahaSmart\src\main\java\controllers\produit" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\monjava\CRUD_Operation\src\main\resources\views" />
+      <recent name="C:\monjava\CRUD_Operation\src\main\resources\views\advancedfeatures" />
+      <recent name="C:\monjava\CRUD_Operation\src\main\resources\views\operation" />
+      <recent name="C:\monjava\CRUD_Operation\src\main\resources\styles" />
+      <recent name="C:\monjava\CRUD_Operation\src\main\resources" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="utilies" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Maven.CRUD_Operation [javafx:run]">
+    <configuration default="true" type="JBossConfiguration" factoryName="Remote" ALTERNATIVE_JRE_ENABLED="false">
+      <option name="LOCAL" value="false" />
+      <deployment />
+      <server-settings>
+        <data>
+          <option name="serverGroup" value="" />
+          <option name="transportHostId" value="" />
+          <server-group />
+          <host-id />
+        </data>
+      </server-settings>
+      <predefined_log_file enabled="true" id="JBoss" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="TomeeConfiguration" factoryName="Remote" ALTERNATIVE_JRE_ENABLED="false">
+      <option name="LOCAL" value="false" />
+      <deployment />
+      <server-settings>
+        <data>
+          <option name="transportHostId" value="" />
+          <host-id />
+        </data>
+      </server-settings>
+      <predefined_log_file enabled="true" id="Tomcat" />
+      <predefined_log_file enabled="true" id="TOMCAT_LOCALHOST_LOG_ID" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Remote" ALTERNATIVE_JRE_ENABLED="false">
+      <option name="LOCAL" value="false" />
+      <deployment />
+      <server-settings>
+        <data>
+          <option name="transportHostId" value="" />
+          <host-id />
+        </data>
+      </server-settings>
+      <predefined_log_file enabled="true" id="Tomcat" />
+      <predefined_log_file enabled="true" id="TOMCAT_LOCALHOST_LOG_ID" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="testes.Main" />
+      <module name="CRUD_Operation" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="testes.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MainApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="testes.MainApp" />
+      <module name="FlahaSmart" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="testes.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestDB" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="TestDB" />
+      <module name="CRUD_Operation" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CRUD_Operation [javafx:run]" type="MavenRunConfiguration" factoryName="Maven">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="cmdOptions" />
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="javafx:run" />
+              </list>
+            </option>
+            <option name="multimoduleDir" />
+            <option name="pomFileName" value="pom.xml" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.MainApp" />
+        <item itemvalue="Application.TestDB" />
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.30387.90" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0dd62393-fca9-412a-8652-b090a5ec4918" name="Changes" comment="" />
+      <created>1770671394626</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1770671394626</updated>
+      <workItem from="1770671396120" duration="4205000" />
+      <workItem from="1770719743320" duration="657000" />
+      <workItem from="1770720441377" duration="497000" />
+      <workItem from="1770720994871" duration="7139000" />
+      <workItem from="1770900608113" duration="3356000" />
+      <workItem from="1770992689349" duration="4622000" />
+      <workItem from="1770997398665" duration="14056000" />
+      <workItem from="1771014108250" duration="20268000" />
+      <workItem from="1771170371801" duration="469000" />
+      <workItem from="1771174202186" duration="76000" />
+      <workItem from="1771174314124" duration="346000" />
+      <workItem from="1771174877802" duration="784000" />
+      <workItem from="1771176005296" duration="530000" />
+      <workItem from="1771177288329" duration="4741000" />
+      <workItem from="1771182794756" duration="1215000" />
+      <workItem from="1771245461185" duration="764000" />
+      <workItem from="1771246586531" duration="6000" />
+      <workItem from="1771251907236" duration="157000" />
+      <workItem from="1771252281469" duration="2449000" />
+      <workItem from="1771255413381" duration="602000" />
+      <workItem from="1771256444396" duration="614000" />
+      <workItem from="1771708162547" duration="13640000" />
+      <workItem from="1771957975682" duration="3753000" />
+      <workItem from="1772029766945" duration="5350000" />
+      <workItem from="1772045199979" duration="9334000" />
+      <workItem from="1772092886799" duration="344000" />
+      <workItem from="1772096147603" duration="181000" />
+      <workItem from="1772096569251" duration="254000" />
+      <workItem from="1772096875959" duration="1335000" />
+      <workItem from="1772104044073" duration="4821000" />
+      <workItem from="1772314307275" duration="15218000" />
+      <workItem from="1772389511817" duration="13014000" />
+      <workItem from="1772474447734" duration="7155000" />
+      <workItem from="1772489178615" duration="1188000" />
+      <workItem from="1772566513929" duration="15013000" />
+      <workItem from="1772636451740" duration="733000" />
+      <workItem from="1772655462391" duration="8655000" />
+      <workItem from="1772667725453" duration="2638000" />
+      <workItem from="1772670831704" duration="8110000" />
+      <workItem from="1772683286871" duration="741000" />
+      <workItem from="1772684511257" duration="1493000" />
+      <workItem from="1772686762243" duration="434000" />
+      <workItem from="1772688518973" duration="35000" />
+      <workItem from="1775049512518" duration="2919000" />
+      <workItem from="1775052833914" duration="2865000" />
+    </task>
+    <task id="LOCAL-00001" summary="API 1">
+      <option name="closed" value="true" />
+      <created>1771687218402</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1771687218402</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Gemini + Weather">
+      <option name="closed" value="true" />
+      <created>1771711811483</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1771711811483</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Gemini + Weather">
+      <option name="closed" value="true" />
+      <created>1771711826940</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1771711826940</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Persque finale">
+      <option name="closed" value="true" />
+      <created>1771719561348</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1771719561348</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Persque finale 2">
+      <option name="closed" value="true" />
+      <created>1772334497979</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1772334497979</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Finale 2">
+      <option name="closed" value="true" />
+      <created>1772406306425</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1772406306425</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Finale 2.1">
+      <option name="closed" value="true" />
+      <created>1772407942226</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1772407942226</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Finale 2.2">
+      <option name="closed" value="true" />
+      <created>1772479657592</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1772479657592</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Finale 2.3">
+      <option name="closed" value="true" />
+      <created>1772573863161</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1772573863161</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Finale 2.4">
+      <option name="closed" value="true" />
+      <created>1772576810879</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1772576810879</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Finale 2.5">
+      <option name="closed" value="true" />
+      <created>1772579461631</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1772579461631</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="API 1" />
+    <MESSAGE value="Gemini + Weather" />
+    <MESSAGE value="Persque finale" />
+    <MESSAGE value="Persque finale 2" />
+    <MESSAGE value="Finale 2" />
+    <MESSAGE value="Finale 2.1" />
+    <MESSAGE value="Finale 2.2" />
+    <MESSAGE value="Finale 2.3" />
+    <MESSAGE value="Finale 2.4" />
+    <MESSAGE value="Finale 2.5" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finale 2.5" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>

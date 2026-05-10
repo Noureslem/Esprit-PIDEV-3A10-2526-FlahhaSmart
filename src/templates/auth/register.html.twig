@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'auth.register.title'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/auth.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+    <div class="container auth-shell auth-shell-wide">
+        <div class="row justify-content-center">
+            <div class="col-md-9 col-lg-8">
+
+                <div class="text-center mb-4 auth-intro">
+                    <div class="auth-mark">
+                        <img src="{{ asset('logo.png') }}" alt="Logo" class="auth-logo">
+                    </div>
+                    <h2 class="fw-bold mt-2 auth-title">{{ 'auth.register.heading'|trans }}</h2>
+                    <p class="text-muted auth-subtitle">{{ 'auth.register.subtitle'|trans }}</p>
+                </div>
+
+                <div class="card auth-card">
+                    <div class="auth-back-wrap">
+                        <a class="auth-back" href="{{ path('app_home') }}">
+                            <i class="bi bi-arrow-left-circle"></i>Accueil
+                        </a>
+                    </div>
+                    <div class="auth-card-body">
+                        {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate', 'class': 'auth-form'}}) }}
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">{{ form_label(registrationForm.nom) }}</label>
+                                <div class="input-icon">
+                                    <i class="bi bi-person" aria-hidden="true"></i>
+                                    {{ form_widget(registrationForm.nom, {'attr': {'class': 'form-control auth-input'}}) }}
+                                </div>
+                                <div class="auth-errors">{{ form_errors(registrationForm.nom) }}</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">{{ form_label(registrationForm.prenom) }}</label>
+                                <div class="input-icon">
+                                    <i class="bi bi-person-plus" aria-hidden="true"></i>
+                                    {{ form_widget(registrationForm.prenom, {'attr': {'class': 'form-control auth-input'}}) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 mt-3">
+                            <label class="form-label fw-semibold">{{ form_label(registrationForm.email) }}</label>
+                            <div class="input-icon">
+                                <i class="bi bi-envelope" aria-hidden="true"></i>
+                                {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control auth-input'}}) }}
+                            </div>
+                            <div class="auth-errors">{{ form_errors(registrationForm.email) }}</div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">{{ form_label(registrationForm.telephone) }}</label>
+                                <div class="input-icon">
+                                    <i class="bi bi-telephone" aria-hidden="true"></i>
+                                    {{ form_widget(registrationForm.telephone, {'attr': {'class': 'form-control auth-input'}}) }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">{{ form_label(registrationForm.ville) }}</label>
+                                <div class="input-icon">
+                                    <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                                    {{ form_widget(registrationForm.ville, {'attr': {'class': 'form-control auth-input'}}) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">{{ form_label(registrationForm.role) }}</label>
+                            <div class="input-icon">
+                                <i class="bi bi-person-badge" aria-hidden="true"></i>
+                                {{ form_widget(registrationForm.role, {'attr': {'class': 'form-select auth-select'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">{{ 'auth.register.password.label'|trans }}</label>
+                            <div class="input-icon mb-2">
+                                <i class="bi bi-lock" aria-hidden="true"></i>
+                                {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control auth-input'}}) }}
+                            </div>
+                            <div class="input-icon">
+                                <i class="bi bi-shield-check" aria-hidden="true"></i>
+                                {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control auth-input'}}) }}
+                            </div>
+                            <div class="auth-errors">{{ form_errors(registrationForm.plainPassword) }}</div>
+                        </div>
+
+                        <button type="submit" class="btn auth-btn w-100 py-2 fw-semibold">
+                            {{ 'auth.register.submit'|trans }}
+                        </button>
+
+                        {{ form_end(registrationForm) }}
+                    </div>
+                </div>
+
+                <p class="text-center mt-3 text-muted">
+                    {{ 'auth.register.have_account'|trans }}
+                    <a href="{{ path('app_login') }}" class="auth-link fw-semibold">{{ 'auth.register.login_link'|trans }}</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

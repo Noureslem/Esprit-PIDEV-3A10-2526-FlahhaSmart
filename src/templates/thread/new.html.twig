@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Thread - FlahaSmart{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .premium-card { background: #fff; border-radius: 16px; box-shadow: 0 1px 6px rgba(0,0,0,.07); border: 1px solid #f1f5f9; }
+    .brand-btn { background: #16a34a; color: #fff; border: none; border-radius: 12px; padding: .6rem 1.5rem; font-weight: 700; font-size: .9rem; transition: .2s; }
+    .brand-btn:hover { background: #15803d; color: #fff; transform: translateY(-1px); }
+    .form-label-custom { font-size: .7rem; font-weight: 900; text-transform: uppercase; letter-spacing: .1em; color: #94a3b8; }
+    .form-control { border-radius: 12px; border: 1px solid #e2e8f0; padding: .75rem 1rem; transition: .2s; }
+    .form-control:focus { border-color: #16a34a; box-shadow: 0 0 0 3px rgba(22,163,74,.1); }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="premium-card overflow-hidden">
+            <div style="height:4px;background:linear-gradient(90deg,#16a34a,#15803d);"></div>
+            <div class="p-4 p-md-5">
+                <h2 class="fw-black mb-1"><i class="fas fa-edit text-success me-2"></i>Démarrer une discussion</h2>
+                <p class="text-muted small mb-4">Partagez vos questions et conseils avec la communauté agricole.</p>
+
+                {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+                    {{ form_errors(form) }}
+
+                    <div class="mb-4">
+                        <label class="form-label-custom d-block mb-2">Titre de la discussion</label>
+                        {{ form_widget(form.titre, {attr: {class: 'form-control', placeholder: 'Un titre clair et précis...'}}) }}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label-custom d-block mb-2">Votre message</label>
+                        {{ form_widget(form.contenu, {attr: {class: 'form-control', rows: 8, placeholder: 'Décrivez votre question ou partagez vos conseils...'}}) }}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label-custom d-block mb-2">Mots-clés (tags)</label>
+                        {{ form_widget(form.tags, {attr: {class: 'form-control', placeholder: 'agriculture, élevage, conseils...'}}) }}
+                        <small class="text-muted">Séparez les tags par des virgules</small>
+                    </div>
+
+                    <div class="d-flex gap-3 align-items-center pt-2">
+                        <button type="submit" class="brand-btn">
+                            <i class="fas fa-paper-plane me-2"></i>Publier sur le forum
+                        </button>
+                        <a href="{{ path('thread_index') }}" class="text-muted text-decoration-none fw-bold small">Annuler</a>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

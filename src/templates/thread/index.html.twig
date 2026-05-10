@@ -1,0 +1,197 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum Agricole - FlahaSmart{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .premium-card { background: #fff; border-radius: 16px; box-shadow: 0 1px 6px rgba(0,0,0,.07); border: 1px solid #f1f5f9; }
+    .brand-btn { background: #16a34a; color: #fff; border: none; border-radius: 12px; padding: .5rem 1.25rem; font-weight: 700; font-size: .85rem; transition: .2s; }
+    .brand-btn:hover { background: #15803d; color: #fff; transform: translateY(-1px); }
+    .vote-widget { display: flex; flex-direction: column; align-items: center; background: #f8fafc; padding: .75rem .5rem; border-radius: 14px; min-width: 3.5rem; }
+    .vote-btn { background: none; border: none; padding: .4rem .5rem; border-radius: 10px; cursor: pointer; color: #94a3b8; transition: .2s; }
+    .vote-btn:hover { background: #f0fdf4; color: #16a34a; }
+    .vote-btn.active-up { background: #f0fdf4; color: #16a34a; }
+    .vote-btn.active-down { background: #fef2f2; color: #dc2626; }
+    .score { font-weight: 900; font-size: 1.1rem; color: #0f172a; margin: .25rem 0; }
+    .sentiment-badge { font-size: .7rem; font-weight: 700; text-transform: uppercase; padding: .25rem .6rem; border-radius: 8px; }
+    .sentiment-positif { background: #dcfce7; color: #15803d; }
+    .sentiment-negatif { background: #fee2e2; color: #dc2626; }
+    .sentiment-neutre { background: #f1f5f9; color: #64748b; }
+    .thread-card { border: 1px solid #f1f5f9; border-radius: 16px; padding: 1.25rem 1.5rem; background: #fff; margin-bottom: 1rem; transition: box-shadow .2s; }
+    .thread-card:hover { box-shadow: 0 4px 20px rgba(22,163,74,.1); }
+    .like-btn { background: none; border: none; cursor: pointer; color: #94a3b8; font-weight: 700; font-size: .9rem; transition: .2s; }
+    .like-btn.liked { color: #ef4444; }
+    .translate-btn { background: #eff6ff; color: #2563eb; border: none; border-radius: 10px; padding: .3rem .9rem; font-size: .75rem; font-weight: 700; cursor: pointer; transition: .2s; }
+    .translate-btn:hover { background: #dbeafe; }
+    .reputation-card { background: linear-gradient(135deg, #16a34a, #15803d); color: #fff; border-radius: 16px; padding: 1.5rem; }
+    .forum-search input { border-radius: 12px; border: 1px solid #e2e8f0; padding: .6rem 1rem .6rem 2.5rem; width: 100%; }
+    .avatar { width: 32px; height: 32px; border-radius: 10px; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="row g-4">
+    {# Sidebar gauche #}
+    <div class="col-lg-3">
+        {% if app.user %}
+        <div class="reputation-card mb-4">
+            <h6 class="text-uppercase opacity-75 fw-bold small mb-3">Votre Réputation</h6>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="display-6 fw-black">{{ reputationPoints }}</span>
+                <i class="fas fa-seedling fs-2 opacity-50"></i>
+            </div>
+            <div class="fw-bold small mb-2">{{ reputationBadge }}</div>
+            <div class="progress" style="height:4px; background:rgba(255,255,255,.2);">
+                {% set percent = min(100, (reputationPoints / 100) * 100) %}
+                <div class="progress-bar bg-white" style="width:{{ percent }}%"></div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="premium-card p-4 mb-4">
+            <h6 class="fw-bold mb-3"><i class="fas fa-chart-line text-success me-2"></i>Statistiques</h6>
+            <div class="d-flex justify-content-between mb-3">
+                <span class="text-muted small fw-bold">Discussions</span>
+                <span class="fw-bold">{{ threads|length }}</span>
+            </div>
+            <a href="{{ path('thread_new') }}" class="brand-btn d-block text-center text-decoration-none">
+                <i class="fas fa-plus-circle me-1"></i> Nouveau Sujet
+            </a>
+        </div>
+    </div>
+
+    {# Zone principale #}
+    <div class="col-lg-9">
+        {# Header + Recherche #}
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+            <div>
+                <h2 class="fw-black mb-1">Fil d'actualité</h2>
+                <p class="text-muted small mb-0">Découvrez les dernières discussions de la communauté.</p>
+            </div>
+            <form method="get" class="d-flex gap-2 forum-search" style="min-width:260px;">
+                <div class="position-relative flex-grow-1">
+                    <i class="fas fa-search position-absolute" style="left:.75rem;top:50%;transform:translateY(-50%);color:#94a3b8;"></i>
+                    <input type="text" name="search" value="{{ search }}" placeholder="Rechercher..." class="form-control ps-5">
+                </div>
+                <button type="submit" class="brand-btn"><i class="fas fa-filter"></i></button>
+                {% if search %}
+                    <a href="{{ path('thread_index') }}" class="btn btn-light rounded-3"><i class="fas fa-undo"></i></a>
+                {% endif %}
+            </form>
+        </div>
+
+        {# Liste des threads #}
+        {% for thread in threads %}
+        <div class="thread-card d-flex gap-3" id="thread-{{ thread.idThread }}">
+            {# Vote widget #}
+            <div class="vote-widget">
+                <button class="vote-btn {{ thread.userVote == 'up' ? 'active-up' : '' }}" data-id="{{ thread.idThread }}" data-type="up">
+                    <i class="fas fa-chevron-up"></i>
+                </button>
+                <span class="score">{{ thread.score|default(0) }}</span>
+                <button class="vote-btn {{ thread.userVote == 'down' ? 'active-down' : '' }}" data-id="{{ thread.idThread }}" data-type="down">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+
+            {# Contenu #}
+            <div class="flex-grow-1 min-w-0">
+                <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+                    <img src="https://ui-avatars.com/api/?name={{ thread.auteur.nom|default('A') }}&background=f0fdf4&color=059669&size=32"
+                         class="avatar" alt="Avatar">
+                    <span class="fw-bold small text-muted">{{ thread.auteur.nom|default('Anonyme') }}</span>
+                    <span class="text-muted">•</span>
+                    <span class="text-muted" style="font-size:.75rem;">{{ thread.dateCreation|date('d M Y') }}</span>
+                    {% if thread.sentiment %}
+                        <span class="sentiment-badge sentiment-{{ thread.sentiment }} ms-auto">
+                            {{ thread.sentiment == 'positif' ? '😊' : (thread.sentiment == 'negatif' ? '😟' : '😐') }}
+                            {{ thread.sentiment }}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <h5 class="fw-bold mb-2">
+                    <a href="{{ path('thread_show', {id: thread.idThread}) }}" class="text-decoration-none text-dark">{{ thread.titre }}</a>
+                </h5>
+
+                <p class="text-muted small mb-3 content-area">{{ thread.contenu|slice(0, 200) }}...</p>
+
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                    <div class="d-flex gap-3 align-items-center">
+                        <button class="like-btn {{ thread.liked ? 'liked' : '' }}" data-id="{{ thread.idThread }}">
+                            <i class="fas fa-heart me-1"></i>
+                            <span class="like-count">{{ thread.likesCount|default(0) }}</span>
+                        </button>
+                        <a href="{{ path('thread_show', {id: thread.idThread}) }}" class="text-muted small fw-bold text-decoration-none">
+                            <i class="fas fa-comment me-1"></i>Consulter
+                        </a>
+                    </div>
+                    <button class="translate-btn" data-id="{{ thread.idThread }}" data-type="thread">
+                        <i class="fas fa-language me-1"></i>Traduire
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-5 premium-card">
+            <i class="fas fa-inbox fs-1 text-muted mb-3 d-block"></i>
+            <p class="text-muted">Aucune discussion trouvée.</p>
+            <a href="{{ path('thread_new') }}" class="brand-btn text-decoration-none">Créer la première discussion</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.vote-btn').click(function(e) {
+        e.preventDefault();
+        let btn = $(this);
+        let id = btn.data('id');
+        let type = btn.data('type');
+        let card = btn.closest('.thread-card');
+
+        $.post('/thread/' + id + '/vote/' + type, function(data) {
+            card.find('.score').fadeOut(100, function() {
+                $(this).text(data.score).fadeIn(100);
+            });
+            card.find('.vote-btn').removeClass('active-up active-down');
+            if (type === 'up') btn.addClass('active-up');
+            else btn.addClass('active-down');
+        }).fail(function(xhr) {
+            if (xhr.status === 401) alert('Vous devez être connecté pour voter !');
+        });
+    });
+
+    $('.like-btn').click(function() {
+        let btn = $(this);
+        let id = btn.data('id');
+        $.post('/thread/' + id + '/like', function(data) {
+            btn.find('.like-count').text(data.likes);
+            if (data.liked) btn.addClass('liked');
+            else btn.removeClass('liked');
+        }).fail(function(xhr) {
+            if (xhr.status === 401) alert('Vous devez être connecté !');
+        });
+    });
+
+    $('.translate-btn').click(function() {
+        let btn = $(this);
+        let id = btn.data('id');
+        let contentArea = btn.closest('.thread-card').find('.content-area');
+        btn.html('<i class="fas fa-spinner fa-spin me-1"></i>...').prop('disabled', true);
+        $.post('/ai/translate/thread/' + id, function(data) {
+            contentArea.fadeOut(300, function() {
+                $(this).html('<span class="badge bg-primary-subtle text-primary me-1">Traduit</span>' + data.translated).fadeIn(300);
+            });
+            btn.html('<i class="fas fa-check me-1"></i>OK').addClass('bg-success-subtle text-success');
+        }).fail(function() {
+            btn.html('<i class="fas fa-language me-1"></i>Retry').prop('disabled', false);
+        });
+    });
+});
+</script>
+{% endblock %}

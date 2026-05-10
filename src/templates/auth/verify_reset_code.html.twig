@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Verification du code - FlahaSmart{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/auth.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+    <div class="container auth-shell auth-shell-medium">
+        <div class="row justify-content-center">
+            <div class="col-md-7 col-lg-6">
+                <div class="card auth-card">
+                    <div class="card-header auth-card-header text-center">
+                        <div class="auth-back-wrap">
+                            <a class="auth-back" href="{{ path('app_forgot_password') }}">
+                                <i class="bi bi-arrow-left-circle"></i>Retour
+                            </a>
+                        </div>
+                        <img src="{{ asset('logo.png') }}" alt="Logo" class="auth-logo">
+                        <div class="auth-badge" aria-hidden="true">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h3 class="auth-title mb-0">Code de verification</h3>
+                    </div>
+                    <div class="card-body auth-card-body">
+                        {% for message in app.flashes('info') %}
+                            <div class="alert alert-info auth-alert">{{ message }}</div>
+                        {% endfor %}
+
+                        {% for message in app.flashes('error') %}
+                            <div class="alert alert-danger auth-alert">{{ message }}</div>
+                        {% endfor %}
+
+                        <p class="text-muted text-center mb-4">
+                            Entrez le code a 6 chiffres envoye a votre adresse email.
+                        </p>
+
+                        <form method="post" action="{{ path('app_verify_reset_code') }}" class="auth-form">
+                            <div class="mb-4 auth-field">
+                                <label for="code" class="form-label">Code de verification</label>
+                                <div class="input-icon">
+                                    <i class="bi bi-key" aria-hidden="true"></i>
+                                    <input type="text" class="form-control auth-input text-center" id="code" name="code" maxlength="6" pattern="[0-9]{6}" placeholder="000000" required autofocus>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn auth-btn w-100">Verifier le code</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

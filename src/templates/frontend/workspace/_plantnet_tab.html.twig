@@ -1,0 +1,165 @@
+<div id="plantnetWorkspace"
+     class="plantnet-workspace grid grid-cols-1 xl:grid-cols-2 gap-6 p-3 md:p-6 rounded-2xl"
+     data-endpoint="{{ path('app_workspace_plantnet_analyse') }}">
+    <section class="rounded-2xl bg-white/95 shadow-xl border border-slate-200 p-6 md:p-8">
+        <div class="mb-5">
+            <h3 class="text-2xl font-semibold text-slate-900 mb-1">Diagnostic plante & maladies</h3>
+            <p class="text-slate-500 text-sm mb-0">Importez une photo pour identifier l'espece et/ou obtenir un diagnostic maladies.</p>
+        </div>
+
+        {{ form_start(plantNetForm, {
+            method: 'POST',
+            attr: {
+                id: 'plantnetForm',
+                class: 'space-y-5',
+                novalidate: 'novalidate'
+            },
+            action: path('app_workspace_plantnet_analyse')
+        }) }}
+            <div id="plantnetAlert" class="hidden rounded-xl px-3 py-2 text-sm"></div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div class="lg:col-span-2">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2" for="{{ plantNetForm.image.vars.id }}">
+                        Image de plante
+                    </label>
+
+                    <div id="plantnetDropzone" class="plantnet-dropzone relative rounded-2xl p-5">
+                        {{ form_widget(plantNetForm.image, {
+                            attr: {
+                                class: 'absolute inset-0 h-full w-full opacity-0 cursor-pointer z-10',
+                                'data-plantnet-file-input': '1',
+                                'aria-label': 'Selectionner une image de plante'
+                            }
+                        }) }}
+
+                        <div class="flex flex-col items-center justify-center text-center gap-3 pointer-events-none">
+                            <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-100 text-emerald-700">
+                                <i class="bi bi-cloud-arrow-up text-xl"></i>
+                            </span>
+                            <div>
+                                <p class="font-semibold text-slate-900 mb-1">Glissez-deposez une image ici</p>
+                                <p class="text-sm text-slate-500">ou cliquez pour selectionner un fichier</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="text-xs text-slate-500 mt-2">Formats acceptes: JPG, PNG, WEBP. Taille maximale: 8 Mo.</p>
+                    <div id="plantnetFieldError" class="hidden mt-2 rounded-lg border border-red-200 bg-red-50 text-red-700 text-sm px-3 py-2"></div>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        {{ form_label(plantNetForm.organ, null, {'label_attr': {'class': 'block text-sm font-semibold text-slate-700 mb-2'}}) }}
+                        {{ form_widget(plantNetForm.organ, {
+                            attr: {
+                                class: 'w-full rounded-xl border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500'
+                            }
+                        }) }}
+                    </div>
+
+                    <div>
+                        {{ form_label(plantNetForm.language, null, {'label_attr': {'class': 'block text-sm font-semibold text-slate-700 mb-2'}}) }}
+                        {{ form_widget(plantNetForm.language, {
+                            attr: {
+                                class: 'w-full rounded-xl border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500'
+                            }
+                        }) }}
+                    </div>
+
+                    {{ form_row(plantNetForm.detectDiseases, {
+                        row_attr: {
+                            class: 'rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 mb-0'
+                        },
+                        label_attr: {
+                            class: 'text-sm text-slate-700 ms-2'
+                        },
+                        attr: {
+                            class: 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500'
+                        }
+                    }) }}
+                </div>
+            </div>
+
+            <div id="plantnetPreviewPanel" class="hidden rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                <div class="flex items-center gap-3">
+                    <img id="plantnetImagePreview" alt="Apercu de la plante" class="h-20 w-20 rounded-xl object-cover border border-slate-200 bg-white">
+                    <div>
+                        <p id="plantnetFileName" class="font-medium text-slate-900 mb-1">-</p>
+                        <p id="plantnetFileSize" class="text-xs text-slate-500">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <button id="plantnetSubmit"
+                    type="submit"
+                    class="w-full rounded-xl bg-gradient-to-r from-emerald-500 via-lime-500 to-teal-500 text-white font-semibold py-3 px-4 hover:from-emerald-600 hover:via-lime-600 hover:to-teal-600 transition-all duration-300">
+                Analyser la plante
+            </button>
+
+            <div id="plantnetLoader" class="hidden plantnet-loader text-sm text-slate-500">
+                <span class="plantnet-spinner" aria-hidden="true"></span>
+                Analyse PlantNet en cours...
+            </div>
+        {{ form_end(plantNetForm) }}
+    </section>
+
+    <section class="rounded-2xl bg-white/95 shadow-xl border border-slate-200 p-6 md:p-8 space-y-4">
+        <div class="flex items-center justify-between gap-3">
+            <div>
+                <h3 class="text-2xl font-semibold text-slate-900 mb-1">Resultats</h3>
+            </div>
+        </div>
+
+        <div id="plantnetResultEmpty" class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-slate-500">
+            Ajoutez une image puis lancez l analyse pour afficher les resultats.
+        </div>
+
+        <div id="plantnetResultContent" class="hidden space-y-4">
+            <article id="plantnetTopCard" class="plantnet-card-enter rounded-2xl border border-slate-200 bg-gradient-to-r from-white to-emerald-50 p-4">
+                <div class="flex items-start gap-4">
+                    <img id="plantnetTopImage" src="" alt="Image plante identifiee" class="h-24 w-24 rounded-xl object-cover border border-slate-200 bg-white hidden">
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wider text-slate-500 mb-1">Top resultat</p>
+                        <h4 id="plantnetTopName" class="text-xl font-bold text-slate-900">-</h4>
+                        <p id="plantnetTopScientific" class="text-sm text-slate-600 mb-3">-</p>
+
+                        <div class="flex items-center gap-3">
+                            <div class="h-2 w-full rounded-full bg-slate-200 overflow-hidden">
+                                <div id="plantnetTopScoreBar" class="plantnet-score-bar h-2 rounded-full bg-gradient-to-r from-emerald-400 to-teal-500" style="width: 0%"></div>
+                            </div>
+                            <span id="plantnetTopScore" class="text-sm font-semibold text-emerald-700 whitespace-nowrap">0%</span>
+                        </div>
+
+                        <p id="plantnetTopMeta" class="text-xs text-slate-500 mt-2">-</p>
+                    </div>
+                </div>
+            </article>
+
+            <article id="plantnetDiseaseCard" class="hidden rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                <h4 class="text-lg font-semibold text-amber-900 mb-3">Diagnostics maladies</h4>
+                <div id="plantnetDiseaseList" class="space-y-2"></div>
+            </article>
+
+            <article class="rounded-2xl border border-slate-200 bg-white p-4">
+                <h4 class="text-lg font-semibold text-slate-900 mb-3">Especes candidates</h4>
+                <div id="plantnetSuggestionsList" class="space-y-2"></div>
+            </article>
+
+            <div class="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-500 flex items-center justify-between">
+                <span>Requetes restantes</span>
+                <span id="plantnetRemainingRequests" class="font-semibold text-slate-700">-</span>
+            </div>
+        </div>
+
+        <article id="plantnetHistoryBlock" class="hidden rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <div class="flex items-center justify-between mb-2">
+                <h4 class="text-sm font-semibold text-slate-800 mb-0">Historique recent</h4>
+                <button type="button" id="plantnetHistoryClear" class="text-xs text-slate-500 hover:text-slate-700">Vider</button>
+            </div>
+            <div id="plantnetHistoryList" class="space-y-2"></div>
+        </article>
+    </section>
+
+    <div id="plantnetToastContainer" class="plantnet-toast-container" aria-live="polite" aria-atomic="true"></div>
+</div>

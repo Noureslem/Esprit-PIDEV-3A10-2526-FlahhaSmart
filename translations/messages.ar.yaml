@@ -1,0 +1,543 @@
+nav:
+  language: "اللغة"
+  section:
+    navigation: "التنقل"
+    quick_actions: "إجراءات سريعة"
+    administration: "الإدارة"
+    agriculteur: "الفلاح"
+    client: "العميل"
+    account: "الحساب"
+  dashboard: "لوحة التحكم"
+  equipements: "المعدات"
+  operations: "العمليات"
+  new_equipement: "معدات جديدة"
+  new_operation: "عملية جديدة"
+  users: "المستخدمون"
+  forum: "المنتدى"
+  my_orders: "طلباتي"
+  profile: "الملف الشخصي"
+  logout: "تسجيل الخروج"
+
+workspace:
+  title: "مساحة العمل"
+
+common:
+  ok: "حسناً"
+  loading: "جاري التحميل..."
+  home: "الرئيسية"
+  new: "جديد"
+  day_singular: "يوم"
+  day_plural: "يوم"
+  completed: "منتهية"
+  terminated: "منتهٍ"
+  search: "بحث"
+  reset: "إعادة ضبط"
+  save: "حفظ"
+  update: "تحديث"
+  back_to_list: "العودة إلى القائمة"
+  actions: "الإجراءات"
+  quick_actions: "إجراءات سريعة"
+  select_all: "تحديد الكل"
+  id: "المعرّف"
+  close: "إغلاق"
+  error: "خطأ"
+  please_fix_errors: "يرجى تصحيح الأخطاء أدناه."
+  bulk_select_at_least_one: "يرجى تحديد عنصر واحد على الأقل."
+  confirm_bulk_delete_count: "تأكيد حذف %count% عنصر/عناصر؟"
+  sort:
+    asc: "ترتيب تصاعدي"
+    desc: "ترتيب تنازلي"
+  cancel: "إلغاء"
+  delete: "حذف"
+  view: "عرض"
+  edit: "تعديل"
+  not_available: "غير متوفر"
+  active: "نشط"
+  inactive: "غير نشط"
+  confirm_delete:
+    title: "تأكيد الحذف"
+    message: "هل أنت متأكد من حذف هذا العنصر؟ هذا الإجراء لا يمكن التراجع عنه."
+
+operation:
+  table:
+    type: "النوع"
+    status: "الحالة"
+    date: "التاريخ"
+    equipement: "المعدّة"
+  index:
+    title: "العمليات"
+    navbar_title: "إدارة العمليات"
+    filter:
+      type_label: "نوع العملية"
+      type_placeholder: "ابحث حسب النوع..."
+      status_label: "الحالة"
+      status_all: "-- جميع الحالات --"
+    table:
+      type: "النوع"
+      equipment: "المعدات"
+      start_date: "تاريخ البدء"
+      end_date: "تاريخ الانتهاء"
+      status: "الحالة"
+    empty: "لا توجد عمليات"
+    empty_cta: "إضافة عملية"
+  bulk:
+    confirm: "حذف العمليات المحددة؟"
+    item_aria: "تحديد العملية #%id%"
+  new:
+    title: "عملية جديدة"
+    navbar_title: "إنشاء عملية"
+    card_header: "معلومات العملية"
+  edit:
+    title: "تعديل العملية"
+    navbar_title: "تعديل العملية"
+  show:
+    page_title: "العملية #%id%"
+    navbar_title: "تفاصيل العملية"
+    user_id: "معرّف المستخدم"
+    operation_type: "نوع العملية"
+    start_date: "تاريخ البدء"
+    end_date: "تاريخ الانتهاء"
+    status: "الحالة"
+    equipment: "المعدات"
+    associated_equipment: "المعدات المرتبطة"
+    view_equipment: "عرض المعدات"
+  actions:
+    finish: "إنهاء"
+  form:
+    type_operation:
+      label: "نوع العملية"
+      placeholder: "مثال: صيانة، إصلاح..."
+    date_debut:
+      label: "تاريخ البدء"
+    date_fin:
+      label: "تاريخ الانتهاء"
+    equipement:
+      label: "المعدات"
+  export:
+    open_modal: "تصدير PDF"
+    modal_title: "تصدير العمليات إلى PDF"
+    modal_subtitle: "اختر الأعمدة التي تريد تضمينها في المستند."
+    select_all: "تحديد الكل"
+    deselect_all: "إلغاء تحديد الكل"
+    submit: "تصدير PDF"
+    document_title: "تقرير العمليات"
+    generated_on: "تاريخ الإنشاء:"
+    total: "إجمالي العمليات: %count%"
+    empty: "لا توجد عمليات للتصدير."
+    column:
+      id: "المعرف"
+      id_user: "معرف المستخدم"
+      type_operation: "نوع العملية"
+      equipement: "المعدات"
+      date_debut: "تاريخ البدء"
+      date_fin: "تاريخ الانتهاء"
+      statut: "الحالة"
+
+equipement:
+  table:
+    name: "الاسم"
+    model: "الطراز"
+    serial: "الرقم التسلسلي"
+    status: "الحالة"
+  state:
+    available: "متاح"
+    reserved: "محجوز"
+  index:
+    title: "المعدات"
+    navbar_title: "إدارة المعدات"
+    filter:
+      name_label: "الاسم"
+      name_placeholder: "ابحث حسب الاسم..."
+      type_label: "النوع"
+      type_all: "-- جميع الأنواع --"
+      state_label: "الحالة"
+      state_all: "-- جميع الحالات --"
+    table:
+      name: "الاسم"
+      type: "النوع"
+      state: "الحالة"
+    empty: "لا توجد معدات"
+    empty_cta: "إضافة معدات"
+  bulk:
+    confirm: "حذف المعدات المحددة؟"
+    item_aria: "تحديد المعدّة #%id%"
+  new:
+    title: "معدات جديدة"
+    navbar_title: "إنشاء معدات"
+    card_header: "معلومات المعدّة"
+  edit:
+    title: "تعديل المعدّة"
+    navbar_title: "تعديل المعدّة"
+  show:
+    page_title: "المعدّة - %name%"
+    navbar_title: "تفاصيل المعدّة"
+    name: "الاسم"
+    type: "النوع"
+    state: "الحالة"
+  delete:
+    reserved_tooltip: "لا يمكن حذف معدّة محجوزة"
+  form:
+    nom:
+      label: "اسم المعدّة"
+      placeholder: "أدخل الاسم..."
+    type:
+      label: "النوع"
+      placeholder: "اختر نوعًا"
+  type:
+    machine: "آلة"
+    irrigation: "الري"
+    elevage: "تربية المواشي"
+    outil_manuel: "أداة يدوية"
+    transport: "النقل"
+
+app:
+  title: "إدارة العمليات والمعدات"
+  brand: "AgriOps"
+  page:
+    default_title: "لوحة التحكم"
+  actions:
+    delete_selection: "حذف المحدد"
+    new_operation: "عملية جديدة"
+    new_equipement: "معدات جديدة"
+    create_now: "إنشاء الآن"
+  common:
+    view: "عرض"
+    edit: "تعديل"
+    delete: "حذف"
+dashboard:
+  index:
+    title: "لوحة التحكم"
+    navbar_title: "لوحة التحكم - الإحصاءات"
+  actions:
+    refresh: "تحديث"
+    refreshing: "جارٍ التحديث..."
+    terminating: "جارٍ الإنهاء..."
+  confirm:
+    terminate: "هل أنت متأكد أنك تريد إنهاء هذه العملية؟"
+  kpi:
+    operations_total: "إجمالي العمليات"
+    operations_in_progress: "قيد التنفيذ"
+    operations_completed: "منتهية"
+    completion_rate: "%rate%% منتهية"
+  charts:
+    equipment_by_type: "المعدات حسب النوع"
+    equipment_usage: "استخدام المعدات"
+  upcoming:
+    title: "العمليات الأقرب"
+    empty: "لا توجد عمليات قادمة"
+    actions:
+      terminate_tooltip: "إنهاء هذه العملية"
+    table:
+      operation: "العملية"
+      equipment: "المعدات"
+      end_date: "تاريخ الانتهاء"
+      days_remaining: "الأيام المتبقية"
+      status: "الحالة"
+      action: "إجراء"
+  last_updated: "آخر تحديث"
+  notifications:
+    stats_updated: "تم تحديث الإحصاءات"
+    operation_terminated: "تم إنهاء العملية بنجاح"
+  errors:
+    termination: "حدث خطأ أثناء إنهاء العملية"
+    update: "حدث خطأ أثناء التحديث"
+
+auth:
+  register:
+    title: "إنشاء حساب"
+    heading: "أنشئ حسابك"
+    subtitle: "انضم إلى منصة إدارة الأنشطة الزراعية."
+    password:
+      label: "كلمة المرور"
+    submit: "تسجيل"
+    have_account: "لديك حساب بالفعل؟"
+    login_link: "تسجيل الدخول"
+  login:
+    title: "تسجيل الدخول"
+    heading: "تسجيل الدخول"
+    email_label: "البريد الإلكتروني"
+    password_label: "كلمة المرور"
+    submit: "دخول"
+    create_account: "إنشاء حساب"
+
+profile:
+  title: "ملفي الشخصي"
+  field:
+    telephone: "الهاتف"
+    ville: "المدينة"
+    member_since: "عضو منذ"
+    status: "الحالة"
+  edit:
+    heading: "تعديل معلوماتي"
+    submit: "حفظ التغييرات"
+  password:
+    heading: "تغيير كلمة المرور"
+    keep_current_hint: "اترك الحقول فارغة للاحتفاظ بكلمة المرور الحالية."
+
+translation:
+  widget:
+    title: "ترجمة فورية"
+    source_text: "النص المراد ترجمته"
+    to_label: "الترجمة إلى"
+    from_label: "لغة المصدر"
+    auto: "كشف تلقائي"
+    submit: "ترجمة"
+    result: "النتيجة"
+  lang:
+    en: "الإنجليزية"
+    fr: "الفرنسية"
+    ar: "العربية"
+
+admin:
+  users:
+    title: "المستخدمون"
+    page_title: "إدارة المستخدمين"
+    stats:
+      total: "الإجمالي"
+      admins: "المسؤولون"
+      agriculteurs: "الفلاحون"
+      clients: "العملاء"
+      actifs: "النشطون"
+    add_button: "إضافة مستخدم"
+    filters:
+      search:
+        label: "بحث"
+        placeholder: "الاسم أو اللقب أو البريد الإلكتروني"
+      role:
+        label: "الدور"
+        all: "كل الأدوار"
+      submit: "تصفية"
+    table:
+      title: "قائمة المستخدمين"
+      name: "الاسم"
+      email: "البريد الإلكتروني"
+      telephone: "الهاتف"
+      ville: "المدينة"
+      role: "الدور"
+      status: "الحالة"
+      created_at: "تاريخ الإنشاء"
+    role:
+      admin: "مسؤول"
+      agriculteur: "فلاح"
+      client: "عميل"
+    action:
+      activate: "تفعيل"
+      deactivate: "تعطيل"
+    confirm_delete: "حذف المستخدم %name%؟"
+    empty: "لا يوجد مستخدمون."
+    create_user: "إنشاء مستخدم"
+  user_form:
+    new_title: "مستخدم جديد"
+    edit_title: "تعديل %name%"
+
+form:
+  registration:
+    nom:
+      label: "الاسم العائلي"
+      placeholder: "اسمك العائلي"
+    prenom:
+      label: "الاسم الشخصي"
+      placeholder: "اسمك الشخصي"
+    email:
+      label: "البريد الإلكتروني"
+      placeholder: "you@example.com"
+    telephone:
+      label: "الهاتف"
+      placeholder: "رقم الهاتف"
+    ville:
+      label: "المدينة"
+      placeholder: "مدينتك"
+    role:
+      label: "الدور"
+      choice:
+        agriculteur: "فلاح"
+        client: "عميل"
+    password:
+      label: "كلمة المرور"
+      placeholder: "أدخل كلمة المرور"
+      confirm_label: "تأكيد كلمة المرور"
+      confirm_placeholder: "أعد إدخال كلمة المرور"
+
+  profile:
+    nom:
+      label: "الاسم العائلي"
+    prenom:
+      label: "الاسم الشخصي"
+    email:
+      label: "البريد الإلكتروني"
+    telephone:
+      label: "الهاتف"
+    ville:
+      label: "المدينة"
+    password:
+      new_label: "كلمة مرور جديدة"
+      new_placeholder: "كلمة مرور جديدة"
+      confirm_label: "تأكيد كلمة المرور"
+      confirm_placeholder: "تأكيد كلمة المرور"
+
+  admin_user:
+    nom:
+      label: "الاسم العائلي"
+    prenom:
+      label: "الاسم الشخصي"
+    email:
+      label: "البريد الإلكتروني"
+    telephone:
+      label: "الهاتف"
+    ville:
+      label: "المدينة"
+    role:
+      label: "الدور"
+      choice:
+        admin: "مسؤول"
+        agriculteur: "فلاح"
+        client: "عميل"
+    actif:
+      label: "حساب نشط"
+    password:
+      new_label: "كلمة المرور"
+      edit_label: "كلمة مرور جديدة"
+      new_placeholder: "أدخل كلمة المرور"
+      edit_placeholder: "اتركه فارغاً لعدم التغيير"
+
+  consommation:
+    surface:
+      label: "المساحة"
+      placeholder: "المساحة المعنية"
+    quantite_utilisee:
+      label: "الكمية المستعملة"
+      placeholder: "الكمية المستعملة"
+    unite:
+      label: "الوحدة"
+      placeholder: "مثال: كغ، لتر"
+    date_recolte:
+      label: "تاريخ الحصاد"
+    date_utilisation:
+      label: "تاريخ الاستعمال"
+    stock_produit:
+      label: "مخزون المنتج"
+
+  stock:
+    type_produit:
+      label: "نوع المنتج"
+      placeholder: "مثال: سماد"
+    variete:
+      label: "الصنف"
+      placeholder: "مثال: عضوي"
+    date_debut:
+      label: "تاريخ البداية"
+    date_fin_estimee:
+      label: "تاريخ الانتهاء المتوقع"
+    statut:
+      label: "الحالة"
+      choice:
+        en_cours: "قيد التنفيذ"
+        termine: "منتهي"
+        en_croissance: "في طور النمو"
+
+  article:
+    nom:
+      label: "الاسم"
+    categorie:
+      label: "الفئة"
+    description:
+      label: "الوصف"
+    prix:
+      label: "السعر"
+    stock:
+      label: "المخزون"
+    poids:
+      label: "الوزن"
+    unite:
+      label: "الوحدة"
+    image_url:
+      label: "رابط الصورة"
+
+  order:
+    reference:
+      label: "المرجع"
+    date_commande:
+      label: "تاريخ الطلب"
+    statut:
+      label: "الحالة"
+    mode_paiement:
+      label: "طريقة الدفع"
+    adresse_livraison:
+      label: "عنوان التسليم"
+    montant_total:
+      label: "المبلغ الإجمالي"
+    frais_livraison:
+      label: "رسوم التسليم"
+
+  todo:
+    nom_tache:
+      label: "اسم المهمة"
+    tache:
+      label: "المهمة"
+    statut:
+      label: "الحالة"
+      choice:
+        todo: "للإنجاز"
+        doing: "قيد التنفيذ"
+        done: "منجز"
+
+flash:
+  operation:
+    export_invalid_form: "تعذر تصدير ملف PDF. يرجى التحقق من النموذج."
+    csrf_invalid: "رمز CSRF غير صالح للحذف الجماعي للعمليات."
+    none_selected: "لم يتم تحديد أي عملية."
+    some_not_owned: "بعض العمليات لا تخصك ولم يتم حذفها."
+    deleted_count: "تم حذف %count% عملية."
+    not_found_count: "%count% عملية غير موجودة."
+    failed_count: "تعذر حذف %count% عملية."
+  equipement:
+    reserved_cannot_delete: "لا يمكن حذف معدّة محجوزة."
+    deleted_success: "تم حذف المعدّة بنجاح."
+    csrf_invalid: "رمز CSRF غير صالح للحذف الجماعي للمعدات."
+    deleted_count: "تم حذف %count% معدّة."
+    not_found_count: "%count% معدّة غير موجودة."
+    failed_count: "تعذر حذف %count% معدّة."
+  admin:
+    user_created: "تم إنشاء المستخدم بنجاح."
+    user_not_found: "المستخدم غير موجود."
+    user_updated: "تم تحديث المستخدم بنجاح."
+    status_updated: "تم تحديث حالة المستخدم."
+    cannot_delete_self: "لا يمكنك حذف حسابك الخاص."
+    user_deleted: "تم حذف المستخدم بنجاح."
+  auth:
+    account_created: "تم إنشاء الحساب بنجاح. يمكنك تسجيل الدخول الآن."
+  profile:
+    updated: "تم تحديث الملف الشخصي بنجاح."
+  produit:
+    admin_fallback_user: "لم يتم العثور على مستخدم متصل. تم تطبيق مستخدم بديل."
+    added_success: "تمت إضافة المنتج بنجاح."
+    login_required: "يجب تسجيل الدخول أولاً."
+    own_edit_only: "يمكنك تعديل منتجاتك فقط."
+    own_delete_only: "يمكنك حذف منتجاتك فقط."
+    updated_success: "تم تعديل المنتج بنجاح."
+    deleted_success: "تم حذف المنتج بنجاح."
+    consommation_added: "تمت إضافة الاستهلاك بنجاح."
+    consommation_updated: "تم تعديل الاستهلاك بنجاح."
+    consommation_deleted: "تم حذف الاستهلاك بنجاح."
+  article:
+    added: "تمت إضافة المقال بنجاح."
+    updated: "تم تعديل المقال بنجاح."
+    deleted: "تم حذف المقال بنجاح."
+  order:
+    added: "تمت إضافة الطلب بنجاح."
+    updated: "تم تعديل الطلب بنجاح."
+    deleted: "تم حذف الطلب بنجاح."
+  todo:
+    duplicate_for_consultant: "هذه المهمة موجودة بالفعل لهذا المستشار."
+    duplicate_combination: "تركيبة المهمة/المستشار موجودة بالفعل."
+    added: "تمت إضافة المهمة بنجاح."
+    updated: "تم تعديل المهمة بنجاح."
+    deleted: "تم حذف المهمة بنجاح."
+
+security:
+  user_not_authenticated: "المستخدم غير مصادق عليه."
+  operation_access_denied: "ليس لديك صلاحية الوصول إلى هذه العملية."
+
+todo:
+  errors:
+    not_found: "المهمة غير موجودة."

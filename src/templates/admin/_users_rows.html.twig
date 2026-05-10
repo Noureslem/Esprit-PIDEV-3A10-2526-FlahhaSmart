@@ -1,0 +1,56 @@
+{% for u in users %}
+<tr>
+    <td class="text-muted fw-bold">#{{ u.id }}</td>
+    <td>
+        <div class="d-flex align-items-center gap-2">
+            <img src="https://randomuser.me/api/portraits/{{ u.id % 2 == 0 ? 'women' : 'men' }}/{{ u.id % 70 }}.jpg" 
+                 class="user-avatar-img" 
+                 onerror="this.src='https://ui-avatars.com/api/?background=2e7d52&color=fff&name={{ u.prenom }}+{{ u.nom }}'">
+            <div>
+                <strong>{{ u.prenom }} {{ u.nom }}</strong>
+                {% if u.id == app.user.id %}<span class="badge bg-info ms-1">Vous</span>{% endif %}
+            </div>
+        </div>
+    </td>
+    <td>{{ u.email }}</td>
+    <td>{{ u.telephone ?? '—' }}</td>
+    <td>{{ u.ville ?? '—' }}</td>
+    <td>
+        <span class="badge-role {% if u.role == 'ADMINISTRATEUR' %}badge-admin{% elseif u.role == 'AGRICULTEUR' %}badge-agri{% else %}badge-client{% endif %}">
+            {% if u.role == 'ADMINISTRATEUR' %}<i class="fas fa-crown"></i> Admin
+            {% elseif u.role == 'AGRICULTEUR' %}<i class="fas fa-tractor"></i> Agriculteur
+            {% else %}<i class="fas fa-user"></i> Client{% endif %}
+        </span>
+    </td>
+    <td>
+        <span class="badge-status {{ u.actif ? 'badge-active' : 'badge-inactive' }}">
+            <i class="fas {{ u.actif ? 'fa-check-circle' : 'fa-ban' }} me-1"></i>{{ u.actif ? 'Actif' : 'Inactif' }}
+        </span>
+    </td>
+    <td class="text-muted small"><i class="far fa-calendar-alt me-1"></i>{{ u.dateCreation|date('d/m/Y') }}</td>
+    <td class="text-center">
+        <div class="d-flex gap-1 justify-content-center">
+            <a href="{{ path('admin_user_edit', {id: u.id}) }}" class="btn btn-outline-primary action-btn" title="Modifier"><i class="fas fa-edit"></i></a>
+            <form method="post" action="{{ path('admin_user_toggle', {id: u.id}) }}" class="d-inline toggle-form" data-id="{{ u.id }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('toggle' ~ u.id) }}">
+                <button type="submit" class="btn btn-outline-warning action-btn" title="{{ u.actif ? 'Désactiver' : 'Activer' }}">
+                    <i class="fas {{ u.actif ? 'fa-toggle-on' : 'fa-toggle-off' }}"></i>
+                </button>
+            </form>
+            {% if u.email != app.user.email %}
+            <form method="post" action="{{ path('admin_user_delete', {id: u.id}) }}" onsubmit="return confirm('Supprimer définitivement {{ u.prenom }} {{ u.nom }} ?')" class="d-inline delete-form" data-id="{{ u.id }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ u.id) }}">
+                <button type="submit" class="btn btn-outline-danger action-btn" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
+            </form>
+            {% endif %}
+        </div>
+    </td>
+</tr>
+{% else %}
+<tr>
+    <td colspan="9" class="text-center py-5 text-muted">
+        <i class="fas fa-user-slash fa-3x mb-2"></i>
+        <p>Aucun utilisateur trouvé</p>
+    </td>
+</tr>
+{% endfor %}

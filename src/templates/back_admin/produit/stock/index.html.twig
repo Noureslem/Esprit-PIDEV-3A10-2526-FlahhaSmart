@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Stocks - Admin{% endblock %}
+
+{% block body %}
+    {# Affichage des messages flash #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <h3 class="text-dark fw-bold mb-4">Liste des stocks</h3>
+
+    <div class="row mb-3 align-items-center">
+        <div class="col-md-5">
+            <form method="get" class="input-group input-group-sm shadow-sm">
+                <span class="input-group-text bg-white border-end-0 text-success"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" name="search" class="form-control border-start-0 ps-0" placeholder="Rechercher (type, variété, agriculteur)..." value="{{ currentSearch }}">
+                <button type="submit" class="btn btn-success btn-sm">OK</button>
+                {% if currentSearch %}
+                    <a href="{{ path('admin_stock_index') }}" class="btn btn-outline-secondary btn-sm">Réinitialiser</a>
+                {% endif %}
+            </form>
+        </div>
+        <div class="col-md-7 text-md-end mt-2 mt-md-0">
+            <a href="{{ path('admin_stock_new') }}" class="btn btn-success btn-sm shadow-sm fw-bold">
+                <i class="fa-solid fa-plus me-1"></i> Nouveau stock
+            </a>
+        </div>
+    </div>
+
+    <div class="table-responsive bg-white rounded shadow-sm border">
+        <table class="table table-hover table-custom mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Type de Produit</th>
+                    <th>Variété</th>
+                    <th>Date début</th>
+                    <th>Date fin est.</th>
+                    <th>Agriculteur</th>
+                    <th>Statut</th>
+                    <th>QR Code</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stock in stocks %}
+                    <tr>
+                        <td class="fw-bold">{{ stock.idProduit }}</td>
+                        <td>{{ stock.typeProduit }}</td>
+                        <td>{{ stock.variete }}</td>
+                        <td>{{ stock.dateDebut ? stock.dateDebut|date('d/m/Y') : '--' }}</td>
+                        <td>{{ stock.dateFinEstimee ? stock.dateFinEstimee|date('d/m/Y') : '--' }}</td>
+                        <td>{{ stock.user ? stock.user.nom : '--' }}</td>
+                        <td>
+                            <span class="badge {% if stock.statut == 'en cours' %}bg-primary{% elseif stock.statut == 'terminé' %}bg-success{% else %}bg-secondary{% endif %}">
+                                {{ stock.statut|capitalize }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if stock.codeQr %}
+                                <a href="{{ asset(stock.codeQr) }}" target="_blank">
+                                    <i class="fa-solid fa-qrcode fa-lg text-success"></i>
+                                </a>
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <div class="d-flex justify-content-end gap-1">
+                               <a href="{{ path('admin_stock_edit', {'idProduit': stock.idProduit}) }}" class="btn btn-outline-primary btn-action">
+    Modifier
+</a>
+
+<form method="post"
+      action="{{ path('admin_stock_delete', {'idProduit': stock.idProduit}) }}"
+      onsubmit="return confirm('Supprimer ce stock définitivement ?');"
+      style="display:inline-block;">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ stock.idProduit) }}">
+    <button class="btn btn-outline-danger btn-action">Supprimer</button>
+</form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="9" class="text-center py-4 text-muted">Aucun stock trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        {{ knp_pagination_render(stocks) }}
+    </div>
+
+    <style>
+        .table-custom th {
+            background-color: #eaf3ed !important;
+            color: #198754;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #198754;
+        }
+        .table-custom td {
+            font-size: 0.85rem;
+            color: #444;
+            vertical-align: middle;
+        }
+        .btn-action {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+        .pagination { justify-content: center; }
+        .page-item.active .page-link { background-color: #198754; border-color: #198754; }
+        .page-link { color: #198754; }
+    </style>
+{% endblock %}

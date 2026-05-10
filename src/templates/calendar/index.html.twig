@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+{% block title %}Calendrier - FlahaSmart{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <!-- FullCalendar core CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.css' rel='stylesheet' />
+    <style>
+        #calendar {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .fc-event-title {
+            font-weight: 500;
+        }
+        .fc-day-today {
+            background-color: #e8f5e9 !important;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="display-5 fw-bold text-success">Calendrier des événements</h1>
+        <p class="lead">Tous vos rendez-vous, commandes et tâches en un coup d'œil.</p>
+        <hr>
+    </div>
+</div>
+
+<div id='calendar'></div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- FullCalendar JS -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                locale: 'fr',           // French language (optional)
+                firstDay: 1,            // Monday first
+                editable: false,        // set to true if you want drag & drop
+                selectable: true,       // allow selecting dates
+                events: '{{ path('app_calendar_events') }}',
+                eventDisplay: 'block',
+                eventTimeFormat: {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    meridiem: false
+                },
+                // Optional: show a loading indicator
+                loading: function(isLoading) {
+                    if (isLoading) {
+                        document.getElementById('calendar').style.opacity = '0.5';
+                    } else {
+                        document.getElementById('calendar').style.opacity = '1';
+                    }
+                }
+            });
+            calendar.render();
+        });
+    </script>
+{% endblock %}

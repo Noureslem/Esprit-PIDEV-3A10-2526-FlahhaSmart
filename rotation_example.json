@@ -1,0 +1,12 @@
+{
+  "surface": 2.5,
+  "type_sol": "limoneux",
+  "derniere_culture": "ble",
+  "avant_derniere_culture": "lentille",
+  "azote": 6,
+  "phosphore": 5,
+  "potassium": 7,
+  "ph": 6.5,
+  "annees_jachaire": 2,
+  "duree_plan": 5
+}

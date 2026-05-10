@@ -1,0 +1,68 @@
+validators:
+  profile:
+    password:
+      mismatch: "Les mots de passe ne correspondent pas."
+
+  article:
+    nom:
+      letters_spaces: "Le nom ne doit contenir que des lettres et des espaces."
+
+  equipement:
+    nom:
+      not_blank: "Le nom de l'équipement est obligatoire."
+      min_length: "Le nom doit contenir au moins {{ limit }} caractères."
+      invalid_chars: "Le nom ne peut contenir que des lettres, chiffres, espaces, tirets et apostrophes."
+    type:
+      not_blank: "Le type d'équipement est obligatoire."
+
+  operation:
+    type_operation:
+      not_blank: "Le type d'opération est obligatoire."
+      min_length: "Le type d'opération doit contenir au moins {{ limit }} caractères."
+      invalid_chars: "Le type d'opération contient des caractères non autorisés."
+    date_debut:
+      not_null: "La date de début est obligatoire."
+      not_in_past: "La date de début ne peut pas être dans le passé."
+    date_fin:
+      not_null: "La date de fin est obligatoire."
+      after_or_equal_date_debut: "La date de fin doit être postérieure ou égale à la date de début."
+
+  common:
+    date:
+      invalid: "Date invalide."
+
+  stock_produit:
+    type_produit:
+      not_blank: "Le type de produit est obligatoire."
+      max_length: "Le type de produit ne peut pas dépasser {{ limit }} caractères."
+    variete:
+      not_blank: "La variété est obligatoire."
+    date_debut:
+      not_blank: "La date de début est obligatoire."
+      before_date_fin_estimee: "La date de début doit être antérieure à la date de fin estimée."
+    date_fin_estimee:
+      greater_than_date_debut: "La date de fin estimée doit être postérieure à la date de début."
+    statut:
+      not_blank: "Le statut est obligatoire."
+      invalid_choice: "Statut invalide."
+    user:
+      not_null: "L'utilisateur est obligatoire."
+
+  consommation:
+    surface:
+      not_blank: "La surface est obligatoire."
+      positive: "La surface doit être strictement positive."
+    quantite_utilisee:
+      not_blank: "La quantité utilisée est obligatoire."
+      positive_or_zero: "La quantité utilisée doit être positive ou nulle."
+    unite:
+      not_blank: "L'unité est obligatoire."
+      max_length: "L'unité ne peut pas dépasser {{ limit }} caractères."
+    date_recolte:
+      not_blank: "La date de récolte est obligatoire."
+      before_or_equal_date_utilisation: "La date de récolte doit être antérieure ou égale à la date d'utilisation."
+    date_utilisation:
+      not_blank: "La date d'utilisation est obligatoire."
+      after_or_equal_date_recolte: "La date d'utilisation doit être postérieure ou égale à la date de récolte."
+    stock_produit:
+      not_null: "Le stock produit est obligatoire."

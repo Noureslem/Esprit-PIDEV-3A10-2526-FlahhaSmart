@@ -1,0 +1,182 @@
+src\templates\base.html.twig:280:                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'common.cancel'|trans }}"></button>
+src\templates\base.html.twig:283:                <p class="mb-0">{{ 'common.confirm_delete.message'|trans }}</p>
+src\templates\base.html.twig:286:                <button type="button" class="btn btn-secondary" data-confirm-cancel data-bs-dismiss="modal">{{ 'common.cancel'|trans }}</button>
+src\templates\base.html.twig:288:                    <i class="bi bi-trash me-1"></i>{{ 'common.delete'|trans }}
+src\templates\base.html.twig:317:        const i18nOk = {{ 'common.ok'|trans|json_encode|raw }};
+src\templates\base.html.twig:318:        const i18nCancel = {{ 'common.cancel'|trans|json_encode|raw }};
+src\templates\base.html.twig:319:        const i18nSingleDeleteMessage = {{ 'common.confirm_delete.message'|trans|json_encode|raw }};
+src\templates\base.html.twig:401:            emptySelectionMessage: {{ 'common.bulk_select_at_least_one'|trans|json_encode|raw }},
+src\templates\base.html.twig:402:            bulkConfirmCountMessage: {{ 'common.confirm_bulk_delete_count'|trans|json_encode|raw }},
+src\templates\auth\login.html.twig:17:                            {{ error.messageKey|trans(error.messageData, 'security') }}
+src\templates\frontend\equipement\edit.html.twig:3:{% block title %}{{ 'equipement.edit.title'|trans }}{% endblock %}
+src\templates\frontend\equipement\edit.html.twig:4:{% block navbar_title %}{{ 'equipement.edit.navbar_title'|trans }}{% endblock %}
+src\templates\frontend\equipement\edit.html.twig:9:        <i class="bi bi-pencil me-2"></i>{{ 'equipement.edit.title'|trans }}
+src\templates\frontend\equipement\edit.html.twig:17:                {{ include('frontend/equipement/_form.html.twig', {'button_label': 'common.update'|trans}) }}
+src\templates\frontend\equipement\index.html.twig:3:{% block title %}{{ 'equipement.index.title'|trans }}{% endblock %}
+src\templates\frontend\equipement\index.html.twig:4:{% block navbar_title %}{{ 'equipement.index.navbar_title'|trans }}{% endblock %}
+src\templates\frontend\equipement\index.html.twig:10:                <i class="bi bi-box-seam me-2"></i>{{ 'equipement.index.title'|trans }}
+src\templates\frontend\equipement\index.html.twig:14:                    <li class="breadcrumb-item"><a href="#">{{ 'common.home'|trans }}</a></li>
+src\templates\frontend\equipement\index.html.twig:15:                    <li class="breadcrumb-item active">{{ 'nav.equipements'|trans }}</li>
+src\templates\frontend\equipement\index.html.twig:24:                    data-confirm-message="{{ 'equipement.bulk.confirm'|trans }}">
+src\templates\frontend\equipement\index.html.twig:26:                {{ 'app.actions.delete_selection'|trans }}
+src\templates\frontend\equipement\index.html.twig:30:                {{ 'app.actions.new_equipement'|trans }}
+src\templates\frontend\equipement\index.html.twig:39:                <label for="filterNom" class="form-label">{{ 'equipement.index.filter.name_label'|trans }}</label>
+src\templates\frontend\equipement\index.html.twig:44:                       placeholder="{{ 'equipement.index.filter.name_placeholder'|trans }}"
+src\templates\frontend\equipement\index.html.twig:48:                <label for="filterType" class="form-label">{{ 'equipement.index.filter.type_label'|trans }}</label>
+src\templates\frontend\equipement\index.html.twig:50:                    <option value="">{{ 'equipement.index.filter.type_all'|trans }}</option>
+src\templates\frontend\equipement\index.html.twig:60:                <label for="filterEtat" class="form-label">{{ 'equipement.index.filter.state_label'|trans }}</label>
+src\templates\frontend\equipement\index.html.twig:62:                    <option value="">{{ 'equipement.index.filter.state_all'|trans }}</option>
+src\templates\frontend\equipement\index.html.twig:73:                    <i class="bi bi-search me-1"></i>{{ 'common.search'|trans }}
+src\templates\frontend\equipement\index.html.twig:76:                    <i class="bi bi-arrow-counterclockwise me-1"></i>{{ 'common.reset'|trans }}
+src\templates\frontend\equipement\index.html.twig:99:                                   aria-label="{{ 'common.select_all'|trans }}">
+src\templates\frontend\equipement\index.html.twig:102:                            {{ 'equipement.index.table.name'|trans }}
+src\templates\frontend\equipement\index.html.twig:105:                                   title="{{ 'common.sort.asc'|trans }}" class="sort-link">?</a>
+src\templates\frontend\equipement\index.html.twig:107:                                   title="{{ 'common.sort.desc'|trans }}" class="sort-link">?</a>
+src\templates\frontend\equipement\index.html.twig:111:                            {{ 'equipement.index.table.type'|trans }}
+src\templates\frontend\equipement\index.html.twig:114:                                   title="{{ 'common.sort.asc'|trans }}" class="sort-link">?</a>
+src\templates\frontend\equipement\index.html.twig:116:                                   title="{{ 'common.sort.desc'|trans }}" class="sort-link">?</a>
+src\templates\frontend\equipement\index.html.twig:120:                            {{ 'equipement.index.table.state'|trans }}
+src\templates\frontend\equipement\index.html.twig:123:                                   title="{{ 'common.sort.asc'|trans }}" class="sort-link">?</a>
+src\templates\frontend\equipement\index.html.twig:125:                                   title="{{ 'common.sort.desc'|trans }}" class="sort-link">?</a>
+src\templates\frontend\equipement\index.html.twig:128:                        <th scope="col" class="text-end">{{ 'common.actions'|trans }}</th>
+src\templates\frontend\equipement\index.html.twig:142:                                aria-label="{{ 'equipement.bulk.item_aria'|trans({'%id%': equipement.id}) }}">
+src\templates\frontend\equipement\index.html.twig:159:                                   class="btn btn-outline-warning btn-action" title="{{ 'common.update'|trans }}">
+src\templates\frontend\equipement\index.html.twig:165:                                        <button type="button" class="btn btn-outline-danger btn-action delete-btn" title="{{ 'common.delete'|trans }}">
+src\templates\frontend\equipement\index.html.twig:170:                                    <button type="button" class="btn btn-outline-secondary btn-action" disabled title="{{ 'equipement.delete.reserved_tooltip'|trans }}">
+src\templates\frontend\equipement\index.html.twig:182:                                <p class="mb-3">{{ 'equipement.index.empty'|trans }}</p>
+src\templates\frontend\equipement\index.html.twig:185:                                    {{ 'equipement.index.empty_cta'|trans }}
+src\templates\frontend\equipement\new.html.twig:3:{% block title %}{{ 'equipement.new.title'|trans }}{% endblock %}
+src\templates\frontend\equipement\new.html.twig:4:{% block navbar_title %}{{ 'equipement.new.navbar_title'|trans }}{% endblock %}
+src\templates\frontend\equipement\new.html.twig:9:            <i class="bi bi-plus-circle me-2"></i>{{ 'equipement.new.title'|trans }}
+src\templates\frontend\equipement\new.html.twig:13:                <li class="breadcrumb-item"><a href="#">{{ 'common.home'|trans }}</a></li>
+src\templates\frontend\equipement\new.html.twig:14:                <li class="breadcrumb-item"><a href="{{ path('app_equipement_index') }}">{{ 'nav.equipements'|trans }}</a></li>
+src\templates\frontend\equipement\new.html.twig:15:                <li class="breadcrumb-item active">{{ 'common.new'|trans }}</li>
+src\templates\frontend\equipement\new.html.twig:24:                    <i class="bi bi-box-seam me-2"></i>{{ 'equipement.new.card_header'|trans }}
+src\templates\frontend\equipement\show.html.twig:3:{% block title %}{{ 'equipement.show.page_title'|trans({'%name%': equipement.nom}) }}{% endblock %}
+src\templates\frontend\equipement\show.html.twig:4:{% block navbar_title %}{{ 'equipement.show.navbar_title'|trans }}{% endblock %}
+src\templates\frontend\equipement\show.html.twig:14:                    <li class="breadcrumb-item"><a href="#">{{ 'common.home'|trans }}</a></li>
+src\templates\frontend\equipement\show.html.twig:15:                    <li class="breadcrumb-item"><a href="{{ path('app_equipement_index') }}">{{ 'nav.equipements'|trans }}</a></li>
+src\templates\frontend\equipement\show.html.twig:23:                {{ 'common.update'|trans }}
+src\templates\frontend\equipement\show.html.twig:46:                            <i class="bi bi-hash me-2"></i>{{ 'common.id'|trans }}
+src\templates\frontend\equipement\show.html.twig:52:                            <i class="bi bi-card-text me-2"></i>{{ 'equipement.show.name'|trans }}
+src\templates\frontend\equipement\show.html.twig:58:                            <i class="bi bi-tag me-2"></i>{{ 'equipement.show.type'|trans }}
+src\templates\frontend\equipement\show.html.twig:64:                            <i class="bi bi-activity me-2"></i>{{ 'equipement.show.state'|trans }}
+src\templates\frontend\equipement\show.html.twig:79:                    <i class="bi bi-lightning me-2"></i>{{ 'common.quick_actions'|trans }}
+src\templates\frontend\equipement\show.html.twig:84:                            <i class="bi bi-pencil me-2"></i>{{ 'common.update'|trans }}
+src\templates\frontend\equipement\show.html.twig:87:                            <i class="bi bi-arrow-left me-2"></i>{{ 'common.back_to_list'|trans }}
+src\templates\frontend\equipement\show.html.twig:90:                            <i class="bi bi-plus-lg me-2"></i>{{ 'app.actions.new_operation'|trans }}
+src\templates\frontend\equipement\_delete_form.html.twig:2:    <button type="button" class="btn btn-secondary" disabled title="{{ 'equipement.delete.reserved_tooltip'|trans }}">
+src\templates\frontend\equipement\_delete_form.html.twig:4:        {{ 'common.delete'|trans }}
+src\templates\frontend\equipement\_delete_form.html.twig:11:            {{ 'common.delete'|trans }}
+src\templates\frontend\equipement\_form.html.twig:7:        <strong>{{ 'common.error'|trans }} :</strong> {{ 'common.please_fix_errors'|trans }}
+src\templates\frontend\equipement\_form.html.twig:9:        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ 'common.close'|trans }}"></button>
+src\templates\frontend\equipement\_form.html.twig:18:                'placeholder': form.nom.vars.attr.placeholder|default('')|trans
+src\templates\frontend\equipement\_form.html.twig:47:            {{ button_label|default('common.save'|trans) }}
+src\templates\frontend\equipement\_form.html.twig:52:                {{ 'common.cancel'|trans }}
+src\templates\frontend\equipement\_form.html.twig:57:                {{ 'common.cancel'|trans }}
+src\templates\frontend\operation\edit.html.twig:3:{% block title %}{{ 'operation.edit.title'|trans }}{% endblock %}
+src\templates\frontend\operation\edit.html.twig:4:{% block navbar_title %}{{ 'operation.edit.navbar_title'|trans }}{% endblock %}
+src\templates\frontend\operation\edit.html.twig:12:        <i class="bi bi-pencil me-2"></i>{{ 'operation.edit.title'|trans }}
+src\templates\frontend\operation\edit.html.twig:20:                {{ include('frontend/operation/_form.html.twig', {'button_label': 'common.update'|trans}) }}
+src\templates\frontend\operation\index.html.twig:3:{% block title %}{{ 'operation.index.title'|trans }}{% endblock %}
+src\templates\frontend\operation\index.html.twig:4:{% block navbar_title %}{{ 'operation.index.navbar_title'|trans }}{% endblock %}
+src\templates\frontend\operation\index.html.twig:10:                <i class="bi bi-clipboard-check me-2"></i>{{ 'operation.index.title'|trans }}
+src\templates\frontend\operation\index.html.twig:14:                    <li class="breadcrumb-item"><a href="#">{{ 'common.home'|trans }}</a></li>
+src\templates\frontend\operation\index.html.twig:15:                    <li class="breadcrumb-item active">{{ 'nav.operations'|trans }}</li>
+src\templates\frontend\operation\index.html.twig:24:                    data-confirm-message="{{ 'operation.bulk.confirm'|trans }}">
+src\templates\frontend\operation\index.html.twig:26:                {{ 'app.actions.delete_selection'|trans }}
+src\templates\frontend\operation\index.html.twig:30:                {{ 'app.actions.new_operation'|trans }}
+src\templates\frontend\operation\index.html.twig:39:                <label for="filterType" class="form-label">{{ 'operation.index.filter.type_label'|trans }}</label>
+src\templates\frontend\operation\index.html.twig:44:                       placeholder="{{ 'operation.index.filter.type_placeholder'|trans }}"
+src\templates\frontend\operation\index.html.twig:48:                <label for="filterStatut" class="form-label">{{ 'operation.index.filter.status_label'|trans }}</label>
+src\templates\frontend\operation\index.html.twig:50:                    <option value="">{{ 'operation.index.filter.status_all'|trans }}</option>
+src\templates\frontend\operation\index.html.twig:61:                    <i class="bi bi-search me-1"></i>{{ 'common.search'|trans }}
+src\templates\frontend\operation\index.html.twig:64:                    <i class="bi bi-arrow-counterclockwise me-1"></i>{{ 'common.reset'|trans }}
+src\templates\frontend\operation\index.html.twig:87:                                   aria-label="{{ 'common.select_all'|trans }}">
+src\templates\frontend\operation\index.html.twig:90:                            {{ 'operation.index.table.type'|trans }}
+src\templates\frontend\operation\index.html.twig:93:                                   title="{{ 'common.sort.asc'|trans }}" class="sort-link">?</a>
+src\templates\frontend\operation\index.html.twig:95:                                   title="{{ 'common.sort.desc'|trans }}" class="sort-link">?</a>
+src\templates\frontend\operation\index.html.twig:98:                        <th scope="col">{{ 'operation.index.table.equipment'|trans }}</th>
+src\templates\frontend\operation\index.html.twig:100:                            {{ 'operation.index.table.start_date'|trans }}
+src\templates\frontend\operation\index.html.twig:103:                                   title="{{ 'common.sort.asc'|trans }}" class="sort-link">?</a>
+src\templates\frontend\operation\index.html.twig:105:                                   title="{{ 'common.sort.desc'|trans }}" class="sort-link">?</a>
+src\templates\frontend\operation\index.html.twig:109:                            {{ 'operation.index.table.end_date'|trans }}
+src\templates\frontend\operation\index.html.twig:112:                                   title="{{ 'common.sort.asc'|trans }}" class="sort-link">?</a>
+src\templates\frontend\operation\index.html.twig:114:                                   title="{{ 'common.sort.desc'|trans }}" class="sort-link">?</a>
+src\templates\frontend\operation\index.html.twig:117:                        <th scope="col">{{ 'operation.index.table.status'|trans }}</th>
+src\templates\frontend\operation\index.html.twig:118:                        <th scope="col" class="text-end">{{ 'common.actions'|trans }}</th>
+src\templates\frontend\operation\index.html.twig:130:                                aria-label="{{ 'operation.bulk.item_aria'|trans({'%id%': operation.id}) }}">
+src\templates\frontend\operation\index.html.twig:155:                                   class="btn btn-outline-warning btn-action" title="{{ 'common.update'|trans }}">
+src\templates\frontend\operation\index.html.twig:160:                                    <button type="button" class="btn btn-outline-danger btn-action delete-btn" title="{{ 'common.delete'|trans }}">
+src\templates\frontend\operation\index.html.twig:172:                                <p class="mb-3">{{ 'operation.index.empty'|trans }}</p>
+src\templates\frontend\operation\index.html.twig:175:                                    {{ 'operation.index.empty_cta'|trans }}
+src\templates\frontend\operation\new.html.twig:3:{% block title %}{{ 'operation.new.title'|trans }}{% endblock %}
+src\templates\frontend\operation\new.html.twig:4:{% block navbar_title %}{{ 'operation.new.navbar_title'|trans }}{% endblock %}
+src\templates\frontend\operation\new.html.twig:9:            <i class="bi bi-plus-circle me-2"></i>{{ 'operation.new.title'|trans }}
+src\templates\frontend\operation\new.html.twig:13:                <li class="breadcrumb-item"><a href="#">{{ 'common.home'|trans }}</a></li>
+src\templates\frontend\operation\new.html.twig:14:                <li class="breadcrumb-item"><a href="{{ path('app_operation_index') }}">{{ 'nav.operations'|trans }}</a></li>
+src\templates\frontend\operation\new.html.twig:15:                <li class="breadcrumb-item active">{{ 'common.new'|trans }}</li>
+src\templates\frontend\operation\new.html.twig:24:                    <i class="bi bi-clipboard-check me-2"></i>{{ 'operation.new.card_header'|trans }}
+src\templates\frontend\operation\show.html.twig:3:{% block title %}{{ 'operation.show.page_title'|trans({'%id%': operation.id}) }}{% endblock %}
+src\templates\frontend\operation\show.html.twig:4:{% block navbar_title %}{{ 'operation.show.navbar_title'|trans }}{% endblock %}
+src\templates\frontend\operation\show.html.twig:10:                <i class="bi bi-clipboard-check me-2"></i>{{ 'operation.show.page_title'|trans({'%id%': operation.id}) }}
+src\templates\frontend\operation\show.html.twig:14:                    <li class="breadcrumb-item"><a href="#">{{ 'common.home'|trans }}</a></li>
+src\templates\frontend\operation\show.html.twig:15:                    <li class="breadcrumb-item"><a href="{{ path('app_operation_index') }}">{{ 'nav.operations'|trans }}</a></li>
+src\templates\frontend\operation\show.html.twig:26:                    {{ 'operation.actions.finish'|trans }}
+src\templates\frontend\operation\show.html.twig:32:                {{ 'common.update'|trans }}
+src\templates\frontend\operation\show.html.twig:58:                            <i class="bi bi-hash me-2"></i>{{ 'common.id'|trans }}
+src\templates\frontend\operation\show.html.twig:64:                            <i class="bi bi-person me-2"></i>{{ 'operation.show.user_id'|trans }}
+src\templates\frontend\operation\show.html.twig:72:                            <i class="bi bi-gear me-2"></i>{{ 'operation.show.operation_type'|trans }}
+src\templates\frontend\operation\show.html.twig:78:                            <i class="bi bi-calendar-event me-2"></i>{{ 'operation.show.start_date'|trans }}
+src\templates\frontend\operation\show.html.twig:86:                            <i class="bi bi-calendar-check me-2"></i>{{ 'operation.show.end_date'|trans }}
+src\templates\frontend\operation\show.html.twig:94:                            <i class="bi bi-activity me-2"></i>{{ 'operation.show.status'|trans }}
+src\templates\frontend\operation\show.html.twig:105:                            <i class="bi bi-box-seam me-2"></i>{{ 'operation.show.equipment'|trans }}
+src\templates\frontend\operation\show.html.twig:121:                    <i class="bi bi-lightning me-2"></i>{{ 'common.quick_actions'|trans }}
+src\templates\frontend\operation\show.html.twig:129:                                <i class="bi bi-check-lg me-2"></i>{{ 'operation.actions.finish'|trans }}
+src\templates\frontend\operation\show.html.twig:134:                            <i class="bi bi-pencil me-2"></i>{{ 'common.update'|trans }}
+src\templates\frontend\operation\show.html.twig:137:                            <i class="bi bi-arrow-left me-2"></i>{{ 'common.back_to_list'|trans }}
+src\templates\frontend\operation\show.html.twig:140:                            <i class="bi bi-plus-lg me-2"></i>{{ 'app.actions.new_operation'|trans }}
+src\templates\frontend\operation\show.html.twig:149:                    <i class="bi bi-box-seam me-2"></i>{{ 'operation.show.associated_equipment'|trans }}
+src\templates\frontend\operation\show.html.twig:154:                        {{ 'equipement.show.type'|trans }}: {{ operation.equipement.type }}<br>
+src\templates\frontend\operation\show.html.twig:155:                        {{ 'equipement.show.state'|trans }}: <span class="badge badge-status-{{ operation.equipement.etat|lower|replace({' ': '_', 'é': 'e'}) }}">{{ operation.equipement.etat }}</span>
+src\templates\frontend\operation\show.html.twig:158:                        <i class="bi bi-eye me-1"></i>{{ 'operation.show.view_equipment'|trans }}
+src\templates\frontend\operation\_delete_form.html.twig:5:        {{ 'common.delete'|trans }}
+src\templates\frontend\operation\_form.html.twig:7:        <strong>{{ 'common.error'|trans }} :</strong> {{ 'common.please_fix_errors'|trans }}
+src\templates\frontend\operation\_form.html.twig:9:        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ 'common.close'|trans }}"></button>
+src\templates\frontend\operation\_form.html.twig:19:                    'placeholder': form.type_operation.vars.attr.placeholder|default('')|trans
+src\templates\frontend\operation\_form.html.twig:81:            {{ button_label|default('common.save'|trans) }}
+src\templates\frontend\operation\_form.html.twig:86:                {{ 'common.cancel'|trans }}
+src\templates\frontend\operation\_form.html.twig:91:                {{ 'common.cancel'|trans }}
+src\templates\frontend\workspace\index.html.twig:3:{% block title %}{{ 'workspace.title'|trans }}{% endblock %}
+src\templates\frontend\workspace\index.html.twig:4:{% block navbar_title %}{{ 'workspace.title'|trans }}{% endblock %}
+src\templates\frontend\workspace\index.html.twig:64:                    <span class="visually-hidden">{{ 'common.loading'|trans }}</span>
+src\templates\frontend\workspace\index.html.twig:80:                    <span class="visually-hidden">{{ 'common.loading'|trans }}</span>
+src\templates\frontend\workspace\index.html.twig:96:                    <span class="visually-hidden">{{ 'common.loading'|trans }}</span>
+src\templates\frontend\workspace\_equipements_tab.html.twig:5:            <i class="bi bi-box-seam me-2"></i>{{ 'nav.equipements'|trans }}
+src\templates\frontend\workspace\_equipements_tab.html.twig:13:                data-confirm-message="{{ 'equipement.bulk.confirm'|trans }}">
+src\templates\frontend\workspace\_equipements_tab.html.twig:15:            {{ 'app.actions.delete_selection'|trans }}
+src\templates\frontend\workspace\_equipements_tab.html.twig:19:            {{ 'app.actions.new_equipement'|trans }}
+src\templates\frontend\workspace\_equipements_tab.html.twig:40:                    <th>{{ 'equipement.table.name'|trans }}</th>
+src\templates\frontend\workspace\_equipements_tab.html.twig:41:                    <th>{{ 'equipement.table.model'|trans }}</th>
+src\templates\frontend\workspace\_equipements_tab.html.twig:42:                    <th>{{ 'equipement.table.serial'|trans }}</th>
+src\templates\frontend\workspace\_equipements_tab.html.twig:43:                    <th>{{ 'equipement.table.status'|trans }}</th>
+src\templates\frontend\workspace\_equipements_tab.html.twig:44:                    <th style="width: 120px;">{{ 'common.actions'|trans }}</th>
+src\templates\frontend\workspace\_equipements_tab.html.twig:63:                                <a href="{{ path('app_equipement_show', {id: equipement.id}) }}" class="btn btn-outline-primary" title="{{ 'common.view'|trans }}">
+src\templates\frontend\workspace\_equipements_tab.html.twig:66:                                <a href="{{ path('app_equipement_edit', {id: equipement.id}) }}" class="btn btn-outline-warning" title="{{ 'common.edit'|trans }}">
+src\templates\frontend\workspace\_equipements_tab.html.twig:71:                                    <button type="submit" class="btn btn-outline-danger delete-btn" title="{{ 'common.delete'|trans }}">
+src\templates\frontend\workspace\_equipements_tab.html.twig:85:        {{ 'equipement.index.empty'|trans }}
+src\templates\frontend\workspace\_equipements_tab.html.twig:86:        <a href="{{ path('app_equipement_new') }}" class="alert-link">{{ 'app.actions.create_now'|trans }}</a>
+src\templates\frontend\workspace\_operations_tab.html.twig:5:            <i class="bi bi-clipboard-check me-2"></i>{{ 'operation.index.title'|trans }}
+src\templates\frontend\workspace\_operations_tab.html.twig:13:                data-confirm-message="{{ 'operation.bulk.confirm'|trans }}">
+src\templates\frontend\workspace\_operations_tab.html.twig:15:            {{ 'app.actions.delete_selection'|trans }}
+src\templates\frontend\workspace\_operations_tab.html.twig:19:            {{ 'app.actions.new_operation'|trans }}
+src\templates\frontend\workspace\_operations_tab.html.twig:40:                    <th>{{ 'operation.table.type'|trans }}</th>
+src\templates\frontend\workspace\_operations_tab.html.twig:41:                    <th>{{ 'operation.table.status'|trans }}</th>
+src\templates\frontend\workspace\_operations_tab.html.twig:42:                    <th>{{ 'operation.table.date'|trans }}</th>
+src\templates\frontend\workspace\_operations_tab.html.twig:43:                    <th>{{ 'operation.table.equipement'|trans }}</th>
+src\templates\frontend\workspace\_operations_tab.html.twig:44:                    <th style="width: 120px;">{{ 'common.actions'|trans }}</th>
+src\templates\frontend\workspace\_operations_tab.html.twig:63:                                <a href="{{ path('app_operation_show', {id: operation.id}) }}" class="btn btn-outline-primary" title="{{ 'common.view'|trans }}">
+src\templates\frontend\workspace\_operations_tab.html.twig:66:                                <a href="{{ path('app_operation_edit', {id: operation.id}) }}" class="btn btn-outline-warning" title="{{ 'common.edit'|trans }}">
+src\templates\frontend\workspace\_operations_tab.html.twig:71:                                    <button type="submit" class="btn btn-outline-danger delete-btn" title="{{ 'common.delete'|trans }}">
+src\templates\frontend\workspace\_operations_tab.html.twig:85:        {{ 'operation.index.empty'|trans }}
+src\templates\frontend\workspace\_operations_tab.html.twig:86:        <a href="{{ path('app_operation_new') }}" class="alert-link">{{ 'app.actions.create_now'|trans }}</a>

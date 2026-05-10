@@ -1,0 +1,14 @@
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+gunicorn==23.0.0
+pydantic==2.10.6
+pydantic-settings==2.8.0
+python-multipart==0.0.20
+Pillow==11.1.0
+numpy==2.2.3
+structlog==25.1.0
+
+# PyTorch CPU wheels
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.6.0
+torchvision==0.21.0

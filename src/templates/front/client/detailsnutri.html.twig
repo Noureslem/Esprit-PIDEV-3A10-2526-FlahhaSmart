@@ -1,0 +1,156 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail produit - {{ stock.nomProduit ?? stock.typeProduit }}{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h1 class="card-title text-success fw-bold">
+                        {{ stock.nomProduit ?? stock.typeProduit }}
+                    </h1>
+                    
+                    <p class="text-muted">
+                        <strong>Producteur :</strong> 
+                        {{ stock.user ? stock.user.nom ~ ' ' ~ stock.user.prenom : 'Coopérative' }}
+                    </p>
+                    
+                    <p><strong>Statut :</strong> 
+                        <span class="badge 
+                            {% set statut = stock.statut|lower %}
+                            {% if statut in ['en cours','en_cours'] %}bg-warning text-dark
+                            {% elseif statut in ['terminé','termine'] %}bg-success
+                            {% elseif statut in ['en croissance','en_croissance'] %}bg-primary
+                            {% else %}bg-secondary{% endif %}">
+                            {{ stock.statut }}
+                        </span>
+                    </p>
+                    
+                    <hr>
+
+                    <h4 class="mt-3">📊 Informations nutritionnelles (pour 100g)</h4>
+                    
+                    {% if nutrition.energy_kcal is not null or nutrition.protein is not null %}
+                        <ul class="list-group list-group-flush mb-3">
+                            {% if nutrition.energy_kcal %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    🔥 Énergie <span class="badge bg-secondary rounded-pill">{{ nutrition.energy_kcal }} kcal</span>
+                                </li>
+                            {% endif %}
+                            {% if nutrition.protein %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    🥩 Protéines <span class="badge bg-secondary rounded-pill">{{ nutrition.protein }} g</span>
+                                </li>
+                            {% endif %}
+                            {% if nutrition.fat %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    🧈 Lipides <span class="badge bg-secondary rounded-pill">{{ nutrition.fat }} g</span>
+                                </li>
+                            {% endif %}
+                            {% if nutrition.saturated_fat %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    ⚠️ Dont saturés <span class="badge bg-secondary rounded-pill">{{ nutrition.saturated_fat }} g</span>
+                                </li>
+                            {% endif %}
+                            {% if nutrition.carbohydrates %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    🍚 Glucides <span class="badge bg-secondary rounded-pill">{{ nutrition.carbohydrates }} g</span>
+                                </li>
+                            {% endif %}
+                            {% if nutrition.sugars %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    🍬 Dont sucres <span class="badge bg-secondary rounded-pill">{{ nutrition.sugars }} g</span>
+                                </li>
+                            {% endif %}
+                            {% if nutrition.fiber %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    🌾 Fibres <span class="badge bg-secondary rounded-pill">{{ nutrition.fiber }} g</span>
+                                </li>
+                            {% endif %}
+                            {% if nutrition.salt %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    🧂 Sel <span class="badge bg-secondary rounded-pill">{{ nutrition.salt }} g</span>
+                                </li>
+                            {% endif %}
+                        </ul>
+                        {% if nutrition.brand %}
+                            <p class="small text-muted">🏷️ Marque / variété : {{ nutrition.brand }}</p>
+                        {% endif %}
+                        {% if nutrition.image_url %}
+                            <img src="{{ nutrition.image_url }}" class="img-fluid rounded-3 mt-2" style="max-height: 150px;" alt="Image produit">
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <i class="fa-solid fa-triangle-exclamation"></i> 
+                            Désolé, les données nutritionnelles pour <strong>{{ stock.nomProduit ?? stock.typeProduit }}</strong> ne sont pas disponibles dans la base Open Food Facts.
+                        </div>
+                    {% endif %}
+
+                    <hr>
+
+                    <h4 class="mt-3">📋 Consommations liées</h4>
+                    {% if consommations is empty %}
+                        <p class="text-muted">Aucune consommation enregistrée pour ce produit.</p>
+                    {% else %}
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover">
+                                <thead>
+                                    <tr><th>Date</th><th>Quantité</th><th>Unité</th></tr>
+                                </thead>
+                                <tbody>
+                                    {% for conso in consommations %}
+                                        <tr>
+                                            <td>{{ conso.date_utilisation ? conso.date_utilisation|date('d/m/Y') : '-' }}</td>
+                                            <td>{{ conso.quantite_utilisee }}</td>
+                                            <td>{{ conso.unite }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+
+                    <!-- Bouton QR code -->
+                    <div class="mt-4 text-center">
+                        <button type="button" class="btn btn-outline-secondary rounded-pill me-2" data-bs-toggle="modal" data-bs-target="#qrModal">
+                            <i class="fa-solid fa-qrcode me-1"></i> Voir le QR code
+                        </button>
+                        <a href="{{ path('client_produit_index') }}" class="btn btn-outline-success rounded-pill">
+                            <i class="fa-solid fa-arrow-left me-1"></i> Retour à la liste
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal QR code -->
+<div class="modal fade" id="qrModal" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="qrModalLabel">
+                    <i class="fa-solid fa-qrcode me-2"></i> QR Code du produit
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body text-center">
+                {% if stock.codeQr %}
+                    <img src="{{ asset(stock.codeQr) }}" alt="QR Code" class="img-fluid" style="max-width: 250px;">
+                    <p class="mt-3 text-muted small">Scannez ce code pour accéder directement à la fiche produit.</p>
+                {% else %}
+                    <div class="alert alert-info mb-0">
+                        <i class="fa-solid fa-info-circle"></i> Aucun QR code n’a été généré pour ce produit.
+                    </div>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

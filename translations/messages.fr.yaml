@@ -1,0 +1,544 @@
+nav:
+  language: "Langue"
+  section:
+    navigation: "Navigation"
+    quick_actions: "Actions Rapides"
+    administration: "Administration"
+    agriculteur: "Agriculteur"
+    client: "Client"
+    account: "Compte"
+  dashboard: "Tableau de Bord"
+  equipements: "Équipements"
+  operations: "Opérations"
+  new_equipement: "Nouvel Équipement"
+  new_operation: "Nouvelle Opération"
+  users: "Utilisateurs"
+  forum: "Forum"
+  my_orders: "Mes commandes"
+  profile: "Profil"
+  logout: "Déconnexion"
+
+workspace:
+  title: "Espace de Travail"
+
+common:
+  ok: "OK"
+  loading: "Chargement..."
+  home: "Accueil"
+  new: "Nouveau"
+  day_singular: "jour"
+  day_plural: "jours"
+  completed: "Terminée"
+  terminated: "Terminé"
+  search: "Rechercher"
+  reset: "Réinitialiser"
+  save: "Enregistrer"
+  update: "Mettre à jour"
+  back_to_list: "Retour à la liste"
+  actions: "Actions"
+  quick_actions: "Actions Rapides"
+  select_all: "Tout sélectionner"
+  id: "Identifiant"
+  close: "Fermer"
+  error: "Erreur"
+  please_fix_errors: "Veuillez corriger les erreurs ci-dessous."
+  bulk_select_at_least_one: "Veuillez sélectionner au moins un élément."
+  confirm_bulk_delete_count: "Confirmer la suppression de %count% élément(s) ?"
+  sort:
+    asc: "Trier croissant"
+    desc: "Trier décroissant"
+  cancel: "Annuler"
+  delete: "Supprimer"
+  view: "Voir"
+  edit: "Modifier"
+  not_available: "Non renseigné"
+  active: "Actif"
+  inactive: "Inactif"
+  confirm_delete:
+    title: "Confirmer la suppression"
+    message: "Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible."
+
+operation:
+  table:
+    type: "Type"
+    status: "Statut"
+    date: "Date"
+    equipement: "Équipement"
+  index:
+    title: "Opérations"
+    navbar_title: "Gestion des Opérations"
+    filter:
+      type_label: "Type d'opération"
+      type_placeholder: "Rechercher par type..."
+      status_label: "Statut"
+      status_all: "-- Tous les statuts --"
+    table:
+      type: "Type"
+      equipment: "Équipement"
+      start_date: "Date Début"
+      end_date: "Date Fin"
+      status: "Statut"
+    empty: "Aucune opération trouvée"
+    empty_cta: "Ajouter une opération"
+  bulk:
+    confirm: "Supprimer les opérations sélectionnées ?"
+    item_aria: "Sélectionner l'opération #%id%"
+  new:
+    title: "Nouvelle Opération"
+    navbar_title: "Créer une Opération"
+    card_header: "Informations de l'Opération"
+  edit:
+    title: "Modifier l'Opération"
+    navbar_title: "Modifier l'Opération"
+  show:
+    page_title: "Opération #%id%"
+    navbar_title: "Détails de l'Opération"
+    user_id: "ID Utilisateur"
+    operation_type: "Type d'Opération"
+    start_date: "Date de Début"
+    end_date: "Date de Fin"
+    status: "Statut"
+    equipment: "Équipement"
+    associated_equipment: "Équipement Associé"
+    view_equipment: "Voir l'équipement"
+  actions:
+    finish: "Terminer"
+  form:
+    type_operation:
+      label: "Type d'Opération"
+      placeholder: "Ex: Maintenance, Réparation..."
+    date_debut:
+      label: "Date de Début"
+    date_fin:
+      label: "Date de Fin"
+    equipement:
+      label: "Équipement"
+  export:
+    open_modal: "Exporter PDF"
+    modal_title: "Exporter les opérations en PDF"
+    modal_subtitle: "Choisissez les colonnes à inclure dans le document."
+    select_all: "Tout sélectionner"
+    deselect_all: "Tout désélectionner"
+    submit: "Exporter PDF"
+    document_title: "Rapport des opérations"
+    generated_on: "Généré le :"
+    total: "Total des opérations : %count%"
+    empty: "Aucune opération à exporter."
+    column:
+      id: "ID"
+      id_user: "ID utilisateur"
+      type_operation: "Type d'opération"
+      equipement: "Équipement"
+      date_debut: "Date de début"
+      date_fin: "Date de fin"
+      statut: "Statut"
+
+equipement:
+  table:
+    name: "Nom"
+    model: "Modèle"
+    serial: "Série"
+    status: "Statut"
+  state:
+    available: "Disponible"
+    reserved: "Réservé"
+  index:
+    title: "Équipements"
+    navbar_title: "Gestion des Équipements"
+    filter:
+      name_label: "Nom"
+      name_placeholder: "Rechercher par nom..."
+      type_label: "Type"
+      type_all: "-- Tous les types --"
+      state_label: "État"
+      state_all: "-- Tous les états --"
+    table:
+      name: "Nom"
+      type: "Type"
+      state: "État"
+    empty: "Aucun équipement trouvé"
+    empty_cta: "Ajouter un équipement"
+  bulk:
+    confirm: "Supprimer les équipements sélectionnés ?"
+    item_aria: "Sélectionner l'équipement #%id%"
+  new:
+    title: "Nouvel Équipement"
+    navbar_title: "Créer un Équipement"
+    card_header: "Informations de l'Équipement"
+  edit:
+    title: "Modifier l'Équipement"
+    navbar_title: "Modifier l'Équipement"
+  show:
+    page_title: "Équipement - %name%"
+    navbar_title: "Détails de l'Équipement"
+    name: "Nom"
+    type: "Type"
+    state: "État"
+  delete:
+    reserved_tooltip: "Impossible de supprimer un équipement réservé"
+  form:
+    nom:
+      label: "Nom de l'équipement"
+      placeholder: "Entrez le nom..."
+    type:
+      label: "Type"
+      placeholder: "Choisir un type"
+  type:
+    machine: "Machine"
+    irrigation: "Irrigation"
+    elevage: "Élevage"
+    outil_manuel: "Outil manuel"
+    transport: "Transport"
+
+app:
+  title: "Gestion des opérations et équipements"
+  brand: "AgriOps"
+  page:
+    default_title: "Tableau de bord"
+  actions:
+    delete_selection: "Supprimer la sélection"
+    new_operation: "Nouvelle opération"
+    new_equipement: "Nouvel équipement"
+    create_now: "Créer maintenant"
+  common:
+    view: "Voir"
+    edit: "Modifier"
+    delete: "Supprimer"
+
+dashboard:
+  index:
+    title: "Tableau de Bord"
+    navbar_title: "Tableau de Bord - Statistiques"
+  actions:
+    refresh: "Actualiser"
+    refreshing: "Actualisation..."
+    terminating: "Termination..."
+  confirm:
+    terminate: "Êtes-vous sûr de vouloir terminer cette opération ?"
+  kpi:
+    operations_total: "Opérations Totales"
+    operations_in_progress: "En Cours"
+    operations_completed: "Terminées"
+    completion_rate: "%rate%% complétées"
+  charts:
+    equipment_by_type: "Équipements par Type"
+    equipment_usage: "Utilisation des Équipements"
+  upcoming:
+    title: "Opérations les plus proches"
+    empty: "Aucune opération à venir"
+    actions:
+      terminate_tooltip: "Terminer cette opération"
+    table:
+      operation: "Opération"
+      equipment: "Équipement"
+      end_date: "Date de Fin"
+      days_remaining: "Jours Restants"
+      status: "Statut"
+      action: "Action"
+  last_updated: "Dernière mise à jour"
+  notifications:
+    stats_updated: "Statistiques mises à jour"
+    operation_terminated: "Opération terminée avec succès"
+  errors:
+    termination: "Erreur lors de la termination"
+    update: "Erreur lors de la mise à jour"
+
+auth:
+  register:
+    title: "Inscription"
+    heading: "Créer votre compte"
+    subtitle: "Rejoignez la plateforme de gestion agricole."
+    password:
+      label: "Mot de passe"
+    submit: "S'inscrire"
+    have_account: "Vous avez déjà un compte ?"
+    login_link: "Se connecter"
+  login:
+    title: "Connexion"
+    heading: "Connexion"
+    email_label: "Email"
+    password_label: "Mot de passe"
+    submit: "Se connecter"
+    create_account: "Créer un compte"
+
+profile:
+  title: "Mon profil"
+  field:
+    telephone: "Téléphone"
+    ville: "Ville"
+    member_since: "Membre depuis"
+    status: "Statut"
+  edit:
+    heading: "Modifier mes informations"
+    submit: "Enregistrer les modifications"
+  password:
+    heading: "Changer le mot de passe"
+    keep_current_hint: "Laissez vide pour conserver le mot de passe actuel."
+
+translation:
+  widget:
+    title: "Traduction instantanée"
+    source_text: "Texte à traduire"
+    to_label: "Traduire vers"
+    from_label: "Langue source"
+    auto: "Détection automatique"
+    submit: "Traduire"
+    result: "Résultat"
+  lang:
+    en: "Anglais"
+    fr: "Français"
+    ar: "Arabe"
+
+admin:
+  users:
+    title: "Utilisateurs"
+    page_title: "Gestion des utilisateurs"
+    stats:
+      total: "Total"
+      admins: "Administrateurs"
+      agriculteurs: "Agriculteurs"
+      clients: "Clients"
+      actifs: "Actifs"
+    add_button: "Ajouter un utilisateur"
+    filters:
+      search:
+        label: "Recherche"
+        placeholder: "Nom, prénom ou email"
+      role:
+        label: "Rôle"
+        all: "Tous les rôles"
+      submit: "Filtrer"
+    table:
+      title: "Liste des utilisateurs"
+      name: "Nom"
+      email: "Email"
+      telephone: "Téléphone"
+      ville: "Ville"
+      role: "Rôle"
+      status: "Statut"
+      created_at: "Créé le"
+    role:
+      admin: "Administrateur"
+      agriculteur: "Agriculteur"
+      client: "Client"
+    action:
+      activate: "Activer"
+      deactivate: "Désactiver"
+    confirm_delete: "Supprimer l'utilisateur %name% ?"
+    empty: "Aucun utilisateur trouvé."
+    create_user: "Créer l'utilisateur"
+  user_form:
+    new_title: "Nouvel utilisateur"
+    edit_title: "Modifier %name%"
+
+form:
+  registration:
+    nom:
+      label: "Nom"
+      placeholder: "Votre nom"
+    prenom:
+      label: "Prénom"
+      placeholder: "Votre prénom"
+    email:
+      label: "Adresse email"
+      placeholder: "vous@exemple.com"
+    telephone:
+      label: "Téléphone"
+      placeholder: "Votre téléphone"
+    ville:
+      label: "Ville"
+      placeholder: "Votre ville"
+    role:
+      label: "Rôle"
+      choice:
+        agriculteur: "Agriculteur"
+        client: "Client"
+    password:
+      label: "Mot de passe"
+      placeholder: "Entrez un mot de passe"
+      confirm_label: "Confirmer le mot de passe"
+      confirm_placeholder: "Confirmez le mot de passe"
+
+  profile:
+    nom:
+      label: "Nom"
+    prenom:
+      label: "Prénom"
+    email:
+      label: "Adresse email"
+    telephone:
+      label: "Téléphone"
+    ville:
+      label: "Ville"
+    password:
+      new_label: "Nouveau mot de passe"
+      new_placeholder: "Nouveau mot de passe"
+      confirm_label: "Confirmer le mot de passe"
+      confirm_placeholder: "Confirmer le mot de passe"
+
+  admin_user:
+    nom:
+      label: "Nom"
+    prenom:
+      label: "Prénom"
+    email:
+      label: "Adresse email"
+    telephone:
+      label: "Téléphone"
+    ville:
+      label: "Ville"
+    role:
+      label: "Rôle"
+      choice:
+        admin: "Administrateur"
+        agriculteur: "Agriculteur"
+        client: "Client"
+    actif:
+      label: "Compte actif"
+    password:
+      new_label: "Mot de passe"
+      edit_label: "Nouveau mot de passe"
+      new_placeholder: "Saisissez un mot de passe"
+      edit_placeholder: "Laisser vide pour ne pas changer"
+
+  consommation:
+    surface:
+      label: "Surface"
+      placeholder: "Surface concernée"
+    quantite_utilisee:
+      label: "Quantité utilisée"
+      placeholder: "Quantité utilisée"
+    unite:
+      label: "Unité"
+      placeholder: "Ex: kg, l"
+    date_recolte:
+      label: "Date de récolte"
+    date_utilisation:
+      label: "Date d'utilisation"
+    stock_produit:
+      label: "Stock produit"
+
+  stock:
+    type_produit:
+      label: "Type de produit"
+      placeholder: "Ex: Engrais"
+    variete:
+      label: "Variété"
+      placeholder: "Ex: Bio"
+    date_debut:
+      label: "Date de début"
+    date_fin_estimee:
+      label: "Date de fin estimée"
+    statut:
+      label: "Statut"
+      choice:
+        en_cours: "En cours"
+        termine: "Terminé"
+        en_croissance: "En croissance"
+
+  article:
+    nom:
+      label: "Nom"
+    categorie:
+      label: "Catégorie"
+    description:
+      label: "Description"
+    prix:
+      label: "Prix"
+    stock:
+      label: "Stock"
+    poids:
+      label: "Poids"
+    unite:
+      label: "Unité"
+    image_url:
+      label: "URL de l'image"
+
+  order:
+    reference:
+      label: "Référence"
+    date_commande:
+      label: "Date de commande"
+    statut:
+      label: "Statut"
+    mode_paiement:
+      label: "Mode de paiement"
+    adresse_livraison:
+      label: "Adresse de livraison"
+    montant_total:
+      label: "Montant total"
+    frais_livraison:
+      label: "Frais de livraison"
+
+  todo:
+    nom_tache:
+      label: "Nom de la tâche"
+    tache:
+      label: "Tâche"
+    statut:
+      label: "Statut"
+      choice:
+        todo: "À faire"
+        doing: "En cours"
+        done: "Terminé"
+
+flash:
+  operation:
+    export_invalid_form: "Impossible d'exporter le PDF. Vérifiez le formulaire."
+    csrf_invalid: "Jeton CSRF invalide pour la suppression groupée des opérations."
+    none_selected: "Aucune opération sélectionnée."
+    some_not_owned: "Certaines opérations ne vous appartiennent pas et n'ont pas été supprimées."
+    deleted_count: "%count% opération(s) supprimée(s)."
+    not_found_count: "%count% opération(s) introuvable(s)."
+    failed_count: "%count% opération(s) n'ont pas pu être supprimée(s)."
+  equipement:
+    reserved_cannot_delete: "Impossible de supprimer un équipement réservé."
+    deleted_success: "Équipement supprimé avec succès."
+    csrf_invalid: "Jeton CSRF invalide pour la suppression groupée des équipements."
+    deleted_count: "%count% équipement(s) supprimé(s)."
+    not_found_count: "%count% équipement(s) introuvable(s)."
+    failed_count: "%count% équipement(s) n'ont pas pu être supprimé(s)."
+  admin:
+    user_created: "Utilisateur créé avec succès."
+    user_not_found: "Utilisateur introuvable."
+    user_updated: "Utilisateur mis à jour avec succès."
+    status_updated: "Statut utilisateur mis à jour."
+    cannot_delete_self: "Vous ne pouvez pas supprimer votre propre compte."
+    user_deleted: "Utilisateur supprimé avec succès."
+  auth:
+    account_created: "Compte créé avec succès. Vous pouvez vous connecter."
+  profile:
+    updated: "Profil mis à jour avec succès."
+  produit:
+    admin_fallback_user: "Aucun utilisateur connecté détecté. Utilisateur de secours appliqué."
+    added_success: "Produit ajouté avec succès."
+    login_required: "Vous devez être connecté."
+    own_edit_only: "Vous ne pouvez modifier que vos propres produits."
+    own_delete_only: "Vous ne pouvez supprimer que vos propres produits."
+    updated_success: "Produit modifié avec succès."
+    deleted_success: "Produit supprimé avec succès."
+    consommation_added: "Consommation ajoutée avec succès."
+    consommation_updated: "Consommation modifiée avec succès."
+    consommation_deleted: "Consommation supprimée avec succès."
+  article:
+    added: "Article ajouté avec succès."
+    updated: "Article modifié avec succès."
+    deleted: "Article supprimé avec succès."
+  order:
+    added: "Commande ajoutée avec succès."
+    updated: "Commande modifiée avec succès."
+    deleted: "Commande supprimée avec succès."
+  todo:
+    duplicate_for_consultant: "Cette tâche existe déjà pour ce consultant."
+    duplicate_combination: "Cette combinaison tâche/consultant existe déjà."
+    added: "Tâche ajoutée avec succès."
+    updated: "Tâche modifiée avec succès."
+    deleted: "Tâche supprimée avec succès."
+
+security:
+  user_not_authenticated: "Utilisateur non authentifié."
+  operation_access_denied: "Vous n'avez pas accès à cette opération."
+
+todo:
+  errors:
+    not_found: "Tâche introuvable."

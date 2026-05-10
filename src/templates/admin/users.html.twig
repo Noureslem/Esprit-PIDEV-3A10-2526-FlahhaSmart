@@ -1,0 +1,403 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des utilisateurs - FlahaSmart{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<style>
+    :root {
+        --agri-green: #2e7d52;
+        --agri-green-light: #4c9a6e;
+        --agri-dark: #1a3c34;
+        --bg-soft: #fefaf5;
+    }
+    body {
+        background: var(--bg-soft);
+    }
+    .page-header {
+        background: linear-gradient(135deg, #1a3c34 0%, #2d5a1e 100%);
+        border-radius: 0 0 2rem 2rem;
+        padding: 1.5rem 0;
+        margin-bottom: 2rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    .page-header::after {
+        content: "";
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.08);
+        right: -30px;
+        bottom: -50px;
+    }
+    .btn-back {
+        background: rgba(255,255,255,0.2);
+        border-radius: 2rem;
+        padding: 0.5rem 1.2rem;
+        color: white;
+        text-decoration: none;
+        transition: 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn-back:hover {
+        background: rgba(255,255,255,0.35);
+        color: white;
+        transform: translateX(-3px);
+    }
+    .stat-card,
+    .filter-card,
+    .user-table,
+    .pagination-shell {
+        background: white;
+        border-radius: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    .stat-card {
+        padding: 1.2rem;
+        transition: all 0.3s;
+        border: 1px solid rgba(0,0,0,0.03);
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        background: rgba(46,125,82,0.1);
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        color: var(--agri-green);
+    }
+    .stat-number {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--agri-dark);
+        line-height: 1.2;
+    }
+    .filter-card,
+    .pagination-shell {
+        padding: 1.2rem;
+    }
+    .user-table {
+        overflow: hidden;
+    }
+    .user-table thead {
+        background: linear-gradient(135deg, #1a3c34 0%, #2d5a1e 100%);
+        color: white;
+    }
+    .user-table thead th {
+        padding: 1rem;
+        font-weight: 600;
+        border: none;
+    }
+    .user-table tbody tr {
+        transition: 0.2s;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .user-table tbody tr:hover {
+        background: #f9fef7;
+    }
+    .user-table tbody td {
+        padding: 0.8rem;
+        vertical-align: middle;
+    }
+    .user-avatar-img {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid white;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        background: #e9ecef;
+    }
+    .badge-role {
+        padding: 0.3rem 0.8rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        font-size: 0.7rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .badge-admin { background: #fef3c7; color: #b45309; }
+    .badge-agri { background: #dcfce7; color: #166534; }
+    .badge-client { background: #e0f2fe; color: #0369a1; }
+    .badge-status {
+        padding: 0.2rem 0.7rem;
+        border-radius: 2rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+    .badge-active { background: #d1fae5; color: #065f46; }
+    .badge-inactive { background: #fee2e2; color: #991b1b; }
+    .action-btn {
+        width: 34px;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        transition: 0.2s;
+    }
+    .action-btn:hover {
+        transform: translateY(-2px);
+    }
+    .btn-add {
+        background: linear-gradient(135deg, var(--agri-green), var(--agri-green-light));
+        border: none;
+        border-radius: 2rem;
+        padding: 0.6rem 1.5rem;
+        font-weight: 600;
+        color: white;
+        transition: 0.2s;
+        text-decoration: none;
+    }
+    .btn-add:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(46,125,82,0.3);
+        color: white;
+    }
+    .page-link {
+        border: none;
+        color: var(--agri-dark);
+        border-radius: 999px !important;
+        margin: 0 0.15rem;
+    }
+    .page-item.active .page-link {
+        background: linear-gradient(135deg, var(--agri-green), var(--agri-green-light));
+        color: white;
+    }
+    @media (max-width: 768px) {
+        .stat-number { font-size: 1.2rem; }
+        .user-table thead th { font-size: 0.7rem; padding: 0.6rem; }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="page-header" data-aos="fade-down">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="h3 mb-1 fw-bold"><i class="fas fa-users-cog me-2"></i>Gestion des utilisateurs</h1>
+                <p class="mb-0 opacity-75">Gérez les comptes agriculteurs, clients et administrateurs</p>
+            </div>
+            <a href="{{ path('dashboard_admin') }}" class="btn-back">
+                <i class="fas fa-arrow-left me-1"></i>Retour au tableau de bord
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    {# ── Cartes statistiques ───────────────────────────────────────── #}
+    <div class="row g-4 mb-5" data-aos="fade-up">
+        <div class="col-md-6 col-lg-2">
+            <div class="stat-card d-flex align-items-center">
+                <div class="stat-icon me-3"><i class="fas fa-users"></i></div>
+                <div><div class="stat-number">{{ stats.total|default(0) }}</div><small>Total</small></div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-2">
+            <div class="stat-card d-flex align-items-center">
+                <div class="stat-icon me-3"><i class="fas fa-crown"></i></div>
+                <div><div class="stat-number">{{ stats.admins|default(0) }}</div><small>Admins</small></div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-2">
+            <div class="stat-card d-flex align-items-center">
+                <div class="stat-icon me-3"><i class="fas fa-tractor"></i></div>
+                <div><div class="stat-number">{{ stats.agriculteurs|default(0) }}</div><small>Agriculteurs</small></div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-2">
+            <div class="stat-card d-flex align-items-center">
+                <div class="stat-icon me-3"><i class="fas fa-user"></i></div>
+                <div><div class="stat-number">{{ stats.clients|default(0) }}</div><small>Clients</small></div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-2">
+            <div class="stat-card d-flex align-items-center">
+                <div class="stat-icon me-3"><i class="fas fa-check-circle"></i></div>
+                <div><div class="stat-number">{{ stats.actifs|default(0) }}</div><small>Actifs</small></div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-2">
+            <div class="stat-card d-flex align-items-center">
+                <div class="stat-icon me-3"><i class="fas fa-ban"></i></div>
+                <div><div class="stat-number">{{ stats.inactifs|default(0) }}</div><small>Inactifs</small></div>
+            </div>
+        </div>
+    </div>
+
+    {# ── Filtres ───────────────────────────────────────────────────── #}
+    <div class="filter-card" data-aos="fade-up" data-aos-delay="100">
+        <form method="get" action="{{ path('admin_users') }}" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold"><i class="fas fa-search me-1"></i>Recherche</label>
+                <input type="text" name="search" value="{{ search|default('') }}" class="form-control rounded-pill" placeholder="Nom, prénom ou email...">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold"><i class="fas fa-tag me-1"></i>Rôle</label>
+                <select name="role" class="form-select rounded-pill">
+                    <option value="">Tous</option>
+                    <option value="ADMINISTRATEUR" {{ role == 'ADMINISTRATEUR' ? 'selected' : '' }}>Administrateur</option>
+                    <option value="AGRICULTEUR" {{ role == 'AGRICULTEUR' ? 'selected' : '' }}>Agriculteur</option>
+                    <option value="CLIENT" {{ role == 'CLIENT' ? 'selected' : '' }}>Client</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold"><i class="fas fa-circle me-1"></i>Statut</label>
+                <select name="status" class="form-select rounded-pill">
+                    <option value="">Tous</option>
+                    <option value="actif" {{ status == 'actif' ? 'selected' : '' }}>Actifs</option>
+                    <option value="inactif" {{ status == 'inactif' ? 'selected' : '' }}>Inactifs</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-success w-100 rounded-pill"><i class="fas fa-filter me-1"></i>Filtrer</button>
+            </div>
+        </form>
+    </div>
+
+    {# ── Entête avec info pagination + bouton ajout ───────────────── #}
+    <div class="d-flex justify-content-between align-items-center mb-3 mt-3" data-aos="fade-up" data-aos-delay="150">
+        <div class="text-muted small">
+            <i class="fas fa-user-check me-1"></i>
+            {% if pagination.total is defined %}
+                {{ pagination.total }} utilisateur(s) trouvé(s), page {{ pagination.page }}/{{ pagination.pages }}
+            {% else %}
+                {{ users|length }} utilisateur(s) affiché(s)
+            {% endif %}
+        </div>
+        <a href="{{ path('admin_user_new') }}" class="btn-add"><i class="fas fa-user-plus me-2"></i>Ajouter un utilisateur</a>
+    </div>
+
+    {# ── Tableau des utilisateurs ──────────────────────────────────── #}
+    <div class="user-table" data-aos="fade-up" data-aos-delay="200">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Utilisateur</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>Ville</th>
+                        <th>Rôle</th>
+                        <th>Statut</th>
+                        <th>Inscription</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for u in users %}
+                    <tr>
+                        <td class="text-muted fw-bold">#{{ u.id }}</td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="https://randomuser.me/api/portraits/{{ u.id % 2 == 0 ? 'women' : 'men' }}/{{ u.id % 70 }}.jpg" class="user-avatar-img" alt="{{ u.prenom }} {{ u.nom }}" onerror="this.src='https://ui-avatars.com/api/?background=2e7d52&color=fff&name={{ u.prenom }}+{{ u.nom }}'">
+                                <div>
+                                    <strong>{{ u.prenom }} {{ u.nom }}</strong>
+                                    {% if u.id == app.user.id %}<span class="badge bg-info ms-1">Vous</span>{% endif %}
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ u.email }}</td>
+                        <td>{{ u.telephone ?? '—' }}</td>
+                        <td>{{ u.ville ?? '—' }}</td>
+                        <td>
+                            <span class="badge-role {% if u.role in ['ADMINISTRATEUR', 'ROLE_ADMIN'] %}badge-admin{% elseif u.role in ['AGRICULTEUR', 'ROLE_AGRICULTEUR'] %}badge-agri{% else %}badge-client{% endif %}">
+                                {% if u.role in ['ADMINISTRATEUR', 'ROLE_ADMIN'] %}<i class="fas fa-crown"></i>Admin
+                                {% elseif u.role in ['AGRICULTEUR', 'ROLE_AGRICULTEUR'] %}<i class="fas fa-tractor"></i>Agriculteur
+                                {% else %}<i class="fas fa-user"></i>Client{% endif %}
+                            </span>
+                         </td>
+                        <td>
+                            <span class="badge-status {{ u.actif ? 'badge-active' : 'badge-inactive' }}">
+                                <i class="fas {{ u.actif ? 'fa-check-circle' : 'fa-ban' }} me-1"></i>{{ u.actif ? 'Actif' : 'Inactif' }}
+                            </span>
+                         </td>
+                        <td class="text-muted small"><i class="far fa-calendar-alt me-1"></i>{{ u.dateCreation|date('d/m/Y') }}</td>
+                        <td class="text-center">
+                            <div class="d-flex gap-1 justify-content-center">
+                                <a href="{{ path('admin_user_edit', {id: u.id}) }}" class="btn btn-outline-primary action-btn" title="Modifier"><i class="fas fa-edit"></i></a>
+                                <form method="post" action="{{ path('admin_user_toggle', {id: u.id}) }}" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('toggle' ~ u.id) }}">
+                                    <button type="submit" class="btn btn-outline-warning action-btn" title="{{ u.actif ? 'Désactiver' : 'Activer' }}">
+                                        <i class="fas {{ u.actif ? 'fa-toggle-on' : 'fa-toggle-off' }}"></i>
+                                    </button>
+                                </form>
+                                {% if u.email != app.user.email %}
+                                    <form method="post" action="{{ path('admin_user_delete', {id: u.id}) }}" onsubmit="return confirm('Supprimer définitivement {{ u.prenom }} {{ u.nom }} ?')" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ u.id) }}">
+                                        <button type="submit" class="btn btn-outline-danger action-btn" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </td>
+                    记
+                {% else %}
+                    <tr>
+                        <td colspan="9" class="text-center py-5 text-muted">
+                            <i class="fas fa-user-slash fa-3x mb-2"></i>
+                            <p class="mb-0">Aucun utilisateur trouvé</p>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {# ── Pagination manuelle (si plusieurs pages) ─────────────────── #}
+    {% if pagination.pages is defined and pagination.pages > 1 %}
+        {% set queryParams = { search: search|default(''), role: role|default(''), status: status|default('') } %}
+        <div class="pagination-shell mt-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                <div class="small text-muted">
+                    {% set firstItem = ((pagination.page - 1) * pagination.limit) + 1 %}
+                    {% set lastItem = pagination.page * pagination.limit %}
+                    {% if lastItem > pagination.total %}
+                        {% set lastItem = pagination.total %}
+                    {% endif %}
+                    Affichage de {{ firstItem }} à {{ lastItem }} sur {{ pagination.total }} utilisateurs
+                </div>
+                <nav aria-label="Pagination des utilisateurs">
+                    <ul class="pagination mb-0">
+                        <li class="page-item {{ pagination.page == 1 ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ path('admin_users', queryParams|merge({page: pagination.page - 1})) }}">Précédent</a>
+                        </li>
+                        {% for p in 1..pagination.pages %}
+                            <li class="page-item {{ p == pagination.page ? 'active' : '' }}">
+                                <a class="page-link" href="{{ path('admin_users', queryParams|merge({page: p})) }}">{{ p }}</a>
+                            </li>
+                        {% endfor %}
+                        <li class="page-item {{ pagination.page == pagination.pages ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ path('admin_users', queryParams|merge({page: pagination.page + 1})) }}">Suivant</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+    AOS.init({ duration: 600, once: true });
+</script>
+{% endblock %}

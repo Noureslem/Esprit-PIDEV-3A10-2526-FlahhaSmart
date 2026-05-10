@@ -1,0 +1,43 @@
+{% for operation in operations %}
+<tr>
+
+<td>
+<strong>{{ operation.typeOperation }}</strong>
+</td>
+
+<td>
+{{ operation.equipement ? operation.equipement.nom : '-' }}
+</td>
+
+<td>
+{{ operation.dateDebut ? operation.dateDebut|date('d/m/Y') : '-' }}
+</td>
+
+<td>
+{{ operation.dateFin ? operation.dateFin|date('d/m/Y') : '-' }}
+</td>
+
+<td>
+<span class="badge badge-status-{{ operation.statut|lower|replace({' ': '_', 'é':'e'}) }}">
+{{ operation.statut }}
+</span>
+</td>
+
+<td>
+
+<a href="{{ path('app_operation_edit', {'id': operation.id}) }}"
+class="btn btn-outline-warning btn-action">
+<i class="bi bi-pencil"></i>
+</a>
+
+</td>
+
+</tr>
+
+{% else %}
+
+<tr>
+<td colspan="6">Aucune opération trouvée</td>
+</tr>
+
+{% endfor %}

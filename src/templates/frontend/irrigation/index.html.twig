@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Irrigation intelligente{% endblock %}
+{% block navbar_title %}Irrigation intelligente{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+
+{% block body %}
+    {% include 'frontend/irrigation/_module.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/irrigation.js') }}" defer></script>
+{% endblock %}

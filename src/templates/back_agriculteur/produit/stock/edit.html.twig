@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le stock - agriculteur{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h2 class="card-title text-success fw-bold mb-4">
+                        <i class="fa-solid fa-pen-to-square me-2"></i>Modifier le stock
+                    </h2>
+
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                        {{ form_errors(form) }}
+
+                        <div class="mb-3">
+                            {{ form_label(form.typeProduit) }}
+                            {{ form_widget(form.typeProduit, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.typeProduit) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.variete) }}
+                            {{ form_widget(form.variete, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.variete) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.dateDebut) }}
+                            {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.dateDebut) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.dateFinEstimee) }}
+                            {{ form_widget(form.dateFinEstimee, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.dateFinEstimee) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.statut) }}
+                            {{ form_widget(form.statut, {'attr': {'class': 'form-select'}}) }}
+                            {{ form_errors(form.statut) }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Agriculteur</label>
+                            <input type="text" class="form-control" value="{{ stock.user ? stock.user.nom : '' }}" disabled>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="submit" class="btn btn-success px-4">Mettre à jour</button>
+                            <a href="{{ path('agriculteur_stock_index') }}" class="btn btn-outline-secondary">Annuler</a>
+                        </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

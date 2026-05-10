@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Form\article;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class ImageUploadType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('image', FileType::class, [
+                'label' => 'Choisir une image du produit',
+                'mapped' => false,
+                'required' => true,
+                'attr' => [
+                    'accept' => 'image/jpeg,image/png,image/webp,image/gif',
+                    'class' => 'form-control',
+                ],
+            ])
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([]);
+    }
+}

@@ -1,0 +1,88 @@
+<!-- Opérations Tab Content -->
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="page-title mb-0">
+            <i class="bi bi-clipboard-check me-2"></i>{{ 'operation.index.title'|trans }}
+        </h2>
+    </div>
+    <div class="d-flex gap-2">
+        <button type="submit"
+                class="btn btn-danger"
+                form="operation-bulk-delete-form"
+                data-bulk-delete-trigger
+                data-confirm-message="{{ 'operation.bulk.confirm'|trans }}">
+            <i class="bi bi-trash me-1"></i>
+            {{ 'app.actions.delete_selection'|trans }}
+        </button>
+        <a href="{{ path('app_operation_new') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i>
+            {{ 'app.actions.new_operation'|trans }}
+        </a>
+    </div>
+</div>
+
+<!-- Formulaire de suppression en masse -->
+<form method="post" id="operation-bulk-delete-form" class="d-none">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete') }}">
+    <input type="hidden" name="ids" value="">
+</form>
+
+<!-- Table des opérations -->
+{% if operations|length > 0 %}
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 40px;">
+                        <input type="checkbox" class="form-check-input" id="check-all" data-bulk-select-all>
+                    </th>
+                    <th>{{ 'operation.table.type'|trans }}</th>
+                    <th>{{ 'operation.table.status'|trans }}</th>
+                    <th>{{ 'operation.table.date'|trans }}</th>
+                    <th>{{ 'operation.table.equipement'|trans }}</th>
+                    <th style="width: 120px;">{{ 'common.actions'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for operation in operations %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="form-check-input bulk-select-item" data-bulk-item-id="{{ operation.id }}">
+                        </td>
+                        <td><strong>{{ operation.typeOperation }}</strong></td>
+                        <td>
+                            <span class="badge bg-{% if operation.statut == 'Completed' %}success{% elseif operation.statut == 'In Progress' %}info{% else %}warning{% endif %}">
+                                {{ operation.statut }}
+                            </span>
+                        </td>
+                        <td>{{ operation.dateDebut ? operation.dateDebut|date('d/m/Y') : '-' }}</td>
+                        <td>{{ operation.equipement ? operation.equipement.nom : '-' }}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a href="{{ path('app_operation_show', {id: operation.id}) }}" class="btn btn-outline-primary" title="{{ 'common.view'|trans }}">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ path('app_operation_edit', {id: operation.id}) }}" class="btn btn-outline-warning" title="{{ 'common.edit'|trans }}">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form method="post" action="{{ path('app_operation_delete', {id: operation.id}) }}" style="display:inline;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ operation.id) }}">
+                                    <button type="submit" class="btn btn-outline-danger delete-btn" title="{{ 'common.delete'|trans }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle me-2"></i>
+        {{ 'operation.index.empty'|trans }}
+        <a href="{{ path('app_operation_new') }}" class="alert-link">{{ 'app.actions.create_now'|trans }}</a>
+    </div>
+{% endif %}

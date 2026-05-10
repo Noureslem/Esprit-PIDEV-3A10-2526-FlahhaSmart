@@ -1,0 +1,312 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Operations — FlahaSmart{% endblock %}
+{% block page_title %}{{ 'nav.operations'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .kpi-label { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; opacity: .75; }
+        .kpi-value { font-size: 1.9rem; font-weight: 800; }
+        .priority-badge { font-size: .7rem; font-weight: 700; padding: .2rem .55rem; border-radius: 999px; }
+        .priority-critical { background: #fee2e2; color: #991b1b; }
+        .priority-high { background: #fef3c7; color: #92400e; }
+        .priority-normal { background: #dcfce7; color: #166534; }
+        .priority-done { background: #e2e8f0; color: #475569; }
+        .timeline { display: flex; flex-direction: column; gap: .75rem; }
+        .timeline-item { display: flex; gap: .75rem; align-items: flex-start; }
+        .timeline-dot { width: 10px; height: 10px; border-radius: 50%; background: #94a3b8; margin-top: .45rem; }
+        .timeline-dot.status-en_cours { background: #22c55e; }
+        .timeline-dot.status-termine { background: #94a3b8; }
+        .timeline-dot.status-en_attente { background: #f59e0b; }
+        .chart-wrap { height: 260px; }
+        .table thead th { white-space: nowrap; }
+        .filter-card { background: #fff; border-radius: 14px; border: 1px solid #e2e8f0; }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">{{ 'nav.operations'|trans }}</h2>
+        <p class="text-muted small mb-0">Pilotage global des operations terrain</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ path('app_operation_new') }}" class="btn btn-success">
+            <i class="bi bi-plus-lg me-1"></i> Nouvelle operation
+        </a>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-2">
+        <div class="stat-card" style="--c1:#1a3c34;--c2:#2e7d52;">
+            <div class="kpi-label">Total</div>
+            <div class="kpi-value" data-count="{{ stats.total }}">0</div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-2">
+        <div class="stat-card" style="--c1:#1a6e35;--c2:#3aad74;">
+            <div class="kpi-label">Actives</div>
+            <div class="kpi-value" data-count="{{ stats.inProgress }}">0</div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-2">
+        <div class="stat-card" style="--c1:#1a4fa0;--c2:#2196f3;">
+            <div class="kpi-label">Terminees</div>
+            <div class="kpi-value" data-count="{{ stats.completed }}">0</div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-2">
+        <div class="stat-card" style="--c1:#991b1b;--c2:#ef4444;">
+            <div class="kpi-label">Critiques</div>
+            <div class="kpi-value" data-count="{{ stats.critical }}">0</div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-2">
+        <div class="stat-card" style="--c1:#92400e;--c2:#f59e0b;">
+            <div class="kpi-label">Taux reussite</div>
+            <div class="kpi-value">{{ stats.successRate }}%</div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-2">
+        <div class="stat-card" style="--c1:#0f172a;--c2:#475569;">
+            <div class="kpi-label">Temps moyen</div>
+            <div class="kpi-value">{{ stats.avgDurationDays }}j</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card p-3 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="mb-0 fw-bold">Repartition des statuts</h6>
+                <span class="badge bg-success-subtle text-success">Live</span>
+            </div>
+            <div class="chart-wrap">
+                <canvas id="operationsStatusChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card p-3 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="mb-0 fw-bold">Timeline a venir</h6>
+                <span class="text-muted small">{{ upcomingOperations|length }} ops</span>
+            </div>
+            <div class="timeline">
+                {% for item in upcomingOperations %}
+                    {% set op = item.operation %}
+                    {% set statusClass = op.statut|lower|replace({' ': '_', 'é': 'e'}) %}
+                    <div class="timeline-item">
+                        <span class="timeline-dot status-{{ statusClass }}"></span>
+                        <div>
+                            <div class="fw-semibold">{{ op.typeOperation }}</div>
+                            <div class="text-muted small">{{ op.dateDebut|date('d/m/Y') }} → {{ op.dateFin|date('d/m/Y') }}</div>
+                            <div class="text-muted small">Reste: {{ item.daysRemaining }}j</div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="text-muted small">Aucune operation a venir.</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card p-3 mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="mb-0 fw-bold">Historique recent</h6>
+        <span class="badge bg-secondary">Performance {{ stats.performance }}%</span>
+    </div>
+    <div class="row g-2">
+        {% for op in recentOperations %}
+            <div class="col-md-4">
+                <div class="p-3 border rounded-3 bg-light h-100">
+                    <div class="fw-semibold">{{ op.typeOperation }}</div>
+                    <div class="text-muted small">{{ op.dateDebut|date('d/m/Y') }} → {{ op.dateFin|date('d/m/Y') }}</div>
+                    <span class="badge badge-status-{{ op.statut|lower|replace({' ': '_', 'é': 'e'}) }}">{{ op.statut }}</span>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-muted small mb-0">Aucun historique.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="filter-card p-3 mt-4">
+    <form method="get" class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label">Recherche</label>
+            <input type="text" name="q" class="form-control" value="{{ filters.q }}" placeholder="Type, equipement, ID utilisateur">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Statut</label>
+            <select name="statut" class="form-select">
+                <option value="">Tous</option>
+                {% for s in statuts %}
+                    <option value="{{ s }}" {% if filters.statut == s %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Priorite</label>
+            <select name="priority" class="form-select">
+                <option value="">Toutes</option>
+                <option value="critical" {% if filters.priority == 'critical' %}selected{% endif %}>Critique</option>
+                <option value="high" {% if filters.priority == 'high' %}selected{% endif %}>Haute</option>
+                <option value="normal" {% if filters.priority == 'normal' %}selected{% endif %}>Normale</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Limite</label>
+            <select name="limit" class="form-select">
+                {% for option in [10,20,50,100] %}
+                    <option value="{{ option }}" {% if filters.limit == option %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Debut</label>
+            <input type="text" name="start" class="form-control js-flatpickr" value="{{ filters.start }}" placeholder="YYYY-MM-DD">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Fin</label>
+            <input type="text" name="end" class="form-control js-flatpickr" value="{{ filters.end }}" placeholder="YYYY-MM-DD">
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-search me-1"></i> Filtrer
+            </button>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <a href="{{ path('admin_operations') }}" class="btn btn-outline-secondary w-100">
+                <i class="bi bi-arrow-counterclockwise me-1"></i> Reinitialiser
+            </a>
+        </div>
+    </form>
+</div>
+
+<div class="table-container mt-4">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Equipement</th>
+                    <th>Utilisateur</th>
+                    <th>
+                        Debut
+                        <span class="sort-links">
+                            <a href="{{ path('admin_operations', filters|merge({'sort': 'date_debut', 'direction': 'ASC'})) }}" class="sort-link">▲</a>
+                            <a href="{{ path('admin_operations', filters|merge({'sort': 'date_debut', 'direction': 'DESC'})) }}" class="sort-link">▼</a>
+                        </span>
+                    </th>
+                    <th>
+                        Fin
+                        <span class="sort-links">
+                            <a href="{{ path('admin_operations', filters|merge({'sort': 'date_fin', 'direction': 'ASC'})) }}" class="sort-link">▲</a>
+                            <a href="{{ path('admin_operations', filters|merge({'sort': 'date_fin', 'direction': 'DESC'})) }}" class="sort-link">▼</a>
+                        </span>
+                    </th>
+                    <th>Statut</th>
+                    <th>Priorite</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for operation in operations %}
+                {% set meta = operationMeta[operation.id] ?? null %}
+                <tr>
+                    <td><strong>{{ operation.typeOperation }}</strong></td>
+                    <td>{{ operation.equipement ? operation.equipement.nom : '-' }}</td>
+                    <td>{{ userNames[operation.idUser]|default('Utilisateur #' ~ operation.idUser) }}</td>
+                    <td>{{ operation.dateDebut ? operation.dateDebut|date('d/m/Y') : '-' }}</td>
+                    <td>{{ operation.dateFin ? operation.dateFin|date('d/m/Y') : '-' }}</td>
+                    <td>
+                        <span class="badge badge-status-{{ operation.statut|lower|replace({' ': '_', 'é': 'e'}) }}">
+                            {{ operation.statut }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if meta %}
+                            <span class="priority-badge priority-{{ meta.priority }}">{{ meta.priorityLabel }}</span>
+                            {% if meta.daysRemaining is not null %}
+                                <div class="text-muted small">{{ meta.daysRemaining }}j</div>
+                            {% endif %}
+                        {% else %}
+                            <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">
+                        <div class="empty-state">
+                            <i class="bi bi-inbox d-block"></i>
+                            <p class="mb-0">Aucune operation trouvee.</p>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% if pagination.totalPages > 1 %}
+<nav class="mt-3">
+    <ul class="pagination justify-content-center">
+        <li class="page-item {% if pagination.page == 1 %}disabled{% endif %}">
+            <a class="page-link" href="{{ path('admin_operations', filters|merge({'page': pagination.page - 1})) }}">Precedent</a>
+        </li>
+        {% for p in 1..pagination.totalPages %}
+            <li class="page-item {% if p == pagination.page %}active{% endif %}">
+                <a class="page-link" href="{{ path('admin_operations', filters|merge({'page': p})) }}">{{ p }}</a>
+            </li>
+        {% endfor %}
+        <li class="page-item {% if pagination.page == pagination.totalPages %}disabled{% endif %}">
+            <a class="page-link" href="{{ path('admin_operations', filters|merge({'page': pagination.page + 1})) }}">Suivant</a>
+        </li>
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+    document.querySelectorAll('[data-count]').forEach(el => {
+        const target = parseInt(el.dataset.count, 10) || 0;
+        let current = 0;
+        const step = Math.ceil(target / 40) || 1;
+        const timer = setInterval(() => {
+            current = Math.min(current + step, target);
+            el.textContent = current.toLocaleString('fr-FR');
+            if (current >= target) clearInterval(timer);
+        }, 30);
+    });
+
+    const statusData = {{ charts.status|json_encode|raw }};
+    const chartEl = document.getElementById('operationsStatusChart');
+    if (chartEl && statusData.labels.length) {
+        new Chart(chartEl, {
+            type: 'doughnut',
+            data: {
+                labels: statusData.labels,
+                datasets: [{
+                    data: statusData.data,
+                    backgroundColor: statusData.backgroundColor,
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+    }
+</script>
+{% endblock %}

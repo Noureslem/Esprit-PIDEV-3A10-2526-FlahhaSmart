@@ -1,0 +1,233 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Modération Forum — FlahaSmart{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .kpi-card { border-radius: 16px; padding: 1.5rem; color: #fff; position: relative; overflow: hidden; }
+    .kpi-threads { background: linear-gradient(135deg, #1565a8, #2196f3); }
+    .kpi-comments { background: linear-gradient(135deg, #7a3e9d, #9d5ccc); }
+    .kpi-users { background: linear-gradient(135deg, #2e7d52, #3aad74); }
+    .kpi-ai { background: linear-gradient(135deg, #bf6a00, #f9a825); }
+    .kpi-bg-icon { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); font-size: 3.5rem; opacity: .15; }
+    .kpi-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; opacity: .8; margin-bottom: .25rem; }
+    .kpi-value { font-size: 2.5rem; font-weight: 900; line-height: 1; margin-bottom: .5rem; }
+    .kpi-link { font-size: .75rem; font-weight: 700; color: rgba(255,255,255,.8); text-decoration: none; }
+    .kpi-link:hover { color: #fff; }
+    .panel { background: #fff; border-radius: 16px; border: 1px solid #f1f5f9; padding: 1.5rem; box-shadow: 0 1px 6px rgba(0,0,0,.05); }
+    .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; padding-bottom: .75rem; border-bottom: 1px solid #f1f5f9; }
+    .panel-title { font-weight: 700; font-size: .95rem; display: flex; align-items: center; gap: .5rem; }
+    .thread-item { display: flex; align-items: center; gap: .75rem; padding: .75rem 0; border-bottom: 1px solid #f8fafc; }
+    .thread-item:last-child { border-bottom: none; }
+    .sentiment-dot { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .sentiment-positif { background: #dcfce7; }
+    .sentiment-negatif { background: #fee2e2; }
+    .sentiment-neutre { background: #f1f5f9; }
+    .mod-input { border: 1px solid #e2e8f0; border-radius: 12px; padding: .75rem; width: 100%; font-size: .85rem; resize: vertical; }
+    .mod-input:focus { outline: none; border-color: #16a34a; box-shadow: 0 0 0 3px rgba(22,163,74,.1); }
+    .btn-analyze { background: #16a34a; color: #fff; border: none; border-radius: 10px; padding: .5rem 1.25rem; font-weight: 700; font-size: .85rem; cursor: pointer; margin-top: .5rem; transition: .2s; }
+    .btn-analyze:hover { background: #15803d; }
+    .mod-result { margin-top: 1rem; padding: 1rem; border-radius: 12px; font-size: .85rem; }
+    .mod-safe { background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d; }
+    .mod-toxic { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; }
+    .chart-container { height: 220px; position: relative; }
+</style>
+{% endblock %}
+
+{% block body %}
+{# Header #}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-black mb-1">⚡ Modération Forum</h2>
+        <p class="text-muted small mb-0">Vue d'ensemble en temps réel — FlahaSmart Forum</p>
+    </div>
+    <a href="{{ path('admin_ai_moderation') }}" class="btn btn-success rounded-3 fw-bold">
+        <i class="fas fa-robot me-2"></i>Lancer l'IA
+    </a>
+</div>
+
+{# KPI Cards #}
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="kpi-card kpi-threads">
+            <div class="kpi-bg-icon">💬</div>
+            <p class="kpi-label">Threads actifs</p>
+            <p class="kpi-value" data-count="{{ threadCount }}">0</p>
+            <a href="{{ path('forum_admin_threads') }}" class="kpi-link">Gérer →</a>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="kpi-card kpi-comments">
+            <div class="kpi-bg-icon">🗨️</div>
+            <p class="kpi-label">Commentaires</p>
+            <p class="kpi-value" data-count="{{ commentCount }}">0</p>
+            <a href="{{ path('forum_admin_commentaires') }}" class="kpi-link">Gérer →</a>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="kpi-card kpi-users">
+            <div class="kpi-bg-icon">👥</div>
+            <p class="kpi-label">Utilisateurs</p>
+            <p class="kpi-value" data-count="{{ userCount }}">0</p>
+            <a href="{{ path('forum_admin_users') }}" class="kpi-link">Gérer →</a>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="kpi-card kpi-ai">
+            <div class="kpi-bg-icon">🤖</div>
+            <p class="kpi-label">Modération IA</p>
+            <p class="kpi-value" id="ai-flagged">—</p>
+            <span class="kpi-link" id="ai-status">Chargement…</span>
+        </div>
+    </div>
+</div>
+
+{# Main Grid #}
+<div class="row g-4">
+    {# Chart #}
+    <div class="col-lg-8">
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title"><i class="fas fa-chart-line text-success"></i>Évolution 7 jours</span>
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-secondary tab active" data-type="line">Ligne</button>
+                    <button class="btn btn-outline-secondary tab" data-type="bar">Barres</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="mainChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    {# Modération IA #}
+    <div class="col-lg-4">
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title"><i class="fas fa-shield-alt text-success"></i>Analyse IA</span>
+                <span class="badge bg-success-subtle text-success">Live</span>
+            </div>
+            <label class="text-muted small fw-bold d-block mb-2">Analyser un texte</label>
+            <textarea id="mod-input" class="mod-input" rows="3" placeholder="Saisissez un commentaire à analyser…"></textarea>
+            <button id="mod-analyze-btn" class="btn-analyze">
+                <span class="btn-text"><i class="fas fa-robot me-1"></i>Analyser</span>
+                <span class="btn-loader d-none">⏳</span>
+            </button>
+            <div id="mod-result" class="mod-result d-none"></div>
+        </div>
+    </div>
+
+    {# Derniers threads #}
+    <div class="col-12">
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title"><i class="fas fa-comments text-success"></i>Derniers threads</span>
+                <a href="{{ path('forum_admin_threads') }}" class="text-success fw-bold small text-decoration-none">Tout voir →</a>
+            </div>
+            {% for thread in recentThreads %}
+            <div class="thread-item">
+                <div class="sentiment-dot sentiment-{{ thread.sentiment ?? 'neutre' }}">
+                    {{ thread.sentiment == 'positif' ? '😊' : (thread.sentiment == 'negatif' ? '😟' : '😐') }}
+                </div>
+                <div class="flex-grow-1">
+                    <a href="{{ path('thread_show', {id: thread.idThread}) }}" class="fw-bold text-decoration-none text-dark small">
+                        {{ thread.titre|slice(0,60) }}{% if thread.titre|length > 60 %}…{% endif %}
+                    </a>
+                    <div class="text-muted" style="font-size:.7rem;">{{ thread.dateCreation|date('d/m/Y à H:i') }}</div>
+                </div>
+                <form method="post" action="{{ path('forum_admin_thread_delete', {id: thread.idThread}) }}" onsubmit="return confirm('Supprimer ?')">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ thread.idThread) }}">
+                    <button class="btn btn-sm btn-outline-danger rounded-3">🗑</button>
+                </form>
+            </div>
+            {% else %}
+            <p class="text-muted text-center py-3">Aucun thread pour l'instant.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+    // Counter animation
+    document.querySelectorAll('.kpi-value[data-count]').forEach(el => {
+        const target = parseInt(el.dataset.count);
+        let current = 0;
+        const step = Math.ceil(target / 40) || 1;
+        const timer = setInterval(() => {
+            current = Math.min(current + step, target);
+            el.textContent = current.toLocaleString('fr-FR');
+            if (current >= target) clearInterval(timer);
+        }, 30);
+    });
+
+    // Chart
+    let mainChart = null;
+    async function loadChart(type = 'line') {
+        try {
+            const res = await fetch('/api/stats/overview');
+            const data = await res.json();
+            document.getElementById('ai-flagged').textContent = data.flagged_comments ?? '0';
+            document.getElementById('ai-status').textContent = 'Signalements / ' + (data.comments ?? '0');
+            const labels = data.evolution.map(i => new Date(i.date).toLocaleDateString('fr-FR', {day:'2-digit', month:'short'}));
+            const values = data.evolution.map(i => i.count);
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            if (mainChart) mainChart.destroy();
+            mainChart = new Chart(ctx, {
+                type,
+                data: {
+                    labels,
+                    datasets: [{ label: 'Nouveaux threads', data: values, borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,0.1)', borderWidth: 2.5, tension: 0.4, fill: type === 'line', pointBackgroundColor: '#16a34a', pointRadius: 4 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+            });
+        } catch(e) { console.error('Chart error', e); }
+    }
+
+    document.querySelectorAll('.tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            loadChart(btn.dataset.type);
+        });
+    });
+    loadChart();
+
+    // IA Analyse
+    document.getElementById('mod-analyze-btn').addEventListener('click', async () => {
+        const text = document.getElementById('mod-input').value.trim();
+        if (!text) return;
+        const btn = document.getElementById('mod-analyze-btn');
+        btn.querySelector('.btn-text').classList.add('d-none');
+        btn.querySelector('.btn-loader').classList.remove('d-none');
+        btn.disabled = true;
+        const resultDiv = document.getElementById('mod-result');
+        resultDiv.classList.add('d-none');
+        try {
+            const res = await fetch('/api/moderate-preview', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ text })
+            });
+            const data = await res.json();
+            const sentimentEmoji = data.sentiment === 'positive' ? '😊 Positif' : data.sentiment === 'negative' ? '😟 Négatif' : '😐 Neutre';
+            resultDiv.className = `mod-result ${data.toxic ? 'mod-toxic' : 'mod-safe'}`;
+            resultDiv.innerHTML = `<strong>${data.toxic ? '🚨 Contenu signalé' : '✅ Contenu approuvé'}</strong><br>
+                <small>Sentiment : ${sentimentEmoji}</small>
+                ${data.reason ? `<br><small>${data.reason}</small>` : ''}`;
+            resultDiv.classList.remove('d-none');
+        } catch(e) {
+            const lower = text.toLowerCase();
+            const isBad = ['idiot','nul','merde','stupide'].some(w => lower.includes(w));
+            resultDiv.className = `mod-result ${isBad ? 'mod-toxic' : 'mod-safe'}`;
+            resultDiv.innerHTML = `<strong>${isBad ? '🚨 Contenu signalé' : '✅ Contenu approuvé'}</strong> <small>(analyse locale)</small>`;
+            resultDiv.classList.remove('d-none');
+        }
+        btn.querySelector('.btn-text').classList.remove('d-none');
+        btn.querySelector('.btn-loader').classList.add('d-none');
+        btn.disabled = false;
+    });
+</script>
+{% endblock %}

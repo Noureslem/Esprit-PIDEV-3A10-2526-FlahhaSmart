@@ -1,0 +1,249 @@
+{% extends 'base.html.twig' %}
+{% block title %}Nouveau Stock - Agriculteur{% endblock %}
+{% block body %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-header bg-success text-white rounded-4 rounded-bottom-0">
+                    <h2 class="h4 mb-0">
+                        <i class="fa-solid fa-plus-circle me-2"></i>Ajouter un Stock Produit
+                    </h2>
+                </div>
+                <div class="card-body p-4">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                        
+                        {% for field in form %}
+                            {% if field.vars.name != '_token' %}
+                                <div class="mb-3">
+                                    {{ form_label(field, null, {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                                    <div class="input-group">
+                                        {% set fieldId = field.vars.id|default(field.vars.name) %}
+                                        {{ form_widget(field, {'attr': {'class': 'form-control rounded-3', 'id': fieldId}}) }}
+                                        {% if field.vars.name == 'typeProduit' or field.vars.name == 'variete' %}
+                                        <button type="button" class="btn btn-outline-primary mic-btn" data-target="{{ fieldId }}" style="border-radius: 0 8px 8px 0;">
+                                            <i class="fa-solid fa-microphone"></i>
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                    {{ form_errors(field) }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        <button class="btn btn-success w-100 py-2 rounded-3 mt-3">
+                            <i class="fa-solid fa-save me-2"></i>Enregistrer le Stock
+                        </button>
+                    {{ form_end(form) }}
+                    
+                    <a href="{{ path('agriculteur_stock_index') }}" class="d-block text-center mt-3 text-muted text-decoration-none">
+                        <i class="fa-solid fa-arrow-left me-1"></i>Retour à la liste
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SECTION MÉTÉO ET CONSEILS -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 rounded-4 mb-3">
+                <div class="card-header bg-info text-white rounded-4 rounded-bottom-0">
+                    <h3 class="h5 mb-0">
+                        <i class="fa-solid fa-cloud-sun me-2"></i>Météo Agricole
+                    </h3>
+                </div>
+               
+            </div>
+            
+           
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Script chargé - Recherche des boutons micro...');
+    
+    // Vérifier si le navigateur supporte la reconnaissance vocale
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+        console.error('Reconnaissance vocale non supportée par ce navigateur');
+        alert('Votre navigateur ne supporte pas la reconnaissance vocale. Utilisez Chrome, Edge ou Safari.');
+        return;
+    }
+    
+    console.log('Reconnaissance vocale supportée');
+    
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'fr-FR';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    
+    let activeInput = null;
+    let activeButton = null;
+    let isListening = false;
+    
+    // Trouver tous les boutons micro
+    const micButtons = document.querySelectorAll('.mic-btn');
+    console.log('Boutons micro trouvés:', micButtons.length);
+    
+    if (micButtons.length === 0) {
+        console.warn('Aucun bouton micro trouvé ! Vérifiez les noms des champs.');
+        return;
+    }
+    
+    micButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const targetId = this.getAttribute('data-target');
+            console.log('Bouton cliqué - target:', targetId);
+            
+            activeInput = document.getElementById(targetId);
+            
+            if (!activeInput) {
+                console.error('Champ non trouvé avec ID:', targetId);
+                alert('Erreur: champ non trouvé');
+                return;
+            }
+            
+            console.log('Champ trouvé:', activeInput);
+            
+            if (isListening) {
+                console.log('Arrêt de l\'écoute');
+                recognition.stop();
+                return;
+            }
+            
+            activeButton = this;
+            
+            // Changer le style
+            this.innerHTML = '<i class="fa-solid fa-microphone-slash"></i>';
+            this.classList.remove('btn-outline-primary');
+            this.classList.add('btn-danger');
+            
+            // Feedback visuel
+            activeInput.placeholder = '🎤 Parlez maintenant...';
+            activeInput.style.backgroundColor = '#fff3cd';
+            activeInput.focus();
+            
+            try {
+                recognition.start();
+                isListening = true;
+                console.log('Reconnaissance démarrée');
+            } catch (error) {
+                console.error('Erreur au démarrage:', error);
+                resetMic();
+                alert('Erreur: ' + error.message);
+            }
+        });
+    });
+    
+    recognition.onstart = function() {
+        console.log('Reconnaissance en cours...');
+    };
+    
+    recognition.onresult = function(event) {
+        console.log('Résultat reçu', event);
+        const transcript = event.results[0][0].transcript;
+        console.log('Texte reconnu:', transcript);
+        
+        if (activeInput) {
+            activeInput.value = transcript.charAt(0).toUpperCase() + transcript.slice(1);
+            activeInput.style.backgroundColor = '';
+            activeInput.placeholder = '';
+            activeInput.dispatchEvent(new Event('input'));
+            activeInput.dispatchEvent(new Event('change'));
+        }
+        
+        resetMic();
+    };
+    
+    recognition.onerror = function(event) {
+        console.error('Erreur reconnaissance:', event.error);
+        
+        let errorMessage = '';
+        switch(event.error) {
+            case 'no-speech':
+                errorMessage = 'Aucune parole détectée';
+                break;
+            case 'audio-capture':
+                errorMessage = 'Microphone non trouvé';
+                break;
+            case 'not-allowed':
+                errorMessage = 'Permission microphone refusée';
+                break;
+            case 'network':
+                errorMessage = 'Erreur réseau';
+                break;
+            default:
+                errorMessage = 'Erreur: ' + event.error;
+        }
+        
+        if (activeInput) {
+            activeInput.placeholder = errorMessage;
+            activeInput.style.backgroundColor = '#f8d7da';
+            setTimeout(() => {
+                if (activeInput) {
+                    activeInput.placeholder = '';
+                    activeInput.style.backgroundColor = '';
+                }
+            }, 2000);
+        }
+        
+        resetMic();
+    };
+    
+    recognition.onend = function() {
+        console.log('Reconnaissance terminée');
+        resetMic();
+    };
+    
+    function resetMic() {
+        isListening = false;
+        
+        if (activeButton) {
+            activeButton.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+            activeButton.classList.remove('btn-danger');
+            activeButton.classList.add('btn-outline-primary');
+        }
+        
+        if (activeInput && activeInput.placeholder === '🎤 Parlez maintenant...') {
+            activeInput.placeholder = '';
+            activeInput.style.backgroundColor = '';
+        }
+        
+        activeButton = null;
+        activeInput = null;
+    }
+});
+</script>
+
+<style>
+.mic-btn {
+    transition: all 0.3s ease;
+}
+.mic-btn.btn-danger {
+    animation: pulse 1.5s infinite;
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+</style>
+{% endblock %}

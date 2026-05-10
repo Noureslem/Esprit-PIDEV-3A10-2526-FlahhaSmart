@@ -1,0 +1,68 @@
+validators:
+  profile:
+    password:
+      mismatch: "كلمتا المرور غير متطابقتين."
+
+  article:
+    nom:
+      letters_spaces: "يجب أن يحتوي الاسم على أحرف ومسافات فقط."
+
+  equipement:
+    nom:
+      not_blank: "اسم المعدة مطلوب."
+      min_length: "يجب أن يكون الاسم على الأقل {{ limit }} أحرف."
+      invalid_chars: "يسمح في الاسم بالحروف والأرقام والمسافات والشرطات وعلامة الاقتباس فقط."
+    type:
+      not_blank: "نوع المعدة مطلوب."
+
+  operation:
+    type_operation:
+      not_blank: "نوع العملية مطلوب."
+      min_length: "يجب أن يحتوي نوع العملية على {{ limit }} أحرف على الأقل."
+      invalid_chars: "نوع العملية يحتوي على أحرف غير مسموح بها."
+    date_debut:
+      not_null: "تاريخ البداية مطلوب."
+      not_in_past: "لا يمكن أن يكون تاريخ البداية في الماضي."
+    date_fin:
+      not_null: "تاريخ النهاية مطلوب."
+      after_or_equal_date_debut: "يجب أن يكون تاريخ النهاية بعد أو مساوياً لتاريخ البداية."
+
+  common:
+    date:
+      invalid: "تاريخ غير صالح."
+
+  stock_produit:
+    type_produit:
+      not_blank: "نوع المنتج مطلوب."
+      max_length: "لا يمكن أن يتجاوز نوع المنتج {{ limit }} حرفاً."
+    variete:
+      not_blank: "الصنف مطلوب."
+    date_debut:
+      not_blank: "تاريخ البداية مطلوب."
+      before_date_fin_estimee: "يجب أن يكون تاريخ البداية قبل تاريخ النهاية المتوقع."
+    date_fin_estimee:
+      greater_than_date_debut: "يجب أن يكون تاريخ النهاية المتوقع بعد تاريخ البداية."
+    statut:
+      not_blank: "الحالة مطلوبة."
+      invalid_choice: "قيمة الحالة غير صالحة."
+    user:
+      not_null: "المستخدم مطلوب."
+
+  consommation:
+    surface:
+      not_blank: "المساحة مطلوبة."
+      positive: "يجب أن تكون المساحة أكبر من الصفر."
+    quantite_utilisee:
+      not_blank: "الكمية المستعملة مطلوبة."
+      positive_or_zero: "يجب أن تكون الكمية المستعملة صفراً أو قيمة موجبة."
+    unite:
+      not_blank: "الوحدة مطلوبة."
+      max_length: "لا يمكن أن تتجاوز الوحدة {{ limit }} حرفاً."
+    date_recolte:
+      not_blank: "تاريخ الحصاد مطلوب."
+      before_or_equal_date_utilisation: "يجب أن يكون تاريخ الحصاد قبل أو مساوياً لتاريخ الاستعمال."
+    date_utilisation:
+      not_blank: "تاريخ الاستعمال مطلوب."
+      after_or_equal_date_recolte: "يجب أن يكون تاريخ الاستعمال بعد أو مساوياً لتاريخ الحصاد."
+    stock_produit:
+      not_null: "مخزون المنتج مطلوب."

@@ -1,0 +1,68 @@
+validators:
+  profile:
+    password:
+      mismatch: "Passwords do not match."
+
+  article:
+    nom:
+      letters_spaces: "Name must contain only letters and spaces."
+
+  equipement:
+    nom:
+      not_blank: "Equipment name is required."
+      min_length: "Name must be at least {{ limit }} characters long."
+      invalid_chars: "Name may only contain letters, numbers, spaces, hyphens, and apostrophes."
+    type:
+      not_blank: "Equipment type is required."
+
+  operation:
+    type_operation:
+      not_blank: "Operation type is required."
+      min_length: "Operation type must be at least {{ limit }} characters long."
+      invalid_chars: "Operation type contains invalid characters."
+    date_debut:
+      not_null: "Start date is required."
+      not_in_past: "Start date cannot be in the past."
+    date_fin:
+      not_null: "End date is required."
+      after_or_equal_date_debut: "End date must be greater than or equal to the start date."
+
+  common:
+    date:
+      invalid: "Invalid date."
+
+  stock_produit:
+    type_produit:
+      not_blank: "Product type is required."
+      max_length: "Product type cannot exceed {{ limit }} characters."
+    variete:
+      not_blank: "Variety is required."
+    date_debut:
+      not_blank: "Start date is required."
+      before_date_fin_estimee: "Start date must be before the estimated end date."
+    date_fin_estimee:
+      greater_than_date_debut: "Estimated end date must be after the start date."
+    statut:
+      not_blank: "Status is required."
+      invalid_choice: "Invalid status."
+    user:
+      not_null: "User is required."
+
+  consommation:
+    surface:
+      not_blank: "Area is required."
+      positive: "Area must be strictly positive."
+    quantite_utilisee:
+      not_blank: "Used quantity is required."
+      positive_or_zero: "Used quantity must be positive or zero."
+    unite:
+      not_blank: "Unit is required."
+      max_length: "Unit cannot exceed {{ limit }} characters."
+    date_recolte:
+      not_blank: "Harvest date is required."
+      before_or_equal_date_utilisation: "Harvest date must be before or equal to usage date."
+    date_utilisation:
+      not_blank: "Usage date is required."
+      after_or_equal_date_recolte: "Usage date must be after or equal to harvest date."
+    stock_produit:
+      not_null: "Product stock is required."

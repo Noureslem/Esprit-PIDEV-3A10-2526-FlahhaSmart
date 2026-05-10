@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local env
+.env
+.env.*
+
+# Model artifacts (never commit weights)
+models/
+*.pt
+*.pth
+
+# IDE
+.vscode/
+.idea/

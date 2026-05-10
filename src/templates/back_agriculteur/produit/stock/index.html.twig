@@ -1,0 +1,215 @@
+{% extends 'base.html.twig' %}
+{% block title %}Stocks - Agriculteur{% endblock %}
+{% block body %}
+    <h3 class="text-dark fw-bold mb-4" style="font-size: 1.5rem;">Liste des stocks</h3>
+
+    <!-- Barre de recherche et tri -->
+    <div class="row mb-3 align-items-center">
+        <div class="col-md-5">
+            <form method="get" action="{{ path('agriculteur_stock_index') }}" class="input-group input-group-sm shadow-sm">
+                <span class="input-group-text bg-white border-end-0 text-success"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" name="search" class="form-control border-start-0 ps-0" placeholder="Rechercher (type ou variété)..." value="{{ search }}" style="font-size: 0.85rem;">
+                <button type="submit" class="btn btn-outline-success btn-sm">Filtrer</button>
+                {% if search %}
+                    <a href="{{ path('agriculteur_stock_index') }}" class="btn btn-outline-secondary btn-sm">Réinitialiser</a>
+                {% endif %}
+            </form>
+        </div>
+        <div class="col-md-7 text-md-end mt-2 mt-md-0">
+            <a href="{{ path('agriculteur_stock_new') }}" class="btn btn-success btn-sm shadow-sm fw-bold"><i class="fa-solid fa-plus me-1"></i> Nouveau stock</a>
+        </div>
+    </div>
+
+    <div class="table-responsive bg-white rounded shadow-sm border">
+        <table class="table table-hover table-custom mb-0">
+            <thead>
+                <tr>
+                    <th><a href="{{ path('agriculteur_stock_index', {page: stocks.currentPageNumber, search: search, sort: 'idProduit', direction: (sort == 'idProduit' and direction == 'asc') ? 'desc' : 'asc'}) }}" class="text-decoration-none text-dark">ID {% if sort == 'idProduit' %}{{ direction == 'asc' ? '▲' : '▼' }}{% endif %}</a></th>
+                    <th><a href="{{ path('agriculteur_stock_index', {page: stocks.currentPageNumber, search: search, sort: 'typeProduit', direction: (sort == 'typeProduit' and direction == 'asc') ? 'desc' : 'asc'}) }}" class="text-decoration-none text-dark">Type de Produit {% if sort == 'typeProduit' %}{{ direction == 'asc' ? '▲' : '▼' }}{% endif %}</a></th>
+                    <th><a href="{{ path('agriculteur_stock_index', {page: stocks.currentPageNumber, search: search, sort: 'variete', direction: (sort == 'variete' and direction == 'asc') ? 'desc' : 'asc'}) }}" class="text-decoration-none text-dark">Variété {% if sort == 'variete' %}{{ direction == 'asc' ? '▲' : '▼' }}{% endif %}</a></th>
+                    <th><a href="{{ path('agriculteur_stock_index', {page: stocks.currentPageNumber, search: search, sort: 'dateDebut', direction: (sort == 'dateDebut' and direction == 'asc') ? 'desc' : 'asc'}) }}" class="text-decoration-none text-dark">Date début {% if sort == 'dateDebut' %}{{ direction == 'asc' ? '▲' : '▼' }}{% endif %}</a></th>
+                    <th><a href="{{ path('agriculteur_stock_index', {page: stocks.currentPageNumber, search: search, sort: 'dateFinEstimee', direction: (sort == 'dateFinEstimee' and direction == 'asc') ? 'desc' : 'asc'}) }}" class="text-decoration-none text-dark">Date fin est. {% if sort == 'dateFinEstimee' %}{{ direction == 'asc' ? '▲' : '▼' }}{% endif %}</a></th>
+                    <th>Agriculteur</th>
+                    <th><a href="{{ path('agriculteur_stock_index', {page: stocks.currentPageNumber, search: search, sort: 'statut', direction: (sort == 'statut' and direction == 'asc') ? 'desc' : 'asc'}) }}" class="text-decoration-none text-dark">Statut {% if sort == 'statut' %}{{ direction == 'asc' ? '▲' : '▼' }}{% endif %}</a></th>
+                    <th>QR Code</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for stock in stocks %}
+                <tr>
+                    <td class="fw-bold">{{ stock.idProduit }}</td>
+                    <td>{{ stock.typeProduit }}</td>
+                    <td>{{ stock.variete }}</td>
+                    <td>{{ stock.dateDebut ? stock.dateDebut|date('d/m/Y') : '--' }}</td>
+                    <td>{{ stock.dateFinEstimee ? stock.dateFinEstimee|date('d/m/Y') : '--' }}</td>
+                    <td>{{ stock.user ? stock.user.nom : '--' }}</td>
+                    <td>
+                        <span class="badge {% if stock.statut == 'en cours' %}bg-primary{% elseif stock.statut == 'terminé' %}bg-success{% else %}bg-secondary{% endif %}" style="font-size: 0.70rem;">
+                            {{ stock.statut|capitalize }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if stock.codeQr %}
+                            <a href="{{ asset(stock.codeQr) }}" target="_blank"><i class="fa-solid fa-qrcode fa-lg text-success"></i></a>
+                        {% else %}
+                            <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex justify-content-end gap-1">
+                            <a href="{{ path('agriculteur_stock_edit', {'idProduit': stock.idProduit}) }}" class="btn btn-outline-primary btn-action">Modifier</a>
+                            <form method="post" action="{{ path('agriculteur_stock_delete', {'idProduit': stock.idProduit}) }}" onsubmit="return confirm('Supprimer ce stock définitivement ?');" style="display:inline-block; margin:0;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ stock.idProduit) }}">
+                                <button class="btn btn-outline-danger btn-action">Supprimer</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="9" class="text-center py-4 text-muted">Aucun stock trouvé.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center mt-4">
+        {{ knp_pagination_render(stocks) }}
+    </div>
+
+    <style>
+        .table-custom th {
+            background-color: #eaf3ed !important;
+            color: #198754;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #198754;
+        }
+        .table-custom td {
+            font-size: 0.85rem;
+            color: #444;
+            vertical-align: middle;
+        }
+        .btn-action {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+    </style>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('.js-search-input');
+            const sortSelect = document.querySelector('.js-sort-select');
+            const tbody = document.getElementById('stock-table-body');
+            
+            // Stocker toutes les lignes originales au chargement
+            let allRows = [];
+            const originalRows = Array.from(document.querySelectorAll('.js-filterable-row'));
+            
+            // Sauvegarder les lignes originales
+            originalRows.forEach(row => {
+                allRows.push(row.cloneNode(true));
+            });
+            
+            // Si aucune donnée, on garde le message
+            if (originalRows.length === 0) {
+                return;
+            }
+            
+            // Fonction pour obtenir la valeur de tri selon le type
+            function getSortValue(row, sortType) {
+                switch(sortType) {
+                    case 'name_asc':
+                    case 'name_desc':
+                        const typeProduit = row.querySelector('.type-produit');
+                        return typeProduit ? typeProduit.textContent.toLowerCase() : '';
+                    default: // 'default' - tri par ID
+                        const idCell = row.querySelector('.fw-bold');
+                        return idCell ? parseInt(idCell.textContent) || 0 : 0;
+                }
+            }
+            
+            // Fonction pour vérifier si une ligne correspond à la recherche
+            function matchesSearch(row, searchTerm) {
+                if (!searchTerm) return true;
+                const text = row.textContent.toLowerCase();
+                return text.includes(searchTerm);
+            }
+            
+            // Fonction pour trier les lignes
+            function sortRows(rows, sortType) {
+                const sortedRows = [...rows];
+                
+                sortedRows.sort((a, b) => {
+                    let valueA = getSortValue(a, sortType);
+                    let valueB = getSortValue(b, sortType);
+                    
+                    if (sortType === 'name_asc') {
+                        return valueA.localeCompare(valueB);
+                    } else if (sortType === 'name_desc') {
+                        return valueB.localeCompare(valueA);
+                    } else { // 'default' - tri par ID
+                        return valueA - valueB;
+                    }
+                });
+                
+                return sortedRows;
+            }
+            
+            // Fonction pour mettre à jour l'affichage
+            function updateDisplay() {
+                const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+                const sortType = sortSelect ? sortSelect.value : 'default';
+                
+                // 1. Filtrer les lignes (toujours à partir des originales)
+                let filteredRows = allRows.filter(row => matchesSearch(row, searchTerm));
+                
+                // 2. Trier les lignes filtrées
+                const sortedRows = sortRows(filteredRows, sortType);
+                
+                // 3. Vider le tbody
+                tbody.innerHTML = '';
+                
+                // 4. Ajouter les lignes triées
+                if (sortedRows.length === 0) {
+                    const emptyRow = document.createElement('tr');
+                    emptyRow.className = 'no-data-row';
+                    emptyRow.innerHTML = '<td colspan="8" class="text-center py-4 text-muted">Aucun stock trouvé.</td>';
+                    tbody.appendChild(emptyRow);
+                } else {
+                    sortedRows.forEach(row => {
+                        tbody.appendChild(row.cloneNode(true));
+                    });
+                    
+                    // Réattacher les événements de confirmation pour les formulaires de suppression
+                    document.querySelectorAll('#stock-table-body form').forEach(form => {
+                        form.onsubmit = function() {
+                            return confirm('Supprimer ce stock définitivement ?');
+                        };
+                    });
+                }
+            }
+            
+            // Événements
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    updateDisplay();
+                });
+            }
+            
+            if (sortSelect) {
+                sortSelect.addEventListener('change', function() {
+                    updateDisplay();
+                });
+            }
+            
+            // Initialisation
+            updateDisplay();
+        });
+    </script>
+{% endblock %}

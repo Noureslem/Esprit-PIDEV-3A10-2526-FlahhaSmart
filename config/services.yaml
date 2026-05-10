@@ -1,0 +1,64 @@
+# config/services.yaml
+
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            string $azureTranslatorEndpoint: '%env(string:AZURE_TRANSLATOR_ENDPOINT)%'
+            string $azureTranslatorRegion: '%env(string:AZURE_TRANSLATOR_REGION)%'
+            string $azureTranslatorKeyPrimary: '%env(string:AZURE_TRANSLATOR_KEY_PRIMARY)%'
+            $azureTranslatorKeySecondary: '%env(string:AZURE_TRANSLATOR_KEY_SECONDARY)%'
+            int $azureTranslatorCacheTtlSeconds: '%env(int:AZURE_TRANSLATOR_CACHE_TTL_SECONDS)%'
+
+            # Gemini API Configuration
+            string $geminiApiEndpoint: '%env(string:GEMINI_API_ENDPOINT)%'
+            string $geminiModelName: '%env(string:GEMINI_MODEL_NAME)%'
+            string $geminiApiKey: '%env(string:GEMINI_API_KEY)%'
+            int $geminiApiTimeout: '%env(int:GEMINI_API_TIMEOUT)%'
+            bool $geminiChatbotEnabled: '%env(bool:GEMINI_CHATBOT_ENABLED)%'
+
+            # Weatherstack API Configuration
+            string $weatherstackApiKey: '%env(string:WEATHERSTACK_API_KEY)%'
+            string $weatherstackEndpoint: '%env(string:WEATHERSTACK_ENDPOINT)%'
+            int $weatherstackTimeout: '%env(int:WEATHERSTACK_TIMEOUT)%'
+
+            # PlantNet API Configuration
+            string $plantNetApiKey: '%env(string:PLANTNET_API_KEY)%'
+            string $plantNetApiBaseUrl: '%env(string:PLANTNET_API_BASE_URL)%'
+            int $plantNetApiTimeout: '%env(int:PLANTNET_API_TIMEOUT)%'
+
+            # Disease AI microservice Configuration
+            string $diseaseAiBaseUrl: '%env(string:DISEASE_AI_BASE_URL)%'
+            int $diseaseAiTimeout: '%env(int:DISEASE_AI_TIMEOUT)%'
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments'] 
+        # Forum Services
+    App\Service\AiModerationService:
+        arguments:
+            $hfApiKey: '%env(HF_API_KEY)%'
+
+    App\Service\AiTranslationService:
+        arguments:
+            $hfApiKey: '%env(HF_API_KEY)%'
+    App\Service\QrCodeService:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+    App\Service\PlantNetService:
+        arguments:
+            $plantnetApiKey: '%env(PLANTNET_API_KEY)%'
+            $plantnetProject: '%env(PLANTNET_PROJECT)%'
+
+
+

@@ -1,0 +1,165 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'operation.show.page_title'|trans({'%id%': operation.id}) }}{% endblock %}
+{% block navbar_title %}{{ 'operation.show.navbar_title'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="page-header d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">
+                <i class="bi bi-clipboard-check me-2"></i>{{ 'operation.show.page_title'|trans({'%id%': operation.id}) }}
+            </h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">{{ 'common.home'|trans }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_operation_index') }}">{{ 'nav.operations'|trans }}</a></li>
+                    <li class="breadcrumb-item active">#{{ operation.id }}</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="d-flex gap-2">
+            {% if operation.statut != 'terminé' %}
+            <form method="post" action="{{ path('app_operation_finish', {'id': operation.id}) }}" style="display: inline;">
+                <input type="hidden" name="_token" value="{{ csrf_token('finish' ~ operation.id) }}">
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-check-lg me-1"></i>
+                    {{ 'operation.actions.finish'|trans }}
+                </button>
+            </form>
+            {% endif %}
+            <a href="{{ path('app_operation_edit', {'id': operation.id}) }}" class="btn btn-warning">
+                <i class="bi bi-pencil me-1"></i>
+                {{ 'common.update'|trans }}
+            </a>
+            {{ include('frontend/operation/_delete_form.html.twig') }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card detail-card">
+                <div class="detail-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-white bg-opacity-25 rounded-circle p-3">
+                            <i class="bi bi-clipboard-check fs-3"></i>
+                        </div>
+                        <div>
+                            <h4 class="mb-1">{{ operation.typeOperation }}</h4>
+                            <span class="badge bg-light text-dark">ID: {{ operation.id }}</span>
+                            <span class="badge badge-status-{{ operation.statut|lower|replace({' ': '_', 'é': 'e'}) }} ms-1">
+                                {{ operation.statut }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="detail-body">
+                    <div class="row">
+                        <div class="col-md-4 detail-label">
+                            <i class="bi bi-hash me-2"></i>{{ 'common.id'|trans }}
+                        </div>
+                        <div class="col-md-8 detail-value">{{ operation.id }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 detail-label">
+                            <i class="bi bi-person me-2"></i>{{ 'operation.show.user_id'|trans }}
+                        </div>
+                        <div class="col-md-8 detail-value">
+                            <span class="badge bg-info">User #{{ operation.idUser }}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 detail-label">
+                            <i class="bi bi-gear me-2"></i>{{ 'operation.show.operation_type'|trans }}
+                        </div>
+                        <div class="col-md-8 detail-value">{{ operation.typeOperation }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 detail-label">
+                            <i class="bi bi-calendar-event me-2"></i>{{ 'operation.show.start_date'|trans }}
+                        </div>
+                        <div class="col-md-8 detail-value">
+                            {{ operation.dateDebut ? operation.dateDebut|date('d/m/Y') : '-' }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 detail-label">
+                            <i class="bi bi-calendar-check me-2"></i>{{ 'operation.show.end_date'|trans }}
+                        </div>
+                        <div class="col-md-8 detail-value">
+                            {{ operation.dateFin ? operation.dateFin|date('d/m/Y') : '-' }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 detail-label">
+                            <i class="bi bi-activity me-2"></i>{{ 'operation.show.status'|trans }}
+                        </div>
+                        <div class="col-md-8 detail-value">
+                            <span class="badge badge-status-{{ operation.statut|lower|replace({' ': '_', 'é': 'e'}) }}">
+                                {{ operation.statut }}
+                            </span>
+                        </div>
+                    </div>
+                    {% if operation.equipement %}
+                    <div class="row">
+                        <div class="col-md-4 detail-label">
+                            <i class="bi bi-box-seam me-2"></i>{{ 'operation.show.equipment'|trans }}
+                        </div>
+                        <div class="col-md-8 detail-value">
+                            <a href="{{ path('app_equipement_show', {'id': operation.equipement.id}) }}">
+                                {{ operation.equipement.nom }}
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-lightning me-2"></i>{{ 'common.quick_actions'|trans }}
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        {% if operation.statut != 'terminé' %}
+                        <form method="post" action="{{ path('app_operation_finish', {'id': operation.id}) }}" style="display: block;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('finish' ~ operation.id) }}">
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="bi bi-check-lg me-2"></i>{{ 'operation.actions.finish'|trans }}
+                            </button>
+                        </form>
+                        {% endif %}
+                        <a href="{{ path('app_operation_edit', {'id': operation.id}) }}" class="btn btn-outline-warning">
+                            <i class="bi bi-pencil me-2"></i>{{ 'common.update'|trans }}
+                        </a>
+                        <a href="{{ path('app_operation_index') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>{{ 'common.back_to_list'|trans }}
+                        </a>
+                        <a href="{{ path('app_operation_new') }}" class="btn btn-outline-primary">
+                            <i class="bi bi-plus-lg me-2"></i>{{ 'app.actions.new_operation'|trans }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            {% if operation.equipement %}
+            <div class="card mt-3">
+                <div class="card-header">
+                    <i class="bi bi-box-seam me-2"></i>{{ 'operation.show.associated_equipment'|trans }}
+                </div>
+                <div class="card-body">
+                    <h6>{{ operation.equipement.nom }}</h6>
+                    <p class="text-muted small mb-2">
+                        {{ 'equipement.show.type'|trans }}: {{ operation.equipement.type }}<br>
+                        {{ 'equipement.show.state'|trans }}: <span class="badge badge-status-{{ operation.equipement.etat|lower|replace({' ': '_', 'é': 'e'}) }}">{{ operation.equipement.etat }}</span>
+                    </p>
+                    <a href="{{ path('app_equipement_show', {'id': operation.equipement.id}) }}" class="btn btn-outline-info btn-sm w-100">
+                        <i class="bi bi-eye me-1"></i>{{ 'operation.show.view_equipment'|trans }}
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

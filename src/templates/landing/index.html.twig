@@ -1,0 +1,262 @@
+{% set currentLocale = app.request.locale|default('fr')|lower %}
+<!DOCTYPE html>
+<html lang="{{ currentLocale }}" dir="{{ currentLocale starts with 'ar' ? 'rtl' : 'ltr' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlahaSmart - Plateforme d'agriculture intelligente</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{{ asset('css/landing.css') }}" rel="stylesheet">
+</head>
+<body class="landing-body">
+    <div class="landing-orb orb-1" aria-hidden="true"></div>
+    <div class="landing-orb orb-2" aria-hidden="true"></div>
+    <div class="landing-grid" aria-hidden="true"></div>
+
+    <header class="site-header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="{{ path('app_home') }}">
+                    <span class="brand-mark">
+                        <img src="{{ asset('logo.png') }}" alt="FlahaSmart logo">
+                    </span>
+                    <span class="brand-text">FlahaSmart</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#landingNav" aria-controls="landingNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="landingNav">
+                    <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+                        <li class="nav-item"><a class="nav-link" href="#features">Fonctionnalités</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#stats">Statistiques</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#about">À propos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#cta">Contact</a></li>
+                    </ul>
+                    <div class="d-flex gap-2 ms-lg-4 mt-3 mt-lg-0">
+                        <a class="btn btn-ghost" href="{{ path('app_login') }}">Se connecter</a>
+                        <a class="btn btn-primary btn-cta" href="{{ path('app_register') }}">S'inscrire</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero-section" id="top">
+            <div class="container">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6">
+                        <span class="pill">Plateforme d'agriculture intelligente</span>
+                        <h1 class="hero-title">Pilotez vos opérations agricoles avec l'intelligence des données.</h1>
+                        <p class="hero-lead">
+                            FlahaSmart réunit gestion agricole, commandes clients, articles et forum communautaire
+                            dans une plateforme premium pensée pour les agriculteurs et les clients.
+                        </p>
+                        <div class="d-flex flex-wrap gap-3 mt-4">
+                            <a class="btn btn-primary btn-cta" href="{{ path('app_register') }}">Commencer</a>
+                            <a class="btn btn-ghost" href="{{ path('app_login') }}">Se connecter</a>
+                        </div>
+                        <div class="hero-metrics">
+                            <div class="metric-card">
+                                <span class="metric-value">98%</span>
+                                <span class="metric-label">Visibilité opérationnelle</span>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-value">24/7</span>
+                                <span class="metric-label">Suivi continu</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="hero-visual">
+                            <div class="glass-panel">
+                                <div class="panel-header">
+                                    <span class="status-dot"></span>
+                                    <span class="panel-title">Pulse agricole en direct</span>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="panel-chip">
+                                        <i class="bi bi-geo-alt"></i>
+                                        Parcelle Nord - Irrigation
+                                    </div>
+                                    <div class="panel-chip">
+                                        <i class="bi bi-broadcast"></i>
+                                        Réseau de capteurs actif
+                                    </div>
+                                    <div class="panel-chart">
+                                        <span></span><span></span><span></span><span></span><span></span>
+                                    </div>
+                                    <div class="panel-footer">
+                                        <span>Humidité du sol</span>
+                                        <strong>72%</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="floating-card">
+                                <i class="bi bi-lightning-charge"></i>
+                                <div>
+                                    <p>Énergie optimisée</p>
+                                    <strong>-18% de coûts</strong>
+                                </div>
+                            </div>
+                            <div class="floating-card second">
+                                <i class="bi bi-cloud-check"></i>
+                                <div>
+                                    <p>Météo alignée</p>
+                                    <strong>Prochains 7 jours</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-block" id="features">
+            <div class="container">
+                <div class="section-header">
+                    <p class="section-eyebrow">Capacités de la plateforme</p>
+                    <h2 class="section-title">Tous les outils pour servir l'agriculture et les clients.</h2>
+                    <p class="section-subtitle">Regroupez opérations, équipements, commandes, articles et échanges dans un seul espace élégant.</p>
+                </div>
+                <div class="row g-4">
+                    {% for feature in features %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="bi {{ feature.icon }}"></i>
+                                </div>
+                                <h3>{{ feature.title }}</h3>
+                                <p>{{ feature.text }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <section class="section-block stats-section" id="stats">
+            <div class="container">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-5">
+                        <p class="section-eyebrow">Indicateurs d'impact</p>
+                        <h2 class="section-title">Des performances qui s'adaptent à toutes vos exploitations.</h2>
+                        <p class="section-subtitle">Suivez les chiffres essentiels et prenez des décisions fiables.</p>
+                        <a class="btn btn-ghost" href="{{ path('app_register') }}">Voir en action</a>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="row g-4">
+                            {% for stat in stats %}
+                                <div class="col-md-4">
+                                    <div class="stat-card">
+                                        <span class="stat-value">{{ stat.value }}</span>
+                                        <span class="stat-label">{{ stat.label }}</span>
+                                        <span class="stat-note">{{ stat.note }}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-block" id="about">
+            <div class="container">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6">
+                        <div class="about-card">
+                            <div class="about-header">
+                                <span class="pill">Écosystème smart farming</span>
+                                <h3>Conçu pour les équipes qui pilotent l'agriculture moderne.</h3>
+                            </div>
+                            <ul class="about-list">
+                                <li><i class="bi bi-check-circle"></i> Données unifiées pour agronomes et managers.</li>
+                                <li><i class="bi bi-check-circle"></i> Processus mobiles pour les équipes terrain.</li>
+                                <li><i class="bi bi-check-circle"></i> Collaboration sécurisée entre parties prenantes.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <h2 class="section-title">Une expérience premium pour l'agriculture de précision.</h2>
+                        <p class="section-subtitle">
+                            FlahaSmart connecte analyses, opérations et équipements dans un hub digital unique.
+                            Réduisez les risques, optimisez les ressources et progressez avec une intelligence en temps réel.
+                        </p>
+                        <div class="about-highlight">
+                            <div>
+                                <span class="highlight-value">3x</span>
+                                <p>Cycles de planification plus rapides</p>
+                            </div>
+                            <div>
+                                <span class="highlight-value">15+</span>
+                                <p>Modules smart dédiés à l'agriculture</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section" id="cta">
+            <div class="container">
+                <div class="cta-card">
+                    <div>
+                        <h2>Prêt à transformer vos opérations agricoles ?</h2>
+                        <p>Démarrez avec FlahaSmart et préparez un futur plus intelligent et plus vert.</p>
+                    </div>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a class="btn btn-light" href="{{ path('app_register') }}">Commencer maintenant</a>
+                        <a class="btn btn-outline-light" href="{{ path('app_login') }}">Se connecter</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <div class="footer-brand">
+                        <span class="brand-mark">
+                            <img src="{{ asset('logo.png') }}" alt="FlahaSmart logo">
+                        </span>
+                        <span class="brand-text">FlahaSmart</span>
+                    </div>
+                    <p class="footer-text">Plateforme premium d'agriculture intelligente pour des équipes data-driven.</p>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h6>Produit</h6>
+                    <ul>
+                        <li><a href="#features">Fonctionnalités</a></li>
+                        <li><a href="#stats">Statistiques</a></li>
+                        <li><a href="#about">À propos</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h6>Compte</h6>
+                    <ul>
+                        <li><a href="{{ path('app_login') }}">Se connecter</a></li>
+                        <li><a href="{{ path('app_register') }}">S'inscrire</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h6>Réseaux sociaux</h6>
+                    <div class="footer-social">
+                        <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>Copyright {{ "now"|date("Y") }} FlahaSmart. Tous droits réservés.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

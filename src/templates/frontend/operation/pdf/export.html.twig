@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="{{ locale|default('fr') }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ 'operation.export.document_title'|trans }}</title>
+    <style>
+        @page {
+            margin: 28px 20px 24px 20px;
+        }
+
+        body {
+            font-family: DejaVu Sans, sans-serif;
+            color: #0f172a;
+            font-size: 12px;
+        }
+
+        .header {
+            width: 100%;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #dbe2ea;
+        }
+
+        .header-left,
+        .header-right {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .header-left {
+            width: 45%;
+        }
+
+        .header-right {
+            width: 54%;
+            text-align: right;
+        }
+
+        .logo {
+            width: 120px;
+            height: auto;
+        }
+
+        .title {
+            margin: 0;
+            font-size: 19px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            color: #0f766e;
+        }
+
+        .subtitle {
+            margin: 4px 0 0 0;
+            color: #475569;
+            font-size: 11px;
+        }
+
+        .meta {
+            margin-bottom: 12px;
+            color: #64748b;
+            font-size: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        th,
+        td {
+            border: 1px solid #dbe2ea;
+            padding: 8px 9px;
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+
+        th {
+            background: #0f766e;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        td {
+            font-size: 11px;
+            color: #1f2937;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        tr {
+            page-break-inside: avoid;
+        }
+
+        .empty {
+            text-align: center;
+            color: #64748b;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            {% if logoDataUri %}
+                <img src="{{ logoDataUri }}" alt="Logo" class="logo">
+            {% endif %}
+        </div>
+        <div class="header-right">
+            <h1 class="title">{{ 'operation.export.document_title'|trans }}</h1>
+            <p class="subtitle">{{ 'operation.export.generated_on'|trans }} {{ generatedAt|date('d/m/Y H:i') }}</p>
+        </div>
+    </div>
+
+    <p class="meta">{{ 'operation.export.total'|trans({'%count%': operations|length}) }}</p>
+
+    <table>
+        <thead>
+            <tr>
+                {% for column in columns %}
+                    <th>{{ columnLabels[column]|trans }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for operation in operations %}
+                <tr>
+                    {% for column in columns %}
+                        <td>
+                            {% if column == 'id' %}
+                                {{ operation.id }}
+                            {% elseif column == 'id_user' %}
+                                {{ operation.idUser }}
+                            {% elseif column == 'type_operation' %}
+                                {{ operation.typeOperation ?: '-' }}
+                            {% elseif column == 'equipement' %}
+                                {{ operation.equipement ? operation.equipement.nom : '-' }}
+                            {% elseif column == 'date_debut' %}
+                                {{ operation.dateDebut ? operation.dateDebut|date('d/m/Y') : '-' }}
+                            {% elseif column == 'date_fin' %}
+                                {{ operation.dateFin ? operation.dateFin|date('d/m/Y') : '-' }}
+                            {% elseif column == 'statut' %}
+                                {{ operation.statut ?: '-' }}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="{{ columns|length }}" class="empty">{{ 'operation.export.empty'|trans }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

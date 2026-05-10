@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapport stratégique - FlahaSmart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    {# --- Définition des variables par défaut --- #}
+    {% set siteName = siteName|default('FlahaSmart') %}
+    {% set adminName = adminName|default('Administrateur') %}
+    {% set generatedAt = generatedAt|default(date()) %}
+    
+    {% set stats = stats|default({
+        'users': 0, 'activeUsers': 0, 'inactiveUsers': 0,
+        'admins': 0, 'farmers': 0, 'clients': 0,
+        'newThisMonth': 0, 'activeRate': 0
+    }) %}
+    
+    {% set weeklyRegistrations = weeklyRegistrations|default({
+        'labels': ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+        'data': [0,0,0,0,0,0,0]
+    }) %}
+    {% set weeklyMax = max(weeklyRegistrations.data)|default(1) %}
+    
+    {% set monthlyLabels = monthlyLabels|default(['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc']) %}
+    {% set monthlyData = monthlyData|default([0,0,0,0,0,0,0,0,0,0,0,0]) %}
+    {% set maxMonthly = max(monthlyData)|default(1) %}
+
+    <style>
+        /* ------------------------------------------------------------
+           RESET & GLOBAL
+        ------------------------------------------------------------ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #eef5f0;
+            padding: 2rem 1rem;
+            color: #1a2c24;
+        }
+
+        @page {
+            size: A4;
+            margin: 2cm 1.5cm;
+        }
+
+        .report-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 2rem;
+        }
+
+        /* ------------------------------------------------------------
+           COUVERTURE
+        ------------------------------------------------------------ */
+        .cover {
+            background: linear-gradient(130deg, #0f2b1f 0%, #1f553d 100%);
+            color: white;
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .cover-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 40px;
+            padding: 0.3rem 1.2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+        .site-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+        .report-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0.5rem 0 0.25rem;
+        }
+        .cover-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+        .meta-box {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 1rem;
+            width: 70%;
+            font-size: 0.75rem;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .meta-line {
+            margin: 0.3rem 0;
+        }
+
+        /* ------------------------------------------------------------
+           TITRES
+        ------------------------------------------------------------ */
+        .section {
+            margin-top: 2rem;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a4c38;
+            border-left: 5px solid #2e8b57;
+            padding-left: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .section-desc {
+            color: #5b7c6b;
+            font-size: 0.8rem;
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        /* ------------------------------------------------------------
+           CARTES KPI (3 colonnes)
+        ------------------------------------------------------------ */
+        .kpi-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+        .kpi-card {
+            flex: 1 1 calc(25% - 1.2rem);
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 1.2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #e2eee5;
+            transition: all 0.2s;
+        }
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.08);
+        }
+        .kpi-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #5a7f6a;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        .kpi-value {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1d4e38;
+            line-height: 1;
+            margin-bottom: 0.3rem;
+        }
+        .kpi-note {
+            font-size: 0.65rem;
+            color: #8aa396;
+            border-top: 1px dashed #e0ebe2;
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        /* ------------------------------------------------------------
+           PANELS & PROGRESS
+        ------------------------------------------------------------ */
+        .two-columns {
+            display: flex;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .panel {
+            flex: 1;
+            background: #fefefc;
+            border-radius: 24px;
+            padding: 1.2rem;
+            border: 1px solid #e2eee5;
+        }
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1d4e38;
+            border-bottom: 2px solid #e2eee5;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .progress-item {
+            margin-bottom: 1rem;
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        .progress-bar-bg {
+            background: #e2efe8;
+            border-radius: 20px;
+            height: 8px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 20px;
+        }
+        .fill-admin { background: #d98c2b; }
+        .fill-farmer { background: #2e8b57; }
+        .fill-client { background: #2f7fb5; }
+        .fill-active { background: #2e8b57; }
+        .insight-bullet {
+            margin: 0.8rem 0;
+            font-size: 0.8rem;
+            color: #2a4a3a;
+            padding-left: 0.5rem;
+            border-left: 3px solid #2e8b57;
+        }
+
+        /* ------------------------------------------------------------
+           BARRES VERTICALES (hebdo)
+        ------------------------------------------------------------ */
+        .chart-card {
+            background: #fefefc;
+            border-radius: 24px;
+            padding: 1rem;
+            border: 1px solid #e2eee5;
+            margin: 1rem 0;
+        }
+        .weekly-bars {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            gap: 0.5rem;
+            padding: 1rem 0;
+        }
+        .weekly-bar-item {
+            text-align: center;
+            flex: 1;
+        }
+        .bar-value {
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: #2e8b57;
+            margin-bottom: 0.3rem;
+        }
+        .bar-container {
+            background: #e2efe8;
+            border-radius: 20px;
+            height: 120px;
+            width: 40px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .bar-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(0deg, #2e8b57, #5cb085);
+            border-radius: 20px 20px 0 0;
+            transition: height 0.2s;
+        }
+        .bar-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #5a7f6a;
+            margin-top: 0.5rem;
+        }
+
+        /* ------------------------------------------------------------
+           BARRES HORIZONTALES (mensuel)
+        ------------------------------------------------------------ */
+        .monthly-list {
+            margin: 1rem 0;
+        }
+        .month-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+        .month-name {
+            width: 50px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #1d4e38;
+        }
+        .month-bar-bg {
+            flex: 1;
+            background: #e2efe8;
+            border-radius: 30px;
+            height: 28px;
+            overflow: hidden;
+        }
+        .month-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2e8b57, #5cb085);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+        .month-count {
+            width: 45px;
+            text-align: right;
+            font-weight: 700;
+            color: #2e8b57;
+        }
+
+        /* ------------------------------------------------------------
+           TABLEAU
+        ------------------------------------------------------------ */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            margin-top: 1rem;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #e2eee5;
+            padding: 0.7rem 1rem;
+            text-align: left;
+        }
+        .data-table th {
+            background: #eef5ea;
+            color: #1d4e38;
+            font-weight: 700;
+        }
+
+        /* ------------------------------------------------------------
+           INSIGHT BOX
+        ------------------------------------------------------------ */
+        .insight-box {
+            background: linear-gradient(120deg, #152f24, #214f3a);
+            color: white;
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        .insight-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .insight-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.8rem;
+            margin: 0.6rem 0;
+        }
+        .insight-item::before {
+            content: "✓";
+            background: rgba(255,255,255,0.2);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ------------------------------------------------------------
+           FOOTER
+        ------------------------------------------------------------ */
+        .footer {
+            text-align: center;
+            font-size: 0.65rem;
+            color: #8aa396;
+            border-top: 1px solid #e2eee5;
+            padding-top: 1rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 700px) {
+            .kpi-card { flex: 1 1 100%; }
+            .two-columns { flex-direction: column; }
+            .meta-box { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+<div class="report-container">
+    <!-- COUVERTURE -->
+    <div class="cover">
+        <div class="cover-badge">RAPPORT STRATÉGIQUE</div>
+        <div class="site-name">{{ siteName }}</div>
+        <div class="report-title">Analyse de performance<br>et dynamique des comptes</div>
+        <div class="cover-subtitle">Données consolidées au {{ generatedAt|date('d/m/Y') }}</div>
+        <div class="meta-box">
+            <div class="meta-line"><strong>Généré par :</strong> {{ adminName }}</div>
+            <div class="meta-line"><strong>Date :</strong> {{ generatedAt|date('d/m/Y H:i') }}</div>
+            <div class="meta-line"><strong>Périmètre :</strong> Ensemble des utilisateurs</div>
+        </div>
+    </div>
+
+    <!-- KPI (4 cartes) -->
+    <div class="section">
+        <h2 class="section-title">Indicateurs clés de performance</h2>
+        <div class="section-desc">Synthèse des métriques essentielles pour le pilotage</div>
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-label">👥 UTILISATEURS TOTAUX</div>
+                <div class="kpi-value">{{ stats.users }}</div>
+                <div class="kpi-note">Comptes enregistrés depuis la création</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">✅ COMPTES ACTIFS</div>
+                <div class="kpi-value">{{ stats.activeUsers }}</div>
+                <div class="kpi-note">Taux d’activité : {{ stats.activeRate }}%</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">📈 NOUVEAUX CE MOIS</div>
+                <div class="kpi-value">{{ stats.newThisMonth }}</div>
+                <div class="kpi-note">Inscriptions depuis le {{ "now"|date("01/m/Y") }}</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">⚠️ COMPTES INACTIFS</div>
+                <div class="kpi-value">{{ stats.inactiveUsers }}</div>
+                <div class="kpi-note">À réactiver (campagne relance)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RÉPARTITION + ANALYSE -->
+    <div class="section">
+        <h2 class="section-title">Structure des comptes et activité</h2>
+        <div class="two-columns">
+            <div class="panel">
+                <div class="panel-title">Répartition par rôle</div>
+                <div class="progress-item">
+                    <div class="progress-header"><span>Administrateurs</span><span>{{ stats.admins }}</span></div>
+                    <div class="progress-bar-bg"><div class="progress-fill fill-admin" style="width: {{ (stats.admins / max(stats.users,1)) * 100 }}%;"></div></div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header"><span>Agriculteurs</span><span>{{ stats.farmers }}</span></div>
+                    <div class="progress-bar-bg"><div class="progress-fill fill-farmer" style="width: {{ (stats.farmers / max(stats.users,1)) * 100 }}%;"></div></div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header"><span>Clients</span><span>{{ stats.clients }}</span></div>
+                    <div class="progress-bar-bg"><div class="progress-fill fill-client" style="width: {{ (stats.clients / max(stats.users,1)) * 100 }}%;"></div></div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header"><span>Taux d’activité global</span><span>{{ stats.activeRate }}%</span></div>
+                    <div class="progress-bar-bg"><div class="progress-fill fill-active" style="width: {{ stats.activeRate }}%;"></div></div>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-title">Analyse stratégique</div>
+                <div class="insight-bullet"><strong>Base active</strong> : {{ stats.activeUsers }} / {{ stats.users }} utilisateurs ({{ stats.activeRate }}%)</div>
+                <div class="insight-bullet"><strong>Segmentation</strong> : {{ stats.farmers }} agriculteurs / {{ stats.clients }} clients / {{ stats.admins }} admins</div>
+                <div class="insight-bullet"><strong>Vigilance</strong> : {{ stats.inactiveUsers }} comptes inactifs – opportunité de relance</div>
+                <div class="insight-bullet"><strong>Croissance</strong> : +{{ stats.newThisMonth }} nouveaux comptes ce mois</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRAPHIQUE HEBDOMADAIRE (barres verticales) -->
+    <div class="section">
+        <h2 class="section-title">Dynamique des inscriptions (7 derniers jours)</h2>
+        <div class="chart-card">
+            <div class="weekly-bars">
+                {% for i in 0..6 %}
+                <div class="weekly-bar-item">
+                    <div class="bar-value">{{ weeklyRegistrations.data[i] }}</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="height: {{ (weeklyRegistrations.data[i] / max(weeklyMax,1)) * 100 }}%;"></div>
+                    </div>
+                    <div class="bar-label">{{ weeklyRegistrations.labels[i] }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            <div style="text-align: center; font-size: 0.7rem; color: #5b7c6b; margin-top: 1rem;">
+                🔥 Pic d’inscriptions : <strong>{{ weeklyMax }}</strong> nouveaux comptes
+            </div>
+        </div>
+    </div>
+
+    <!-- ÉVOLUTION MENSUELLE (barres horizontales) -->
+    <div class="section">
+        <h2 class="section-title">Évolution mensuelle des inscriptions</h2>
+        <div class="section-desc">Tendance sur les {{ monthlyLabels|length }} derniers mois</div>
+        <div class="chart-card">
+            <div class="monthly-list">
+                {% for i in 0..(monthlyLabels|length - 1) %}
+                <div class="month-row">
+                    <div class="month-name">{{ monthlyLabels[i] }}</div>
+                    <div class="month-bar-bg">
+                        <div class="month-bar-fill" style="width: {{ (monthlyData[i] / maxMonthly) * 100 }}%;">{{ monthlyData[i] }}</div>
+                    </div>
+                    <div class="month-count">{{ monthlyData[i] }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            <div style="text-align: center; font-size: 0.75rem; color: #5b7c6b; margin-top: 1rem;">
+                {% set croissance = (monthlyData|length >= 2 and monthlyData[0] > 0) ? ((monthlyData|last - monthlyData|first) / monthlyData|first * 100)|round(0) : 0 %}
+                📊 Croissance sur la période : <strong>{{ croissance > 0 ? '+' : '' }}{{ croissance }}%</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABLEAU SYNTHÈSE -->
+    <div class="section">
+        <h2 class="section-title">Synthèse des indicateurs</h2>
+        <table class="data-table">
+            <thead>
+                <tr><th>Indicateur</th><th>Valeur</th><th>Interprétation</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Total utilisateurs</td><td>{{ stats.users }}</td><td>Base solide en croissance</td></tr>
+                <tr><td>Utilisateurs actifs</td><td>{{ stats.activeUsers }}</td><td>{{ stats.activeRate }}% de la base engagée</td></tr>
+                <tr><td>Comptes inactifs</td><td>{{ stats.inactiveUsers }}</td><td>Potentiel de réactivation important</td></tr>
+                <tr><td>Agriculteurs</td><td>{{ stats.farmers }}</td><td>Offreurs clés</td></tr>
+                <tr><td>Clients</td><td>{{ stats.clients }}</td><td>Demandeurs de produits locaux</td></tr>
+                <tr><td>Nouveautés (mois)</td><td>{{ stats.newThisMonth }}</td><td>Dynamique marketing positive</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- RECOMMANDATIONS -->
+    <div class="insight-box">
+        <div class="insight-title">📌 Recommandations stratégiques</div>
+        <div class="insight-item">Relancer les {{ stats.inactiveUsers }} comptes inactifs (campagne automatisée SMS/email).</div>
+        <div class="insight-item">Renforcer la segmentation agriculteurs vs clients pour des actions ciblées.</div>
+        <div class="insight-item">Surveiller hebdomadairement les pics d'inscriptions.</div>
+        <div class="insight-item">Objectif : croissance mensuelle progressive (+10% par mois).</div>
+        <div class="insight-item" style="margin-top: 0.5rem; font-style: italic;">Rapport généré le {{ generatedAt|date('d/m/Y') }}</div>
+    </div>
+
+    <div class="footer">
+        &copy; {{ "now"|date("Y") }} {{ siteName }} – Tous droits réservés
+    </div>
+</div>
+</body>
+</html>

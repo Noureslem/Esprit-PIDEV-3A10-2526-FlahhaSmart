@@ -1,0 +1,146 @@
+{% extends 'base.html.twig' %}
+{% block title %}Articles - FlahaSmart{% endblock %}
+
+{% block body %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1 class="page-title">
+            <i class="bi bi-box-seam me-2"></i> Liste des articles
+        </h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">{{ 'common.home'|trans|default('Accueil') }}</a></li>
+                <li class="breadcrumb-item active">Articles</li>
+            </ol>
+        </nav>
+    </div>
+    <div>
+        <a href="{{ path('app_article_new') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Ajouter un article
+        </a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-light">
+        <i class="bi bi-funnel me-2"></i> Filtrer et trier
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-5">
+                <input type="text" name="search" class="form-control" placeholder="Rechercher par nom" value="{{ search|default('') }}">
+            </div>
+            <div class="col-md-5">
+                <select name="sort" class="form-select">
+                    <option value="id" {% if sort == 'id' %}selected{% endif %}>Trier par défaut (ID)</option>
+                    <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Prix croissant</option>
+                    <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Prix décroissant</option>
+                    <option value="date_desc" {% if sort == 'date_desc' %}selected{% endif %}>Date plus récent</option>
+                    <option value="date_asc" {% if sort == 'date_asc' %}selected{% endif %}>Date plus ancien</option>
+                    <option value="name_asc" {% if sort == 'name_asc' %}selected{% endif %}>Nom A-Z</option>
+                    <option value="name_desc" {% if sort == 'name_desc' %}selected{% endif %}>Nom Z-A</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-check2-circle me-1"></i> Appliquer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-white">
+        <i class="bi bi-table me-2"></i> Tous les articles
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Catégorie</th>
+                        <th>Description</th>
+                        <th class="text-end">Prix (€)</th>
+                        <th class="text-end">Stock</th>
+                        <th class="text-end">Poids (kg)</th>
+                        <th>Unité</th>
+                        <th>Date ajout</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in articles %}
+                    <tr>
+                        <td><strong>{{ article.nom }}</strong></td>
+                        <td>
+                            {% if article.categorie %}
+                                <span class="badge bg-secondary">{{ article.categorie }}</span>
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                        <td class="text-truncate" style="max-width: 250px;" title="{{ article.description }}">
+                            {{ article.description|slice(0, 50) }}{% if article.description|length > 50 %}…{% endif %}
+                        </td>
+                        <td class="text-end">{{ article.prix|number_format(2, ',', ' ') }}</td>
+                        <td class="text-end">{{ article.stock }}</td>
+                        <td class="text-end">{{ article.poids|number_format(2, ',', ' ') }}</td>
+                        <td>{{ article.unite|default('—') }}</td>
+                        <td>{{ article.dateAjout|date('d/m/Y H:i') }}</td>
+                        <td class="text-end">
+                            <div class="d-flex gap-2 justify-content-end">
+                                <a href="{{ path('app_article_edit', {id: article.id}) }}" class="btn btn-sm btn-outline-warning">
+                                    <i class="bi bi-pencil me-1"></i> Modifier
+                                </a>
+                                <form method="post" action="{{ path('app_article_delete', {id: article.id}) }}" onsubmit="return confirm('Supprimer cet article ?');" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash3 me-1"></i> Supprimer
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="9" class="text-center py-4">
+                            <i class="bi bi-inbox fs-2 text-muted d-block mb-2"></i>
+                            Aucun article trouvé
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4 g-3">
+    <div class="col-md-6">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="bi bi-calculator fs-1 text-success"></i>
+                <h5 class="mt-2">Statistiques des prix</h5>
+                <p class="small text-muted">Prix moyen, min, max, etc.</p>
+                <a href="{{ path('app_article_stats_price') }}" class="btn btn-outline-success mt-2">
+                    <i class="bi bi-graph-up"></i> Voir les stats
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="bi bi-weight-scale fs-1 text-primary"></i>
+                <h5 class="mt-2">Statistiques des poids</h5>
+                <p class="small text-muted">Poids moyen, distribution, etc.</p>
+                <a href="{{ path('app_article_stats_weight') }}" class="btn btn-outline-primary mt-2">
+                    <i class="bi bi-bar-chart-steps"></i> Voir les stats
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

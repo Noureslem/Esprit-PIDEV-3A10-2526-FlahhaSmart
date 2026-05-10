@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+{% block title %}Commandes - FlahaSmart{% endblock %}
+
+{% block body %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1 class="page-title">
+            <i class="bi bi-cart4 me-2"></i> Liste des commandes
+        </h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">{{ 'common.home'|trans|default('Accueil') }}</a></li>
+                <li class="breadcrumb-item active">Commandes</li>
+            </ol>
+        </nav>
+    </div>
+    <div>
+        <a href="{{ path('app_order_new') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Ajouter une commande
+        </a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-light">
+        <i class="bi bi-funnel me-2"></i> Filtrer et trier
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-5">
+                <input type="text" name="search" class="form-control" placeholder="Rechercher par référence" value="{{ search|default('') }}">
+            </div>
+            <div class="col-md-5">
+                <select name="sort" class="form-select">
+                    <option value="id" {% if sort == 'id' %}selected{% endif %}>Trier par défaut (ID)</option>
+                    <option value="date_desc" {% if sort == 'date_desc' %}selected{% endif %}>Date plus récente</option>
+                    <option value="date_asc" {% if sort == 'date_asc' %}selected{% endif %}>Date plus ancienne</option>
+                    <option value="amount_asc" {% if sort == 'amount_asc' %}selected{% endif %}>Montant croissant</option>
+                    <option value="amount_desc" {% if sort == 'amount_desc' %}selected{% endif %}>Montant décroissant</option>
+                    <option value="ref_asc" {% if sort == 'ref_asc' %}selected{% endif %}>Référence A-Z</option>
+                    <option value="ref_desc" {% if sort == 'ref_desc' %}selected{% endif %}>Référence Z-A</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-check2-circle me-1"></i> Appliquer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-white">
+        <i class="bi bi-table me-2"></i> Toutes les commandes
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Référence</th>
+                        <th>Date</th>
+                        <th>Statut</th>
+                        <th>Mode paiement</th>
+                        <th>Adresse de livraison</th>
+                        <th class="text-end">Montant (€)</th>
+                        <th class="text-end">Frais (€)</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td><strong>{{ order.reference }}</strong></td>
+                        <td>{{ order.dateCommande|date('d/m/Y') }}</td>
+                        <td>
+                            <span class="badge badge-status-{{ order.statut|lower|replace({' ': '_', 'é': 'e', 'è': 'e'}) }}">
+                                {{ order.statut }}
+                            </span>
+                        </td>
+                        <td>{{ order.modePaiement }}</td>
+                        <td class="text-truncate" style="max-width: 200px;" title="{{ order.adresseLivraison }}">
+                            {{ order.adresseLivraison|length > 40 ? order.adresseLivraison|slice(0, 40) ~ '…' : order.adresseLivraison }}
+                        </td>
+                        <td class="text-end">{{ order.montantTotal|number_format(2, ',', ' ') }}</td>
+                        <td class="text-end">{{ order.fraisLivraison|number_format(2, ',', ' ') }}</td>
+                        <td class="text-end">
+                            <div class="d-flex gap-2 justify-content-end">
+                                <a href="{{ path('app_order_edit', {id: order.id}) }}" class="btn btn-sm btn-outline-warning">
+                                    <i class="bi bi-pencil me-1"></i>
+                                </a>
+                                <form method="post" action="{{ path('app_order_delete', {id: order.id}) }}" onsubmit="return confirm('Supprimer cette commande ?');" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ order.id) }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash3 me-1"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="9" class="text-center py-4">
+                            <i class="bi bi-inbox fs-2 text-muted d-block mb-2"></i>
+                            Aucune commande trouvée
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4 g-3">
+    <div class="col-md-6">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="bi bi-calculator fs-1 text-success"></i>
+                <h5 class="mt-2">Statistiques des montants</h5>
+                <p class="small text-muted">Montant total, moyenne, etc.</p>
+                <a href="{{ path('app_order_stats_amount') }}" class="btn btn-outline-success mt-2">
+                    <i class="bi bi-graph-up"></i> Voir les stats
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="bi bi-truck fs-1 text-primary"></i>
+                <h5 class="mt-2">Statistiques des frais</h5>
+                <p class="small text-muted">Frais de livraison par commande</p>
+                <a href="{{ path('app_order_stats_fees') }}" class="btn btn-outline-primary mt-2">
+                    <i class="bi bi-bar-chart-steps"></i> Voir les stats
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

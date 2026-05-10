@@ -1,0 +1,30 @@
+{
+  "healthy": {
+    "recommendations": [
+      "Aucune action requise.",
+      "Surveillez la plante sur 7 jours pour confirmer."
+    ]
+  },
+  "powdery_mildew": {
+    "recommendations": [
+      "Retirer les feuilles fortement atteintes.",
+      "Ameliorer l aeration (espacement, taille).",
+      "Eviter d arroser le feuillage.",
+      "Utiliser un traitement homologué (soufre / bicarbonate) selon la culture."
+    ]
+  },
+  "leaf_rust": {
+    "recommendations": [
+      "Eliminer les feuilles infectees.",
+      "Eviter l humidite persistante sur le feuillage.",
+      "Appliquer un fongicide homologue si la pression est forte."
+    ]
+  },
+  "leaf_spot": {
+    "recommendations": [
+      "Retirer les feuilles tachetees.",
+      "Desinfecter les outils de taille.",
+      "Reduire l arrosage sur le feuillage."
+    ]
+  }
+}
