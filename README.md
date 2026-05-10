@@ -192,7 +192,7 @@ FlahaSmart is a comprehensive agricultural management platform designed to empow
 └────────────┬──────────────────────────┬─────────────────────┘
              │                          │
     ┌────────▼────────┐      ┌──────────▼──────────┐
-    │   PostgreSQL    │      │  Microservices     │
+    │   MySQL         │      │  Microservices     │
     │   Database      │      ├────────────────────┤
     │                 │      │ FastAPI Disease AI │
     │ • 12 Tables     │      │ (Port 8010)        │
