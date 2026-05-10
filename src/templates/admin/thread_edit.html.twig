@@ -8,11 +8,11 @@
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
             Modifier le Thread #{{ thread.idThread }}
         </div>
-        <a href="{{ path('admin_threads') }}" class="btn btn-secondary" style="background: rgba(0,0,0,0.05); color: var(--text-muted);">Retour</a>
+        <a href="{{ path('forum_admin_threads') }}" class="btn btn-secondary" style="background: rgba(0,0,0,0.05); color: var(--text-muted);">Retour</a>
     </div>
 
     <div class="panel" style="max-width: 800px; margin: 0 auto;">
-        <form method="post" action="{{ path('admin_thread_edit', {id: thread.idThread}) }}">
+        <form method="post" action="{{ path('forum_admin_threads', {id: thread.idThread}) }}">
             <input type="hidden" name="_token" value="{{ csrf_token('edit' ~ thread.idThread) }}">
             
             <div style="margin-bottom: 1.5rem;">
