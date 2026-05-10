@@ -106,8 +106,8 @@ public class DashboardHomeController implements Initializable {
 
         // Formatage de la date
         colDate.setCellValueFactory(cellData -> {
-            if (cellData.getValue().getDate_creation() != null) {
-                String dateStr = cellData.getValue().getDate_creation().toString().substring(0, 10);
+            if (cellData.getValue().getCreated_at() != null) {
+                String dateStr = cellData.getValue().getCreated_at().toString().substring(0, 10);
                 return new javafx.beans.property.SimpleStringProperty(dateStr);
             }
             return new javafx.beans.property.SimpleStringProperty("");

@@ -19,7 +19,7 @@ public class UserService implements IService<User> {
 
     @Override
     public void addEntity(User user) {
-        String query = "INSERT INTO users (nom, prenom, email, password, telephone, adresse, ville, photo_profil, role, actif, date_creation) " +
+        String query = "INSERT INTO users (nom, prenom, email, password, telephone, adresse, ville, photo_profil, role, actif, created_at) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pst = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -44,9 +44,9 @@ public class UserService implements IService<User> {
             if (rowsAffected > 0) {
                 ResultSet rs = pst.getGeneratedKeys();
                 if (rs.next()) {
-                    user.setId_user(rs.getInt(1));
+                    user.setId(rs.getInt(1));
                 }
-                System.out.println("✅ Utilisateur ajouté avec succès ! ID: " + user.getId_user());
+                System.out.println("✅ Utilisateur ajouté avec succès ! ID: " + user.getId());
             }
 
         } catch (SQLException e) {
@@ -57,11 +57,11 @@ public class UserService implements IService<User> {
 
     @Override
     public void deleteEntity(User user) {
-        deleteEntity(user.getId_user());
+        deleteEntity(user.getId());
     }
 
     public void deleteEntity(int id) {
-        String query = "DELETE FROM users WHERE id_user = ?";
+        String query = "DELETE FROM users WHERE id = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, id);
@@ -78,7 +78,7 @@ public class UserService implements IService<User> {
     public void updateEntity(User user) {
         String query = "UPDATE users SET nom = ?, prenom = ?, email = ?, password = ?, " +
                 "telephone = ?, adresse = ?, ville = ?, photo_profil = ?, role = ?, actif = ? " +
-                "WHERE id_user = ?";
+                "WHERE id = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
 
@@ -95,11 +95,11 @@ public class UserService implements IService<User> {
             pst.setString(8, user.getPhoto_profil());
             pst.setString(9, user.getRole().name());
             pst.setBoolean(10, user.getActif() != null ? user.getActif() : true);
-            pst.setInt(11, user.getId_user());
+            pst.setInt(11, user.getId());
 
             int rowsAffected = pst.executeUpdate();
             if (rowsAffected > 0) {
-                System.out.println("✅ Utilisateur mis à jour avec succès ! ID: " + user.getId_user());
+                System.out.println("✅ Utilisateur mis à jour avec succès ! ID: " + user.getId());
             }
 
         } catch (SQLException e) {
@@ -111,7 +111,7 @@ public class UserService implements IService<User> {
     @Override
     public List<User> getEntities() {
         List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM users ORDER BY id_user DESC";
+        String query = "SELECT * FROM users ORDER BY id DESC";
 
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(query)) {
@@ -132,7 +132,7 @@ public class UserService implements IService<User> {
     }
 
     public User getUserById(int id) {
-        String query = "SELECT * FROM users WHERE id_user = ?";
+        String query = "SELECT * FROM users WHERE id = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, id);
@@ -185,7 +185,7 @@ public class UserService implements IService<User> {
 
     public List<User> getRecentUsers(int limit) {
         List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM users ORDER BY date_creation DESC LIMIT ?";
+        String query = "SELECT * FROM users ORDER BY created_at DESC LIMIT ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, limit);
@@ -208,7 +208,7 @@ public class UserService implements IService<User> {
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
         User user = new User();
 
-        user.setId_user(rs.getInt("id_user"));
+        user.setId(rs.getInt("id"));
         user.setNom(rs.getString("nom"));
         user.setPrenom(rs.getString("prenom"));
         user.setEmail(rs.getString("email"));
@@ -217,7 +217,7 @@ public class UserService implements IService<User> {
         user.setAdresse(rs.getString("adresse"));
         user.setVille(rs.getString("ville"));
         user.setPhoto_profil(rs.getString("photo_profil"));
-        user.setDate_creation(rs.getTimestamp("date_creation"));
+        user.setCreated_at(rs.getTimestamp("created_at"));
 
         String roleStr = rs.getString("role");
         if (roleStr != null) {

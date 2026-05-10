@@ -88,9 +88,9 @@ public class DashboardUser implements Initializable {
             userRoleLabel.setText(role);
 
             // Date d'inscription
-            if (loggedInUser.getDate_creation() != null) {
+            if (loggedInUser.getCreated_at() != null) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                memberSinceText.setText(loggedInUser.getDate_creation().toLocalDateTime().format(formatter));
+                memberSinceText.setText(loggedInUser.getCreated_at().toLocalDateTime().format(formatter));
             } else {
                 memberSinceText.setText("Date inconnue");
             }
@@ -128,7 +128,7 @@ public class DashboardUser implements Initializable {
             // Attendre que la fenêtre soit fermée
             stage.setOnHidden(e -> {
                 // Recharger les données après modification
-                User updatedUser = userService.getUserById(loggedInUser.getId_user());
+                User updatedUser = userService.getUserById(loggedInUser.getId());
                 if (updatedUser != null) {
                     loggedInUser = updatedUser;
                     loadUserData();

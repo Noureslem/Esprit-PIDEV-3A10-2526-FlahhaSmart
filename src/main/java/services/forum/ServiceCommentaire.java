@@ -19,12 +19,12 @@ public class ServiceCommentaire implements IService<Commentaire> {
     }
 
     public void ajouterAvecStatut(Commentaire c) throws SQLException {
-        String sql = "INSERT INTO commentaires (id_thread, id_user, contenu, date_creation, statut, sentiment) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO commentaires (id_thread, id_user, contenu, created_at, statut, sentiment) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, c.getId_thread());
         ps.setInt(2, c.getId_user());
         ps.setString(3, c.getContenu());
-        ps.setTimestamp(4, Timestamp.valueOf(c.getDate_creation()));
+        ps.setTimestamp(4, Timestamp.valueOf(c.getCreated_at()));
         ps.setString(5, c.getStatut()    != null ? c.getStatut()    : "actif");
         ps.setString(6, c.getSentiment() != null ? c.getSentiment() : "neutre");
         ps.executeUpdate();
@@ -45,12 +45,12 @@ public class ServiceCommentaire implements IService<Commentaire> {
 
     @Override
     public void ajouter(Commentaire c) throws SQLException {
-        String sql = "INSERT INTO commentaires (id_thread, id_user, contenu, date_creation, statut, sentiment) VALUES (?, ?, ?, ?, 'actif', 'neutre')";
+        String sql = "INSERT INTO commentaires (id_thread, id_user, contenu, created_at, statut, sentiment) VALUES (?, ?, ?, ?, 'actif', 'neutre')";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, c.getId_thread());
         ps.setInt(2, c.getId_user());
         ps.setString(3, c.getContenu());
-        ps.setTimestamp(4, Timestamp.valueOf(c.getDate_creation()));
+        ps.setTimestamp(4, Timestamp.valueOf(c.getCreated_at()));
         ps.executeUpdate();
     }
 
@@ -75,14 +75,14 @@ public class ServiceCommentaire implements IService<Commentaire> {
     public List<Commentaire> recuperer() throws SQLException {
         List<Commentaire> liste = new ArrayList<>();
         Statement st = connection.createStatement();
-        ResultSet rs = st.executeQuery("SELECT * FROM commentaires ORDER BY date_creation ASC");
+        ResultSet rs = st.executeQuery("SELECT * FROM commentaires ORDER BY created_at ASC");
         while (rs.next()) liste.add(mapper(rs));
         return liste;
     }
 
     public List<Commentaire> recupererParThread(int idThread) throws SQLException {
         List<Commentaire> liste = new ArrayList<>();
-        String sql = "SELECT * FROM commentaires WHERE id_thread = ? ORDER BY date_creation ASC";
+        String sql = "SELECT * FROM commentaires WHERE id_thread = ? ORDER BY created_at ASC";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, idThread);
         ResultSet rs = ps.executeQuery();
@@ -105,7 +105,7 @@ public class ServiceCommentaire implements IService<Commentaire> {
                 rs.getInt("id_thread"),
                 rs.getInt("id_user"),
                 rs.getString("contenu"),
-                rs.getTimestamp("date_creation").toLocalDateTime(),
+                rs.getTimestamp("created_at").toLocalDateTime(),
                 rs.getString("statut"),
                 rs.getString("sentiment")
         );

@@ -3,7 +3,7 @@ package entities;
 import java.sql.Timestamp;
 
 public class User {
-    private int id_user;
+    private int id;
     private String nom;
     private String prenom;
     private String email;
@@ -14,13 +14,13 @@ public class User {
     private String photo_profil;
     private Role role;              // Une seule déclaration
     private Boolean actif;
-    private Timestamp date_creation;
+    private Timestamp created_at;
 
     // Constructeur par défaut
     public User() {
     }
 
-    // Constructeur avec tous les champs sauf id_user et date_creation
+    // Constructeur avec tous les champs sauf id et created_at
     public User(String nom, String prenom, String email, String password,
                 String telephone, String adresse, String ville,
                 String photo_profil, Role role, Boolean actif) {
@@ -37,10 +37,10 @@ public class User {
     }
 
     // Constructeur avec tous les champs
-    public User(int id_user, String nom, String prenom, String email, String password,
+    public User(int id, String nom, String prenom, String email, String password,
                 String telephone, String adresse, String ville, String photo_profil,
-                Role role, Boolean actif, Timestamp date_creation) {
-        this.id_user = id_user;
+                Role role, Boolean actif, Timestamp created_at) {
+        this.id = id;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
@@ -51,16 +51,16 @@ public class User {
         this.photo_profil = photo_profil;
         this.role = role;
         this.actif = actif;
-        this.date_creation = date_creation;
+        this.created_at = created_at;
     }
 
     // Getters et Setters
-    public int getId_user() {
-        return id_user;
+    public int getId() {
+        return id;
     }
 
-    public void setId_user(int id_user) {
-        this.id_user = id_user;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNom() {
@@ -143,18 +143,18 @@ public class User {
         this.actif = actif;
     }
 
-    public Timestamp getDate_creation() {
-        return date_creation;
+    public Timestamp getCreated_at() {
+        return created_at;
     }
 
-    public void setDate_creation(Timestamp date_creation) {
-        this.date_creation = date_creation;
+    public void setCreated_at(Timestamp created_at) {
+        this.created_at = created_at;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id_user=" + id_user +
+                "id=" + id +
                 ", nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
                 ", email='" + email + '\'' +
@@ -164,7 +164,7 @@ public class User {
                 ", photo_profil='" + photo_profil + '\'' +
                 ", role=" + role +
                 ", actif=" + actif +
-                ", date_creation=" + date_creation +
+                ", created_at=" + created_at +
                 '}';
     }
 }

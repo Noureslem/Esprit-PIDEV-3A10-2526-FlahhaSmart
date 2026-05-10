@@ -18,7 +18,7 @@ public class OperationService implements Iservice<Operation> {
     @Override
     public void ajouter(Operation operation) throws SQLException {
         // Récupérer l'ID de l'utilisateur connecté via Session
-        int userId = Session.isLoggedIn() ? Session.getCurrentUser().getId_user() : -1;
+        int userId = Session.isLoggedIn() ? Session.getCurrentUser().getId() : -1;
         if (userId == -1) {
             throw new SQLException("Aucun utilisateur connecté. Impossible d'ajouter l'opération.");
         }
@@ -115,7 +115,7 @@ public class OperationService implements Iservice<Operation> {
         List<Operation> operations = new ArrayList<>();
 
         // Récupérer l'ID de l'utilisateur connecté
-        int userId = Session.isLoggedIn() ? Session.getCurrentUser().getId_user() : -1;
+        int userId = Session.isLoggedIn() ? Session.getCurrentUser().getId() : -1;
         if (userId == -1) {
             System.out.println("⚠️ Aucun utilisateur connecté. Liste vide.");
             return operations;

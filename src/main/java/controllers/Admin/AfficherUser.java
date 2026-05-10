@@ -55,7 +55,7 @@ public class AfficherUser {
     private ImageView photoImageView;
 
     public void setUserData(User user) {
-        idLabel.setText("ID: " + user.getId_user());
+        idLabel.setText("ID: " + user.getId());
         nomLabel.setText("Nom: " + user.getNom());
         prenomLabel.setText("Prénom: " + user.getPrenom());
         emailLabel.setText("Email: " + user.getEmail());
@@ -68,7 +68,7 @@ public class AfficherUser {
         String statut = user.getActif() != null && user.getActif() ? "Actif" : "Inactif";
         actifLabel.setText("Statut: " + statut);
 
-        dateCreationLabel.setText("Date d'inscription: " + user.getDate_creation());
+        dateCreationLabel.setText("Date d'inscription: " + user.getCreated_at());
 
         // Charger l'image de profil
         if (user.getPhoto_profil() != null && !user.getPhoto_profil().isEmpty()) {

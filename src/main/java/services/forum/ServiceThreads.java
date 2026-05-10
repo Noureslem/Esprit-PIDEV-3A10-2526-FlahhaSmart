@@ -18,11 +18,11 @@ public class ServiceThreads implements IService<thread> {
 
     public void ajouterAvecStatut(thread t) throws SQLException {
         validerThread(t);
-        String sql = "INSERT INTO threads (titre, contenu, date_creation, date_update, id_user, statut, sentiment, tags) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO threads (titre, contenu, created_at, date_update, id_user, statut, sentiment, tags) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, t.getTitre());
         ps.setString(2, t.getContenu());
-        ps.setTimestamp(3, Timestamp.valueOf(t.getDate_creation()));
+        ps.setTimestamp(3, Timestamp.valueOf(t.getCreated_at()));
         ps.setTimestamp(4, Timestamp.valueOf(t.getDate_update()));
         ps.setInt(5, t.getId_user());
         ps.setString(6, t.getStatut()    != null ? t.getStatut()    : "actif");
@@ -39,11 +39,11 @@ public class ServiceThreads implements IService<thread> {
     @Override
     public void ajouter(thread t) throws SQLException {
         validerThread(t);
-        String sql = "INSERT INTO threads (titre, contenu, date_creation, date_update, id_user, statut, sentiment, tags) VALUES (?, ?, ?, ?, ?, 'actif', 'neutre', '')";
+        String sql = "INSERT INTO threads (titre, contenu, created_at, date_update, id_user, statut, sentiment, tags) VALUES (?, ?, ?, ?, ?, 'actif', 'neutre', '')";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, t.getTitre());
         ps.setString(2, t.getContenu());
-        ps.setTimestamp(3, Timestamp.valueOf(t.getDate_creation()));
+        ps.setTimestamp(3, Timestamp.valueOf(t.getCreated_at()));
         ps.setTimestamp(4, Timestamp.valueOf(t.getDate_update()));
         ps.setInt(5, t.getId_user());
         ps.executeUpdate();
@@ -73,7 +73,7 @@ public class ServiceThreads implements IService<thread> {
     @Override
     public List<thread> recuperer() throws SQLException {
         List<thread> threads = new ArrayList<>();
-        String sql = "SELECT * FROM threads ORDER BY date_creation DESC";
+        String sql = "SELECT * FROM threads ORDER BY created_at DESC";
         PreparedStatement ps = connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) threads.add(mapper(rs));
@@ -85,7 +85,7 @@ public class ServiceThreads implements IService<thread> {
         String sql = "SELECT t.*, " +
                 "(SELECT COUNT(*) FROM votes v WHERE v.id_thread = t.id_thread AND v.type_vote = 'up') - " +
                 "(SELECT COUNT(*) FROM votes v WHERE v.id_thread = t.id_thread AND v.type_vote = 'down') AS score " +
-                "FROM threads t ORDER BY score DESC, t.date_creation DESC";
+                "FROM threads t ORDER BY score DESC, t.created_at DESC";
         PreparedStatement ps = connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) threads.add(mapper(rs));
@@ -115,7 +115,7 @@ public class ServiceThreads implements IService<thread> {
                 rs.getInt("id_thread"),
                 rs.getString("titre"),
                 rs.getString("contenu"),
-                rs.getTimestamp("date_creation").toLocalDateTime(),
+                rs.getTimestamp("created_at").toLocalDateTime(),
                 rs.getTimestamp("date_update").toLocalDateTime(),
                 rs.getInt("id_user"),
                 rs.getString("statut"),
@@ -143,7 +143,7 @@ public class ServiceThreads implements IService<thread> {
     public void mettreAJourTagsDernierThread(int idUser, String tags) throws SQLException {
         String sql = "UPDATE threads SET tags = ? " +
                 "WHERE id_user = ? " +
-                "ORDER BY date_creation DESC LIMIT 1";
+                "ORDER BY created_at DESC LIMIT 1";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, tags);
         ps.setInt(2, idUser);

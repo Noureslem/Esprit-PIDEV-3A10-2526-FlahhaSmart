@@ -273,7 +273,7 @@ public class AjouterThreadController {
                             t.setId_user(userId);
                             t.setStatut("actif");
                             t.setSentiment("neutre");
-                            t.setDate_creation(LocalDateTime.now());
+                            t.setCreated_at(LocalDateTime.now());
                             t.setDate_update(LocalDateTime.now());
 
                             new ServiceThreads().ajouterAvecStatut(t);

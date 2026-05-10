@@ -187,7 +187,7 @@ public class CommentaireController {
         // ===== BADGE SENTIMENT =====
         Label sentimentBadge = creerBadgeSentiment(c.getSentiment());
 
-        Label dateLabel = new Label(c.getDate_creation().format(DATE_FMT));
+        Label dateLabel = new Label(c.getCreated_at().format(DATE_FMT));
         dateLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #9CA3AF;");
 
         Region sp = new Region(); HBox.setHgrow(sp, Priority.ALWAYS);
@@ -295,3 +295,4 @@ public class CommentaireController {
                 "-fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 13px;";
     }
 }
+

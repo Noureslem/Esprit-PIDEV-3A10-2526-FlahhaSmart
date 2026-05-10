@@ -39,7 +39,7 @@ public class ThreadController {
     // Utilisateur connecté via Session
     private int getCurrentUserId() {
         if (Session.isLoggedIn() && Session.getCurrentUser() != null)
-            return Session.getCurrentUser().getId_user();
+            return Session.getCurrentUser().getId();
         return 5; // fallback si pas de session
     }
     private String getCurrentUserName() {
@@ -544,7 +544,7 @@ public class ThreadController {
         titreLabel.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #111827;");
         titreLabel.setWrapText(true);
 
-        Label dateLabel = new Label("Cree le " + t.getDate_creation().format(DATE_FMT));
+        Label dateLabel = new Label("Cree le " + t.getCreated_at().format(DATE_FMT));
         dateLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #9CA3AF;");
 
         Label sentimentBadge = creerBadgeSentiment(t.getSentiment());
@@ -838,3 +838,4 @@ public class ThreadController {
         alert.showAndWait();
     }
 }
+

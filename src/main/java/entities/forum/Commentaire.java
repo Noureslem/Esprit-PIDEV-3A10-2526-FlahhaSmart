@@ -8,28 +8,28 @@ public class Commentaire {
     private int           id_thread;
     private int           id_user;
     private String        contenu;
-    private LocalDateTime date_creation;
+    private LocalDateTime created_at;
     private String        statut;    // "actif" ou "banni"
     private String        sentiment; // "positif", "negatif", "neutre"
 
     public Commentaire() {}
 
-    public Commentaire(int id_thread, int id_user, String contenu, LocalDateTime date_creation) {
+    public Commentaire(int id_thread, int id_user, String contenu, LocalDateTime created_at) {
         this.id_thread     = id_thread;
         this.id_user       = id_user;
         this.contenu       = contenu;
-        this.date_creation = date_creation;
+        this.created_at = created_at;
         this.statut        = "actif";
         this.sentiment     = "neutre";
     }
 
     public Commentaire(int id_commentaire, int id_thread, int id_user, String contenu,
-                       LocalDateTime date_creation, String statut, String sentiment) {
+                       LocalDateTime created_at, String statut, String sentiment) {
         this.id_commentaire = id_commentaire;
         this.id_thread      = id_thread;
         this.id_user        = id_user;
         this.contenu        = contenu;
-        this.date_creation  = date_creation;
+        this.created_at  = created_at;
         this.statut         = statut;
         this.sentiment      = sentiment;
     }
@@ -42,8 +42,8 @@ public class Commentaire {
     public void          setId_user(int id_user)                       { this.id_user = id_user; }
     public String        getContenu()                                  { return contenu; }
     public void          setContenu(String contenu)                    { this.contenu = contenu; }
-    public LocalDateTime getDate_creation()                            { return date_creation; }
-    public void          setDate_creation(LocalDateTime date_creation) { this.date_creation = date_creation; }
+    public LocalDateTime getCreated_at()                            { return created_at; }
+    public void          setCreated_at(LocalDateTime created_at) { this.created_at = created_at; }
     public String        getStatut()                                   { return statut; }
     public void          setStatut(String statut)                      { this.statut = statut; }
     public String        getSentiment()                                { return sentiment; }

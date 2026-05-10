@@ -76,7 +76,7 @@ public class UpdateUser {
         this.user = user;
 
         // Remplir les champs avec les données utilisateur
-        idField.setText(String.valueOf(user.getId_user()));
+        idField.setText(String.valueOf(user.getId()));
         nomField.setText(user.getNom());
         prenomField.setText(user.getPrenom());
         emailField.setText(user.getEmail());

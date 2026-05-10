@@ -298,7 +298,7 @@ public class Register implements Initializable {
             user.setVille(ville.getText().trim());
             user.setRole(selectedRole);
             user.setActif(true);
-            user.setDate_creation(Timestamp.from(Instant.now()));
+            user.setCreated_at(Timestamp.from(Instant.now()));
             user.setPhoto_profil(null);
 
             userService.addEntity(user);

@@ -82,7 +82,7 @@ public class AddAdminController implements Initializable {
         admin.setVille(villeField.getText().trim());
         admin.setRole(Role.ADMINISTRATEUR);
         admin.setActif(true);
-        admin.setDate_creation(Timestamp.from(Instant.now()));
+        admin.setCreated_at(Timestamp.from(Instant.now()));
 
         // Ajouter à la base de données
         userService.addEntity(admin);

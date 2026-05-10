@@ -20,7 +20,7 @@ public class PasswordResetService {
      * Vérifie si l'email existe dans la base
      */
     private static boolean emailExists(String email) {
-        String query = "SELECT id_user FROM users WHERE email = ?";
+        String query = "SELECT id FROM users WHERE email = ?";
 
         try (PreparedStatement pst = myConnection.getInstance().getCnx().prepareStatement(query)) {
             pst.setString(1, email);

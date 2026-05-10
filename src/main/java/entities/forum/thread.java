@@ -7,7 +7,7 @@ public class thread {
     private int           id_thread;
     private String        titre;
     private String        contenu;
-    private LocalDateTime date_creation;
+    private LocalDateTime created_at;
     private LocalDateTime date_update;
     private int           id_user;
     private String        statut;
@@ -16,11 +16,11 @@ public class thread {
 
     public thread() {}
 
-    public thread(String titre, String contenu, LocalDateTime date_creation,
+    public thread(String titre, String contenu, LocalDateTime created_at,
                   LocalDateTime date_update, int id_user) {
         this.titre         = titre;
         this.contenu       = contenu;
-        this.date_creation = date_creation;
+        this.created_at = created_at;
         this.date_update   = date_update;
         this.id_user       = id_user;
         this.statut        = "actif";
@@ -28,12 +28,12 @@ public class thread {
         this.tags          = "";
     }
 
-    public thread(int id_thread, String titre, String contenu, LocalDateTime date_creation,
+    public thread(int id_thread, String titre, String contenu, LocalDateTime created_at,
                   LocalDateTime date_update, int id_user, String statut, String sentiment) {
         this.id_thread     = id_thread;
         this.titre         = titre;
         this.contenu       = contenu;
-        this.date_creation = date_creation;
+        this.created_at = created_at;
         this.date_update   = date_update;
         this.id_user       = id_user;
         this.statut        = statut;
@@ -41,12 +41,12 @@ public class thread {
         this.tags          = "";
     }
 
-    public thread(int id_thread, String titre, String contenu, LocalDateTime date_creation,
+    public thread(int id_thread, String titre, String contenu, LocalDateTime created_at,
                   LocalDateTime date_update, int id_user, String statut, String sentiment, String tags) {
         this.id_thread     = id_thread;
         this.titre         = titre;
         this.contenu       = contenu;
-        this.date_creation = date_creation;
+        this.created_at = created_at;
         this.date_update   = date_update;
         this.id_user       = id_user;
         this.statut        = statut;
@@ -60,8 +60,8 @@ public class thread {
     public void          setTitre(String titre)            { this.titre = titre; }
     public String        getContenu()                      { return contenu; }
     public void          setContenu(String contenu)        { this.contenu = contenu; }
-    public LocalDateTime getDate_creation()                { return date_creation; }
-    public void          setDate_creation(LocalDateTime d) { this.date_creation = d; }
+    public LocalDateTime getCreated_at()                { return created_at; }
+    public void          setCreated_at(LocalDateTime d) { this.created_at = d; }
     public LocalDateTime getDate_update()                  { return date_update; }
     public void          setDate_update(LocalDateTime d)   { this.date_update = d; }
     public int           getId_user()                      { return id_user; }
