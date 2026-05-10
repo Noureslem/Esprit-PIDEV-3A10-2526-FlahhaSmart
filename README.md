@@ -5,9 +5,11 @@
 
 <div align="center">
 
-[![Symfony](https://img.shields.io/badge/Symfony-6.4-000000?style=flat-square&logo=symfony&logoColor=white)](https://symfony.com)
+<img src="https://img.shields.io/badge/Symfony-6.4-black?style=for-the-badge&logo=symfony&logoColor=white" alt="Symfony"/>
+<img src="https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap 5"/>
+<img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL"/>
+
 [![PHP](https://img.shields.io/badge/PHP-8.4-777BB4?style=flat-square&logo=php&logoColor=white)](https://www.php.net)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=flat-square&logo=postgresql&logoColor=white)](https://www.postgresql.org)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com)
 [![API Platform](https://img.shields.io/badge/API_Platform-3.3-00CDF6?style=flat-square&logo=api&logoColor=white)](https://api-platform.com)
 [![License](https://img.shields.io/badge/License-Proprietary-red?style=flat-square)](LICENSE)
