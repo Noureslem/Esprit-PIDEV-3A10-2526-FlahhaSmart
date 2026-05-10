@@ -1,11 +1,8 @@
-# Esprit-PIDEV-3A10-2526-SmartFarm
-
-
 <p align="center">
-  <img src="https://img.shields.io/badge/Java-17+-orange?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java"/>
-  <img src="https://img.shields.io/badge/JavaFX-21-blue?style=for-the-badge&logo=java&logoColor=white" alt="JavaFX"/>
+  <img src="https://img.shields.io/badge/Symfony-6.x-black?style=for-the-badge&logo=symfony&logoColor=white" alt="Symfony"/>
+  <img src="https://img.shields.io/badge/PHP-8.1+-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP"/>
   <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL"/>
-  <img src="https://img.shields.io/badge/Maven-3.6+-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white" alt="Maven"/>
+  <img src="https://img.shields.io/badge/Google_Gemini-AI-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Gemini AI"/>
   <img src="https://img.shields.io/badge/License-Academic-green?style=for-the-badge" alt="License"/>
 </p>
 
@@ -16,8 +13,9 @@
 </p>
 
 <p align="center">
-  Application Symfony moderne combinant gestion d'opérations agricoles, système d'irrigation intelligent, 
-  rotation optimisée des cultures et chatbot IA propulsé par Google Gemini.
+  Application Symfony moderne combinant gestion d'opérations agricoles, système d'irrigation intelligent,
+  rotation optimisée des cultures, chatbot IA propulsé par Google Gemini,
+  et un module Articles & Commandes avec estimation de prix par vision IA.
 </p>
 
 ---
@@ -26,20 +24,20 @@
 
 - [Présentation](#-présentation)
 - [Fonctionnalités](#-fonctionnalités)
+- [Module Articles & Commandes](#-module-articles--commandes)
 - [Architecture](#-architecture)
 - [Technologies](#-technologies)
 - [Installation](#-installation)
 - [Configuration](#-configuration)
-- [Utilisation](#-utilisation)
-- [APIs Intégrées](#-apis-intégrées)
 - [Structure du projet](#-structure-du-projet)
+- [APIs Intégrées](#-apis-intégrées)
 - [Auteur](#-auteur)
 
 ---
 
 ## 🎯 Présentation
 
-**AgriManager Pro** est une solution complète de gestion agricole intelligente qui combine :
+**FlahaSmart** est une solution complète de gestion agricole intelligente qui combine :
 
 | Module | Description |
 |--------|-------------|
@@ -48,16 +46,18 @@
 | 💧 **Irrigation intelligente** | Calcul automatique des besoins en eau |
 | 🔄 **Rotation des cultures** | Planification optimisée pluriannuelle |
 | 🤖 **AgriBot IA** | Chatbot propulsé par Google Gemini 2.5 Flash |
+| 🛒 **Articles & Commandes** | Todo list + estimateur de prix par image IA |
 
 ### ✨ Points forts
 
 ```
 ✅ Interface moderne avec design glassmorphism et dégradés verts
-✅ APIs externes intégrées (WeatherStack, Gemini...)
+✅ APIs externes intégrées (WeatherStack, Gemini Vision...)
 ✅ Système d'irrigation basé sur 7 critères météo et agronomiques
-✅ Conseils agricoles dynamiques générés en temps réel
-✅ Architecture MVC professionnelle avec pattern DAO
-✅ Multithreading pour opérations asynchrones fluides
+✅ Estimation automatique de prix via analyse d'image par IA
+✅ Todo list intelligente intégrée à la gestion des commandes
+✅ Architecture MVC professionnelle Symfony avec services dédiés
+✅ Génération de prix en temps réel depuis une photo produit
 ```
 
 ---
@@ -72,8 +72,8 @@
 | Modifier | Mettre à jour les informations |
 | Supprimer | Suppression avec confirmation |
 | Lister | Affichage en tableau moderne |
-| Rechercher | Recherche par nom (Stream API) |
-| Trier | Tri alphabétique dynamique |
+| Rechercher | Recherche dynamique par nom |
+| Trier | Tri alphabétique |
 
 **Statuts** : `Libre` | `Réservé`
 
@@ -87,25 +87,15 @@
 | Modifier | Mise à jour complète |
 | Terminer | Changement de statut en un clic |
 | Supprimer | Avec confirmation |
-| Filtrer | Par statut (en cours/terminé) |
-
-**Relation** : Utilisation du modèle `Equipement` (jointure Java correcte)
+| Filtrer | Par statut (en cours / terminé) |
 
 ---
 
 ### 3. 📊 Dashboard Intelligent
 
-#### Cards Statistiques Opérations
-- **Total** des opérations avec compteur animé
-- **En cours** avec pourcentage et navigation directe
-- **Terminées** avec indicateur de progression
-
-#### Cards Statistiques Équipements
-- Répartition par type avec barres de progression
-- Compteurs : Total | Libres | Réservés
-
-#### Navigation intelligente
-Clic sur "Opérations en cours" → Redirection avec highlight automatique
+- **Statistiques opérations** : Total, En cours, Terminées avec compteurs animés
+- **Statistiques équipements** : Répartition par type, Libres vs Réservés
+- **Navigation intelligente** : Clic sur une carte → Redirection directe
 
 ---
 
@@ -116,13 +106,11 @@ Clic sur "Opérations en cours" → Redirection avec highlight automatique
 🌡️ Température actuelle et ressentie
 💧 Humidité (%)
 💨 Vitesse du vent (km/h)
-☁️ Description météo
+☁️ Description des conditions
 🕐 Heure locale
 ```
 
 #### Conseils Agricoles Intelligents
-
-Analyse en temps réel des données météo pour générer des conseils professionnels :
 
 | Critère | Analyse |
 |---------|---------|
@@ -130,22 +118,17 @@ Analyse en temps réel des données météo pour générer des conseils professi
 | **Humidité** | Risques maladies fongiques, arrosage |
 | **Vent** | Conditions de pulvérisation, protection |
 | **Conditions** | Pluie, nuages, ensoleillement |
-| **Ressenti** | Stress thermique, refroidissement éolien |
 
-**Code couleur des conseils** :
-- 🔴 **Critique** : Actions immédiates requises
-- 🟡 **Attention** : Précautions nécessaires
-- 🟢 **Optimal** : Conditions idéales
-- 🔵 **Information** : Conseils généraux
+**Code couleur** : 🔴 Critique | 🟡 Attention | 🟢 Optimal | 🔵 Information
 
 ---
 
 ### 5. 💧 Système Intelligent d'Irrigation
 
-Module avancé calculant automatiquement les besoins en eau selon :
+Calcul automatique des besoins en eau selon 7 critères :
 
-| Critère | Poids |
-|---------|-------|
+| Critère | Rôle |
+|---------|------|
 | 🌡️ Température actuelle | Évapotranspiration |
 | 💧 Humidité du sol | Rétention hydrique |
 | 🌧️ Précipitations prévues | Report irrigation |
@@ -154,49 +137,133 @@ Module avancé calculant automatiquement les besoins en eau selon :
 | 💦 Quantité précédente | Ajustement progressif |
 | 🌍 Type de sol | Capacité de rétention |
 
-#### Fonctionnalités
-- Sélection du type de culture (Tomates, Blé, Maïs, Vignes...)
-- Configuration des paramètres d'irrigation
-- Calcul automatique de la priorité (Critique/Haute/Moyenne/Faible)
-- Recommandation de durée et horaire optimal
+**Priorités** : `Critique` | `Haute` | `Moyenne` | `Faible`
 
 ---
 
 ### 6. 🔄 Système de Rotation des Cultures
 
-Planification intelligente des rotations pluriannuelles :
-
-| Paramètre | Configuration |
-|-----------|---------------|
-| Parcelle | Nom, surface (ha) |
-| Type de sol | Argileux, Limoneux, Sableux... |
-| Historique | Dernières cultures |
-| Nutriments | Azote (N), Phosphore (P), Potassium (K) |
-| pH du sol | Échelle 4.0 - 9.0 |
-| Jachère | Années depuis repos |
-
-#### Résultats
-- **Plan de rotation** sur 1 à 10 ans
-- **Visualisation** chronologique avec flèches
-- **Résumé parcelle** avec indicateurs fertilité
+Plan pluriannuel (1 à 10 ans) basé sur :
+- Type de sol (Argileux, Limoneux, Sableux...)
+- Historique des cultures
+- Niveaux de nutriments (N, P, K)
+- pH du sol (4.0 – 9.0)
+- Années depuis jachère
 
 ---
 
-### 7. 🤖 AgriBot - Chatbot IA (Gemini 2.5 Flash)
+### 7. 🤖 AgriBot — Chatbot IA (Google Gemini 2.5 Flash)
 
-Chatbot intelligent propulsé par **Google Gemini** pour répondre aux questions agricoles :
-
-#### Capacités
+Chatbot intelligent pour :
 - Conseils de culture personnalisés
-- Diagnostic de problèmes
+- Diagnostic de problèmes agronomiques
 - Recommandations saisonnières
 - Bonnes pratiques agricoles
-- Réponses en temps réel
 
-#### Interface
-- Design moderne de chat
-- Historique des conversations
-- Indicateur de chargement asynchrone
+---
+
+## 🛒 Module Articles & Commandes
+
+Le module Articles & Commandes est enrichi de deux fonctionnalités IA avancées :
+
+---
+
+### 📝 Todo List intégrée
+
+Système de gestion de tâches directement lié aux commandes agricoles :
+
+| Fonctionnalité | Description |
+|----------------|-------------|
+| ➕ Ajouter une tâche | Créer une tâche associée à une commande |
+| ✅ Marquer comme faite | Suivi de l'avancement en temps réel |
+| 🗑️ Supprimer | Supprimer une tâche terminée |
+| 📋 Lister | Vue complète des tâches par commande |
+| 🔢 Priorité | Organisation par niveau d'urgence |
+
+**Statuts de tâche** : `À faire` | `En cours` | `Terminée`
+
+---
+
+### 🤖 Estimateur de Prix par Image IA
+
+Fonctionnalité phare du module : **estimer automatiquement le prix d'un produit agricole à partir d'une photo**, grâce à la vision par IA de Google Gemini.
+
+#### Comment ça fonctionne
+
+```
+1. 📸  L'utilisateur upload une image du produit (légume, fruit, équipement...)
+2. 🤖  L'image est envoyée à l'API Google Gemini Vision
+3. 🧠  L'IA analyse : type de produit, état, qualité visuelle, contexte marché
+4. 💰  Un prix estimé est retourné automatiquement avec une explication
+5. 📝  Le prix peut être appliqué directement à l'article ou à la commande
+```
+
+#### Données analysées par l'IA
+
+| Critère visuel | Ce que l'IA détecte |
+|----------------|---------------------|
+| 🌿 **Type de produit** | Légume, fruit, céréale, équipement... |
+| ⭐ **Qualité** | État du produit, fraîcheur, maturité |
+| 📦 **Quantité estimée** | Masse ou volume apparent |
+| 🏷️ **Contexte marché** | Estimation basée sur données agricoles |
+| 📊 **Fourchette de prix** | Prix min / prix max / prix recommandé |
+
+#### Interface utilisateur
+
+```
+┌─────────────────────────────────────────────────┐
+│           🤖 Estimateur de Prix IA              │
+├─────────────────────────────────────────────────┤
+│  📸 Uploader une image produit                  │
+│  ┌───────────────────────────────────────────┐  │
+│  │                                           │  │
+│  │    [Glisser-déposer ou choisir fichier]   │  │
+│  │                                           │  │
+│  └───────────────────────────────────────────┘  │
+│                                                 │
+│  [🔍 Analyser l'image]                         │
+│                                                 │
+│  ✅ Résultat IA :                              │
+│  Produit détecté : Tomates fraîches             │
+│  Qualité estimée : Bonne (Grade A)              │
+│  💰 Prix estimé : 2.50 TND/kg                  │
+│  Fourchette : 2.00 – 3.00 TND/kg               │
+│                                                 │
+│  [✔ Appliquer ce prix à l'article]             │
+└─────────────────────────────────────────────────┘
+```
+
+#### Exemple de réponse IA
+
+```json
+{
+  "produit": "Tomates fraîches",
+  "qualite": "Grade A - Bonne fraîcheur",
+  "prix_estime": 2.50,
+  "unite": "TND/kg",
+  "fourchette_min": 2.00,
+  "fourchette_max": 3.00,
+  "explication": "Tomates matures, couleur homogène, sans défauts visibles. Prix conforme au marché local de saison."
+}
+```
+
+---
+
+### Workflow Articles & Commandes
+
+```
+📦 Articles
+├── Créer un article     → Saisir manuellement ou estimer le prix par image IA
+├── Modifier             → Mettre à jour les informations
+├── Supprimer            → Avec confirmation
+└── Lister               → Vue tableau avec prix et disponibilité
+
+🛒 Commandes
+├── Créer une commande   → Sélection d'articles, quantité, total calculé
+├── Gérer les tâches     → Todo list associée à chaque commande
+├── Suivre le statut     → En attente / Confirmée / Livrée
+└── Historique           → Consultation des commandes passées
+```
 
 ---
 
@@ -206,63 +273,58 @@ Chatbot intelligent propulsé par **Google Gemini** pour répondre aux questions
 ┌─────────────────────────────────────────────────────────────┐
 │                      PRÉSENTATION                           │
 │  ┌─────────────┐ ┌─────────────┐ ┌─────────────────────┐   │
-│  │    FXML     │ │    CSS      │ │    Controllers      │   │
-│  │   (Views)   │ │  (Styles)   │ │   (JavaFX FXML)     │   │
+│  │    Twig     │ │    CSS/JS   │ │    Controllers      │   │
+│  │  (Templates)│ │  (Styles)   │ │   (Symfony)         │   │
 │  └─────────────┘ └─────────────┘ └─────────────────────┘   │
 ├─────────────────────────────────────────────────────────────┤
 │                      MÉTIER                                 │
 │  ┌─────────────────────────────────────────────────────┐   │
 │  │                    Services                          │   │
-│  │  • EquipementService    • IrrigationService         │   │
-│  │  • OperationService     • RotationCultureService    │   │
-│  │  • WeatherService                                   │   │
-│  │  • AgriChatbotService                               │   │
+│  │  • ArticleService        • CommandeService          │   │
+│  │  • TodoService           • PriceEstimatorService    │   │
+│  │  • WeatherService        • IrrigationService        │   │
+│  │  • RotationCultureService • AgriChatbotService      │   │
 │  └─────────────────────────────────────────────────────┘   │
 ├─────────────────────────────────────────────────────────────┤
 │                      DONNÉES                                │
 │  ┌─────────────┐ ┌─────────────┐ ┌─────────────────────┐   │
-│  │   Models    │ │  MyDataBase │ │    APIs Externes    │   │
-│  │  (POJOs)    │ │  (Singleton)│ │  (HTTP Clients)     │   │
+│  │   Entities  │ │  Doctrine   │ │    APIs Externes    │   │
+│  │  (POJOs)    │ │    ORM      │ │  Gemini Vision      │   │
 │  └─────────────┘ └─────────────┘ └─────────────────────┘   │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Design Patterns utilisés
+### Design Patterns
 
 | Pattern | Utilisation |
 |---------|-------------|
-| **MVC** | Séparation Views/Controllers/Models |
-| **DAO** | Accès données avec PreparedStatement |
-| **Singleton** | Connexion base de données |
-| **Service Layer** | Logique métier isolée |
-| **Observer** | Binding JavaFX properties |
+| **MVC** | Séparation Templates / Controllers / Entities |
+| **Service Layer** | Logique métier isolée et réutilisable |
+| **Repository** | Accès données via Doctrine ORM |
+| **Dependency Injection** | Services injectés via le container Symfony |
 
 ---
 
 ## 💻 Technologies
 
 ### Core
+
 | Technologie | Version | Usage |
 |-------------|---------|-------|
-| Java | 17+ | Langage principal |
-| JavaFX | 21 | Interface graphique |
-| Maven | 3.6+ | Gestion dépendances |
+| PHP | 8.1+ | Langage principal |
+| Symfony | 6.x | Framework MVC |
+| Doctrine ORM | 2.x | Accès base de données |
+| Twig | 3.x | Templates |
 | MySQL | 8.0+ | Base de données |
 
 ### APIs & Libraries
-| API/Library | Usage |
-|-------------|-------|
-| WeatherStack | Météo temps réel |
-| Google Gemini 2.5 Flash | Chatbot IA |
-| Gson | Parsing JSON |
-| JDBC MySQL Connector | Connexion BD |
 
-### Concepts Java avancés
-- **Stream API** : Recherche et tri dynamiques
-- **Lambda expressions** : Code fonctionnel
-- **Multithreading** : Task<T> pour appels asynchrones
-- **Regex** : Validation et pattern matching
-- **Generics** : Collections typées
+| API / Library | Usage |
+|---------------|-------|
+| Google Gemini 2.5 Flash | Chatbot IA agricole |
+| Google Gemini Vision | Estimation de prix par image |
+| WeatherStack | Météo temps réel |
+| Symfony HttpClient | Appels HTTP vers APIs externes |
 
 ---
 
@@ -271,87 +333,119 @@ Chatbot intelligent propulsé par **Google Gemini** pour répondre aux questions
 ### Prérequis
 
 ```bash
-# Vérifier Java
-java -version   # Doit être 17+
+# PHP 8.1+
+php -v
 
-# Vérifier Maven
-mvn -version    # Doit être 3.6+
+# Composer
+composer -V
 
-# MySQL Server doit être installé et actif
+# Symfony CLI (optionnel mais recommandé)
+symfony check:requirements
+
+# MySQL Server actif
 ```
 
-### Installation
+### Étapes
 
 ```bash
 # 1. Cloner le repository
-git clone https://github.com/votre-username/AgriManager-Pro.git
-cd AgriManager-Pro
+git clone https://github.com/votre-username/FlahaSmart.git
+cd FlahaSmart
 
-# 2. Installer les dépendances
-mvn clean install
+# 2. Installer les dépendances PHP
+composer install
 
-# 3. Compiler
-mvn compile
+# 3. Configurer l'environnement
+cp .env .env.local
+# Éditer .env.local avec vos paramètres
 
-# 4. Lancer l'application
-mvn javafx:run
+# 4. Créer la base de données
+php bin/console doctrine:database:create
+php bin/console doctrine:migrations:migrate
+
+# 5. Lancer le serveur
+symfony server:start
+# ou
+php -S localhost:8000 -t public/
 ```
 
 ---
 
 ## ⚙️ Configuration
 
-### Base de données
+### Base de données (`.env.local`)
 
-1. Créer la base de données :
-```sql
-CREATE DATABASE agrimanager;
-USE agrimanager;
+```env
+DATABASE_URL="mysql://user:password@127.0.0.1:3306/flahasmart"
 ```
 
-2. Éditer `src/main/java/utilies/MyDataBase.java` :
-```java
-private static final String URL = "jdbc:mysql://localhost:3306/agrimanager";
-private static final String USER = "votre_user";
-private static final String PASSWORD = "votre_password";
+### APIs
+
+```env
+WEATHERSTACK_API_KEY=your_weatherstack_key
+GEMINI_API_KEY=your_google_gemini_key
 ```
 
-### APIs (fichiers de configuration)
-
-| API | Variable | Où configurer |
+| API | Variable | Documentation |
 |-----|----------|---------------|
-| WeatherStack | `API_KEY` | `WeatherService.java` |
-| Google Gemini | `API_KEY` | `AgriChatbotService.java` |
+| WeatherStack | `WEATHERSTACK_API_KEY` | [weatherstack.com](https://weatherstack.com) |
+| Google Gemini | `GEMINI_API_KEY` | [ai.google.dev](https://ai.google.dev) |
 
 ---
 
-## 🎮 Utilisation
-
-### Navigation principale
+## 📁 Structure du projet
 
 ```
-📊 Dashboard           → Tableau de bord avec statistiques
-├── 🚜 Équipements     
-│   ├── Liste          → Afficher tous les équipements
-│   └── Ajouter        → Créer un équipement
-├── 🔧 Opérations      
-│   ├── Liste          → Afficher toutes les opérations
-│   └── Ajouter        → Créer une opération
-├── 💧 Irrigation      → Système intelligent d'irrigation
-├── 🔄 Rotation        → Planification rotation cultures
-├── 🌤️ Météo          → Widget météo avec conseils
-└── 🤖 AgriBot        → Chatbot IA agricole
+FlahaSmart/
+├── src/
+│   ├── Controller/
+│   │   ├── DashboardController.php
+│   │   ├── ArticleController.php
+│   │   ├── CommandeController.php
+│   │   ├── TodoController.php
+│   │   ├── PriceEstimatorController.php
+│   │   ├── WeatherController.php
+│   │   ├── ChatbotController.php
+│   │   ├── IrrigationController.php
+│   │   ├── RotationController.php
+│   │   ├── EquipementController.php
+│   │   └── OperationController.php
+│   ├── Entity/
+│   │   ├── Article.php
+│   │   ├── Commande.php
+│   │   ├── TodoItem.php
+│   │   ├── Equipement.php
+│   │   ├── Operation.php
+│   │   ├── Parcelle.php
+│   │   └── IrrigationPlan.php
+│   ├── Repository/
+│   │   ├── ArticleRepository.php
+│   │   ├── CommandeRepository.php
+│   │   └── TodoItemRepository.php
+│   └── Service/
+│       ├── ArticleService.php
+│       ├── CommandeService.php
+│       ├── TodoService.php
+│       ├── PriceEstimatorService.php   ← IA Vision
+│       ├── WeatherService.php
+│       ├── AgriChatbotService.php
+│       ├── IrrigationService.php
+│       └── RotationCultureService.php
+├── templates/
+│   ├── article/
+│   ├── commande/
+│   ├── todo/
+│   ├── price_estimator/
+│   ├── dashboard/
+│   └── base.html.twig
+├── public/
+│   └── uploads/                         ← Images produits uploadées
+├── migrations/
+├── .env
+├── .env.local
+├── composer.json
+└── README.md
 ```
-
-### Workflow typique
-
-1. **Configurer les équipements** → Ajouter tracteurs, outils, systèmes d'irrigation
-2. **Planifier les opérations** → Associer équipements aux tâches
-3. **Consulter le dashboard** → Vue d'ensemble des activités
-4. **Vérifier la météo** → Conseils agricoles adaptés
-5. **Planifier l'irrigation** → Calcul automatique des besoins
-6. **Optimiser les rotations** → Plan pluriannuel des cultures
-7. **Consulter AgriBot** → Questions et conseils IA
 
 ---
 
@@ -359,59 +453,24 @@ private static final String PASSWORD = "votre_password";
 
 ### WeatherStack API
 ```
-Endpoint: http://api.weatherstack.com/current
-Données: Température, humidité, vent, conditions
-Limite: 100 requêtes/mois (gratuit)
+Endpoint : http://api.weatherstack.com/current
+Données  : Température, humidité, vent, conditions
+Limite   : 100 requêtes/mois (gratuit)
 ```
 
-### Google Gemini API
+### Google Gemini — Chatbot
 ```
-Modèle: Gemini 2.5 Flash
-Usage: Chatbot agricole intelligent
-Endpoint: https://generativelanguage.googleapis.com/v1beta/entities/gemini-2.5-flash
+Modèle   : gemini-2.5-flash
+Usage    : Réponses agricoles en langage naturel
+Endpoint : https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
 ```
 
-## 📁 Structure du projet
-
+### Google Gemini Vision — Estimateur de Prix
 ```
-AgriManager-Pro/
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   ├── controllers/
-│   │   │   │   ├── DashboardController.java
-│   │   │   │   ├── MainLayoutController.java
-│   │   │   │   ├── WeatherWidgetController.java
-│   │   │   │   ├── ChatbotController.java
-│   │   │   │   ├── IrrigationController.java
-│   │   │   │   ├── RotationCultureController.java
-│   │   │   │   ├── equipement/
-│   │   │   │   └── operation/
-│   │   │   ├── entities/
-│   │   │   │   ├── Equipement.java
-│   │   │   │   ├── Operation.java
-│   │   │   │   ├── Weather.java
-│   │   │   │   ├── ChatMessage.java
-│   │   │   │   ├── IrrigationPlan.java
-│   │   │   │   ├── Parcelle.java
-│   │   │   │   └── RecommandationCulture.java
-│   │   │   ├── services/
-│   │   │   │   ├── EquipementService.java
-│   │   │   │   ├── OperationService.java
-│   │   │   │   ├── WeatherService.java
-│   │   │   │   ├── AgriChatbotService.java
-│   │   │   │   ├── IrrigationService.java
-│   │   │   │   ├── RotationCultureService.java
-│   │   │   ├── utilies/
-│   │   │   │   └── MyDataBase.java
-│   │   │   └── testes/
-│   │   │       └── MainApp.java
-│   │   └── resources/
-│   │       ├── views/
-│   │       └── styles/
-│   └── test/
-├── pom.xml
-└── README.md
+Modèle   : gemini-2.5-flash (multimodal)
+Usage    : Analyse d'image produit → estimation de prix
+Input    : Image base64 (JPEG / PNG)
+Output   : JSON structuré avec prix, qualité, explication
 ```
 
 ---
@@ -420,24 +479,25 @@ AgriManager-Pro/
 
 | Pratique | Implémentation |
 |----------|----------------|
-| SQL Injection | PreparedStatement partout |
-| Validation | Contrôles de saisie côté client |
-| Async | Appels API sur threads séparés |
-| Error Handling | Try-catch avec logs |
-| Resources | Fermeture automatique (try-with-resources) |
+| SQL Injection | Doctrine ORM avec requêtes paramétrées |
+| Validation | Symfony Validator + contraintes sur les entités |
+| Upload sécurisé | Vérification MIME type des images uploadées |
+| Variables sensibles | `.env.local` (non versionné) |
+| Error Handling | Try-catch + logs Symfony Monolog |
 
 ---
 
 ## 📈 Améliorations futures
 
-- [ ] 📱 Version mobile (JavaFX Mobile / Flutter)
-- [ ] ☁️ Synchronisation cloud
-- [ ] 📊 Export PDF des rapports
-- [ ] 📅 Calendrier visuel des opérations
-- [ ] 🔔 Notifications push
-- [ ] 👥 Multi-utilisateurs avec authentification
-- [ ] 📈 Graphiques statistiques avancés (Charts)
-- [ ] 🌐 Internationalisation (i18n)
+- [ ] 📱 Version mobile progressive (PWA)
+- [ ] 📊 Export PDF des commandes et rapports
+- [ ] 📅 Calendrier visuel des opérations et commandes
+- [ ] 🔔 Notifications (email, push) sur statut commande
+- [ ] 👥 Multi-utilisateurs avec rôles (Admin / Agriculteur / Client)
+- [ ] 📈 Graphiques statistiques avancés (Chart.js)
+- [ ] 🌐 Internationalisation (fr / ar / en)
+- [ ] 🧾 Historique des estimations IA par produit
+- [ ] 📷 Comparaison de prix multi-images
 
 ---
 
@@ -447,7 +507,7 @@ AgriManager-Pro/
 
 | Contact | Lien |
 |---------|------|
-| 📧 Email | votre.email@example.com |
+| 📧 Email | votre.email@esprit.tn |
 | 🔗 GitHub | [@votre-username](https://github.com/votre-username) |
 | 💼 LinkedIn | [Votre Profil](https://linkedin.com/in/votre-profil) |
 
@@ -455,18 +515,17 @@ AgriManager-Pro/
 
 ## 📄 Licence
 
-Ce projet est réalisé dans un cadre académique.
+Ce projet est réalisé dans un cadre académique — **ESPRIT, 2025-2026**.
 
 ```
-MIT License - Libre d'utilisation avec attribution
+Libre d'utilisation avec attribution
 ```
 
----
 ---
 
 <p align="center">
   <strong>Développé avec ❤️ et ☕</strong><br>
-  <em>Mars 2026</em>
+  <em>ESPRIT — Projet PIDEV 3A — 2025/2026</em>
 </p>
 
 <p align="center">
