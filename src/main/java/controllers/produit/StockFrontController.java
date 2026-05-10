@@ -185,7 +185,7 @@ public class StockFrontController {
         try {
             for (StockProduit p : pageItems) {
                 FXMLLoader loader = new FXMLLoader(
-                        getClass().getResource("/produit/CardStockFront.fxml")
+                        getClass().getResource("/views/produit/CardStockFront.fxml")
                 );
                 Parent card = loader.load();
                 CardStockFrontController controller = loader.getController();

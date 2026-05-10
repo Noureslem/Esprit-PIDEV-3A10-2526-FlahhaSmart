@@ -183,7 +183,7 @@ public class StockAgrichController {
             for (int i = start; i < end; i++) {
                 StockProduit p = allProduits.get(i);
                 FXMLLoader loader = new FXMLLoader(
-                        getClass().getResource("/produit/CardStockAgri.fxml")
+                        getClass().getResource("/views/produit/CardStockAgri.fxml")
                 );
 
                 Parent card = loader.load();

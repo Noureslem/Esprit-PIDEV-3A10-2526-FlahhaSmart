@@ -146,7 +146,7 @@ public class DashboardAdmController implements Initializable {
 
     @FXML
     private void handleProducts(ActionEvent event) {
-        loadView("/produit/BackStock.fxml");
+        loadView("/views/produit/BackStock.fxml");
     }
 
     @FXML

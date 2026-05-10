@@ -1,5 +1,6 @@
 package services.commande;
 
+import controllers.Auth.Session;
 import entities.commande.Article;
 import tools.myConnection;
 
@@ -10,6 +11,8 @@ import java.util.List;
 public class ArticleDAO {
 
     public void insertArticle(Article article) {
+        int userId = Session.isLoggedIn() ? Session.getCurrentUser().getId() : -1;
+
         String sql = "INSERT INTO articles (nom, description, categorie, prix, stock, poids, unite, image_url, id_user) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -24,12 +27,18 @@ public class ArticleDAO {
             ps.setDouble(6, article.getPoids());
             ps.setString(7, article.getUnite());
             ps.setString(8, article.getImageUrl());
-            ps.setInt(9, article.getIdUser());
+
+            // ID envoyé
+            System.out.println("ID USER envoyé = " + article.getId());
+
+            ps.setInt(9, userId);
 
             int result = ps.executeUpdate();
+
             if (result > 0) {
                 System.out.println("[ArticleDAO] ✅ Article ajouté avec succès");
             }
+
         } catch (SQLException e) {
             System.out.println("[ArticleDAO] ❌ Erreur insertion article");
             e.printStackTrace();

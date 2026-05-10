@@ -134,7 +134,7 @@ public class ClientHomeController implements Initializable {
 
     @FXML
     public void handleProduit(ActionEvent event) {
-        loadPage("/produit/FrontStock.fxml");
+        loadPage("/views/produit/FrontStock.fxml");
     }
     private void loadPage(String fxml) {
         try {

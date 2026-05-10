@@ -214,7 +214,7 @@ public class StockBackController {
             for (int i = start; i < end; i++) {
                 StockProduit p = allProduits.get(i);
                 FXMLLoader loader = new FXMLLoader(
-                        getClass().getResource("/produit/CardStock.fxml")
+                        getClass().getResource("/views/produit/CardStock.fxml")
                 );
                 Parent card = loader.load();
                 CardStockController controller = loader.getController();

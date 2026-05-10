@@ -50,7 +50,7 @@ public class CardStockFrontController {
     @FXML
     private void openConsommationDetail() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/produit/ConsommationDetailPopup.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/produit/ConsommationDetailPopup.fxml"));
             Parent root = loader.load();
             ConsommationDetailController controller = loader.getController();
             controller.setProductId(produit.getIdProduit());
@@ -63,7 +63,7 @@ public class CardStockFrontController {
 
             Scene scene = new Scene(root);
             scene.setFill(null);
-            scene.getStylesheets().add(getClass().getResource("/produit/css/style.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/views/produit/css/style.css").toExternalForm());
 
             stage.setScene(scene);
             stage.show();
@@ -76,7 +76,7 @@ public class CardStockFrontController {
     public void openApiDetail(ActionEvent actionEvent) {
 
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/produit/popup.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/produit/popup.fxml"));
                 Parent root = loader.load();
                 ApiConsommationDetailController controller = loader.getController();
                 controller.setProductId(produit.getIdProduit());
@@ -88,7 +88,7 @@ public class CardStockFrontController {
 
                 Scene scene = new Scene(root);
                 scene.setFill(null);
-                scene.getStylesheets().add(getClass().getResource("/produit/css/style.css").toExternalForm());
+                scene.getStylesheets().add(getClass().getResource("/views/produit/css/style.css").toExternalForm());
 
                 stage.setScene(scene);
                 stage.show();

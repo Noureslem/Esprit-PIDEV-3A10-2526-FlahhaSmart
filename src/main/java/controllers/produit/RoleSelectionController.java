@@ -19,17 +19,17 @@ public class RoleSelectionController {
 
     @FXML
     private void openAdmin() {
-        openWindow("/produit/BackStock.fxml", "Administration - Gestion des stocks");
+        openWindow("/views/produit/BackStock.fxml", "Administration - Gestion des stocks");
     }
 
     @FXML
     private void openAgriculteur() {
-        openWindow("/produit/AgrichStock.fxml", "Agriculteur - Suivi des cultures");
+        openWindow("/views/produit/AgrichStock.fxml", "Agriculteur - Suivi des cultures");
     }
 
     @FXML
     private void openClient() {
-        openWindow("/produit/FrontStock.fxml", "Client - Consultation");
+        openWindow("/views/produit/FrontStock.fxml", "Client - Consultation");
     }
 
     private void openWindow(String fxmlPath, String title) {
@@ -43,7 +43,7 @@ public class RoleSelectionController {
             stage.setTitle(title);
 
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/produit/css/style.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/views/produit/css/style.css").toExternalForm());
 
             stage.setScene(scene);
             stage.show();

@@ -78,7 +78,7 @@ public class CardStockController {
     private void openConsumption() {
         try {
             // Charger le FXML du popup
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/produit/ConsommationPopup.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/produit/ConsommationPopup.fxml"));
             Parent root = loader.load();
 
             // Récupérer le contrôleur et passer les données du produit
@@ -94,7 +94,7 @@ public class CardStockController {
 
             Scene scene = new Scene(root);
             scene.setFill(null); // Fond transparent
-            scene.getStylesheets().add(getClass().getResource("/produit/css/style.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/views/produit/css/style.css").toExternalForm());
 
             stage.setScene(scene);
             stage.show();
