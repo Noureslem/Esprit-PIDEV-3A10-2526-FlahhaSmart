@@ -2,8 +2,7 @@ package services.commande;
 
 import entities.commande.Article;
 import tools.myConnection;
-import java.time.LocalDate;
-import java.sql.Date;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -187,44 +186,5 @@ public class ArticleDAO {
             e.printStackTrace();
         }
         return article;
-    }
-    /**
-     * Récupère les articles ajoutés entre deux dates (inclus).
-     */
-    public List<Article> findByDateAjoutBetween(LocalDate start, LocalDate end) {
-        String sql = "SELECT id_article, nom, description, categorie, prix, stock, poids, unite, image_url, id_user, date_ajout " +
-                "FROM articles WHERE date_ajout BETWEEN ? AND ? ORDER BY date_ajout DESC";
-        List<Article> articles = new ArrayList<>();
-
-        try (Connection conn = myConnection.getInstance().getCnx();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setDate(1, Date.valueOf(start));
-            ps.setDate(2, Date.valueOf(end));
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Article article = new Article(
-                            rs.getString("nom"),
-                            rs.getString("description"),
-                            rs.getString("categorie"),
-                            rs.getDouble("prix"),
-                            rs.getInt("stock"),
-                            rs.getDouble("poids"),
-                            rs.getString("unite"),
-                            rs.getString("image_url"),
-                            rs.getInt("id_user")
-                    );
-                    article.setId(rs.getInt("id_article"));
-                    Timestamp ts = rs.getTimestamp("date_ajout");
-                    if (ts != null) article.setDateAjout(ts.toLocalDateTime());
-                    articles.add(article);
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("[ArticleDAO] ❌ Erreur findByDateAjoutBetween");
-            e.printStackTrace();
-        }
-        return articles;
     }
 }
