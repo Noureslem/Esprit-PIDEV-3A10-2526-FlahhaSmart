@@ -501,17 +501,6 @@ Output   : JSON structuré avec prix, qualité, explication
 
 ---
 
-## 👨‍💻 Auteur
-
-**[Votre Nom]**
-
-| Contact | Lien |
-|---------|------|
-| 📧 Email | votre.email@esprit.tn |
-| 🔗 GitHub | [@votre-username](https://github.com/votre-username) |
-| 💼 LinkedIn | [Votre Profil](https://linkedin.com/in/votre-profil) |
-
----
 
 ## 📄 Licence
 
