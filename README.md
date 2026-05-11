@@ -486,7 +486,7 @@ AgriManager-Pro/
 Ce projet est réalisé dans un cadre académique.
 
 ```
-MIT License - Libre d'utilisation avec attribution
+MIT License - Libre d'utilisation avec attributions
 ```
 
 ---
