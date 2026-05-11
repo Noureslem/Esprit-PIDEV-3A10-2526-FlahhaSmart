@@ -2242,10 +2242,9 @@ Unauthorized copying, modification, or redistribution of this software is prohib
 ## 👥 Authors & Contributors
 
 ### Project Owner
-- **ESPRIT 3A10 2024-2025** - Practical Internship (PIDEV) Project
+- Nadim Khchini / Med Fakher Ouelhezi / Nour Eslem Khdheri / Eya Dhaouadi 
 
 ### Development Team
-- **Integration Lead**: Bachar (Final Integration)
 - **Architecture & Backend**: Symfony/PHP
 - **AI Services**: Google Gemini, PlantNet, Disease Detection
 - **DevOps**: Docker, PostgreSQL
